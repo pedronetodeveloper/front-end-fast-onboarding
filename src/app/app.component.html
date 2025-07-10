@@ -1,0 +1,24 @@
+<div class="main-container">
+    <!-- Layout para páginas internas (com navbar e sidebar) -->
+    <div *ngIf="showNavigation" class="app-layout">
+        <app-navbar></app-navbar>
+
+        <div class="layout-body">
+            <app-sidebar></app-sidebar>
+
+            <main class="content-wrapper with-sidebar">
+                <router-outlet></router-outlet>
+            </main>
+        </div>
+
+        <app-footer></app-footer>
+    </div>
+
+    <!-- Layout para tela de login (fullscreen, sem navbar/sidebar) -->
+    <div *ngIf="!showNavigation" class="login-layout">
+        <router-outlet></router-outlet>
+    </div>
+
+    <!-- Toast Messages -->
+    <p-toast position="top-right" [life]="5000"></p-toast>
+</div>

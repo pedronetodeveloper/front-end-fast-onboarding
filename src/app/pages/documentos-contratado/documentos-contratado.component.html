@@ -1,0 +1,25 @@
+<p-toast></p-toast>
+<p-dialog header="Status dos Documentos" [(visible)]="statusDialog" [modal]="true" [style]="{width: '90vw', maxWidth: '350px'}">
+  <div class="p-text-center">
+    <i class="pi pi-check-circle" style="font-size:2rem;color:#1976d2;"></i>
+    <p class="p-mt-3">Todos os documentos obrigatórios foram enviados!</p>
+    <button pButton type="button" label="Fechar" (click)="statusDialog=false" class="p-button-primary p-mt-2" style="width:100%"></button>
+  </div>
+</p-dialog>
+<div class="p-card p-mx-auto p-mt-5 p-p-0" style="max-width: 98vw; width: 100%;">
+  <div class="p-card-header p-p-3" style="background: #1976d2; color: #fff; font-size: 1.2rem;">Acompanhamento de Documentos</div>
+  <div class="p-card-body p-p-4">
+    <p class="p-text-primary p-text-bold">Documentos enviados:</p>
+    <ul class="p-pl-3">
+      <li><i class="pi pi-check p-mr-2" style="color:#1976d2"></i> RG: <span style="color: #1976d2;">Enviado</span></li>
+      <li><i class="pi pi-check p-mr-2" style="color:#1976d2"></i> CPF: <span style="color: #1976d2;">Enviado</span></li>
+      <li><i class="pi pi-times p-mr-2" style="color:#d32f2f"></i> Título de Eleitor: <span style="color: #d32f2f;">Pendente</span></li>
+      <li><i class="pi pi-check p-mr-2" style="color:#1976d2"></i> Carteira de Trabalho: <span style="color: #1976d2;">Enviado</span></li>
+      <li><i class="pi pi-times p-mr-2" style="color:#d32f2f"></i> Comprovante de Endereço: <span style="color: #d32f2f;">Pendente</span></li>
+    </ul>
+    <div class="p-d-flex p-flex-column p-gap-2 p-mt-4">
+      <button pButton type="button" label="Verificar Status" icon="pi pi-info-circle" class="p-button-primary" (click)="abrirDialog()"></button>
+      <button pButton type="button" label="Voltar" icon="pi pi-arrow-left" class="p-button-outlined p-button-primary" routerLink="/lista-acessos"></button>
+    </div>
+  </div>
+</div>

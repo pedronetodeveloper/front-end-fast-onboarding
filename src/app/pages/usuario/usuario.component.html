@@ -1,0 +1,248 @@
+<div class="usuario-container" [@pageAnimation]>
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>{{ 'usuario.title' | translate }}</h2>
+        <p class="card-subtitle">{{ 'usuario.subtitle' | translate }}</p>
+      </div>
+    </ng-template>
+
+    <p-toolbar styleClass="mb-4">
+      <ng-template pTemplate="left">
+        <p-button 
+          severity="success" 
+          [label]="'usuario.new' | translate"
+          icon="pi pi-plus" 
+          (onClick)="novoUsuario()">
+        </p-button>
+      </ng-template>
+      
+      <ng-template pTemplate="center">
+        <div class="search-container">
+            <p-iconfield>
+                <p-inputicon class="pi pi-search" />
+                <input type="text" pInputText placeholder="Search" />
+            </p-iconfield>
+        </div>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table 
+      [value]="filteredUsuarios" 
+      [loading]="loading"
+      [scrollable]="true"
+      scrollHeight="400px"
+      styleClass="p-datatable-striped"
+      [sortField]="sortField"
+      [sortOrder]="sortOrder"
+      (onSort)="onSort($event)">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="nome">
+            {{ 'usuario.name' | translate }}
+            <p-sortIcon field="nome"></p-sortIcon>
+          </th>
+          <th pSortableColumn="email">
+            {{ 'usuario.email' | translate }}
+            <p-sortIcon field="email"></p-sortIcon>
+          </th>
+          <th pSortableColumn="matricula">
+            {{ 'usuario.matricula' | translate }}
+            <p-sortIcon field="matricula"></p-sortIcon>
+          </th>
+          <th pSortableColumn="idiomaPreferencia">
+            {{ 'usuario.language' | translate }}
+            <p-sortIcon field="idiomaPreferencia"></p-sortIcon>
+          </th>
+          <th style="width: 200px">{{ 'common.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="body" let-usuario>
+        <tr>
+          <td>
+            <div class="user-info">
+              <i class="pi pi-user user-icon"></i>
+              <span class="user-name">{{ usuario.nome }}</span>
+            </div>
+          </td>
+          <td>{{ usuario.email }}</td>
+          <td>
+            <p-tag 
+              *ngIf="usuario.matricula; else noMatricula"
+              [value]="usuario.matricula"
+              severity="info">
+            </p-tag>
+            <ng-template #noMatricula>
+              <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
+            </ng-template>
+          </td>
+          <td>
+            <p-tag 
+              [value]="getIdiomaTag(usuario.idiomaPreferencia || 'pt')"
+              severity="secondary">
+            </p-tag>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <p-button 
+                icon="pi pi-pencil" 
+                severity="info" 
+                size="small"
+                [title]="'common.edit' | translate"
+                (onClick)="editarUsuario(usuario)">
+              </p-button>
+              <p-button 
+                icon="pi pi-trash" 
+                severity="danger" 
+                size="small"
+                [title]="'common.delete' | translate"
+                (onClick)="confirmarExclusao(usuario)">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="loadingbody">
+        <tr>
+          <td><p-skeleton height="2rem"></p-skeleton></td>
+          <td><p-skeleton height="2rem"></p-skeleton></td>
+          <td><p-skeleton height="2rem"></p-skeleton></td>
+          <td><p-skeleton height="2rem"></p-skeleton></td>
+          <td><p-skeleton height="2rem"></p-skeleton></td>
+          <td>
+            <div class="action-buttons">
+              <p-skeleton width="2rem" height="2rem" borderRadius="4px"></p-skeleton>
+              <p-skeleton width="2rem" height="2rem" borderRadius="4px"></p-skeleton>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let item of [1,2,3,4,5]">
+          <td>
+            <div class="user-info">
+              <div class="skeleton-icon"></div>
+              <div class="skeleton-text skeleton-name"></div>
+            </div>
+          </td>
+          <td>
+            <div class="skeleton-text skeleton-email"></div>
+          </td>
+          <td>
+            <div class="skeleton-tag"></div>
+          </td>
+          <td>
+            <div class="skeleton-tag"></div>
+          </td>
+          <td>
+            <div class="skeleton-tag skeleton-small"></div>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <div class="skeleton-button"></div>
+              <div class="skeleton-button"></div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center">
+            <div class="empty-state">
+              <i class="pi pi-users empty-icon"></i>
+              <p>{{ 'usuario.empty' | translate }}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog para criar/editar usuário -->
+  <p-dialog 
+    [header]="isEditing ? ('usuario.edit' | translate) : ('usuario.new' | translate)"
+    [(visible)]="displayDialog" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false">
+    
+    <div class="dialog-content">
+      <div class="field">
+        <label for="nome">{{ 'usuario.name' | translate }} *</label>
+        <input 
+          id="nome"
+          type="text" 
+          pInputText 
+          [(ngModel)]="usuarioForm.nome"
+          class="w-full"
+          [placeholder]="'usuario.namePlaceholder' | translate" />
+      </div>
+
+      <div class="field">
+        <label for="email">{{ 'usuario.email' | translate }} *</label>
+        <input 
+          id="email"
+          type="email" 
+          pInputText 
+          [(ngModel)]="usuarioForm.email"
+          class="w-full"
+          [placeholder]="'usuario.emailPlaceholder' | translate" />
+      </div>
+
+      <div class="field">
+        <label for="matricula">{{ 'usuario.matricula' | translate }}</label>
+        <input 
+          id="matricula"
+          type="text" 
+          pInputText 
+          [(ngModel)]="usuarioForm.matricula"
+          class="w-full"
+          maxlength="6"
+          [placeholder]="'usuario.matriculaPlaceholder' | translate" />
+      </div>
+
+      <div class="field">
+        <label for="idioma">{{ 'usuario.language' | translate }}</label>
+        <p-dropdown 
+          id="idioma"
+          [(ngModel)]="usuarioForm.idiomaPreferencia"
+          [options]="idiomaOptions"
+          optionLabel="label"
+          optionValue="value"
+          class="w-full"
+          [placeholder]="'usuario.languagePlaceholder' | translate">
+        </p-dropdown>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <p-button 
+          [label]="'common.cancel' | translate"
+          icon="pi pi-times" 
+          variant="outlined"
+          severity="secondary"
+          (onClick)="fecharDialog()">
+        </p-button>
+        <p-button 
+          [label]="'common.save' | translate"
+          icon="pi pi-check" 
+          (onClick)="salvarUsuario()"
+          [loading]="loading">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Toast para mensagens -->
+  <p-toast></p-toast>
+  
+  <!-- Confirmation Dialog -->
+  <p-confirmDialog></p-confirmDialog>
+</div>

@@ -1,0 +1,37 @@
+import { Component } from '@angular/core';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
+@Component({
+  selector: 'app-upload-documentos',
+  imports: [DialogModule, ButtonModule, ToastModule],
+  providers: [MessageService],
+  templateUrl: './upload-documentos.component.html',
+  styleUrl: './upload-documentos.component.scss'
+})
+export class UploadDocumentosComponent {
+  displayDialog = false;
+  arquivos: any = {};
+
+  constructor(private messageService: MessageService) {}
+
+  abrirDialog() {
+    this.displayDialog = true;
+  }
+
+  onFileChange(event: any, tipo: string) {
+    this.arquivos[tipo] = event.target.files[0];
+  }
+
+  enviar() {
+    if (Object.keys(this.arquivos).length === 5) {
+      this.messageService.add({severity:'success', summary:'Sucesso', detail:'Documentos enviados com sucesso!'});
+      this.displayDialog = false;
+      this.arquivos = {};
+    } else {
+      this.messageService.add({severity:'error', summary:'Erro', detail:'Envie todos os documentos!'});
+    }
+  }
+}

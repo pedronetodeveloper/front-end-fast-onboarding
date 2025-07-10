@@ -1,0 +1,20 @@
+.language-selector {
+  min-width: 150px;
+}
+
+.language-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flag {
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 0.9rem;
+}

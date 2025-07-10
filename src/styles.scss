@@ -1,0 +1,647 @@
+@use 'primeflex/primeflex.scss';
+@use '../node_modules/primeicons/primeicons.css';
+
+/* Global Styles */
+html, body { 
+  height: 100%; 
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--surface-a);
+  color: var(--text-color);
+}
+
+/* CSS Variables - Customizable Color System */
+:root {
+  /* Primary Colors */
+  --primary-color: #9C27B0;
+  --primary-color-dark: #7B1FA2;
+  --primary-color-light: #BA68C8;
+  --primary-color-text: #FFFFFF;
+  
+  /* Surface Colors */
+  --surface-a: #FFFFFF;
+  --surface-b: #FAFAFA;
+  --surface-c: #F8F9FA;
+  --surface-d: #F5F5F5;
+  --surface-e: #FFFFFF;
+  
+  /* Text Colors */
+  --text-color: #333333;
+  --text-color-secondary: #666666;
+  --text-color-muted: #999999;
+  
+  /* Border and Shadow */
+  
+  /* Primary Color Opacity Variations */
+  --primary-alpha-5: rgba(156, 39, 176, 0.08);
+  --primary-alpha-10: rgba(156, 39, 176, 0.15);
+  --primary-alpha-15: rgba(156, 39, 176, 0.2);
+  --primary-alpha-20: rgba(156, 39, 176, 0.25);
+  --primary-alpha-25: rgba(156, 39, 176, 0.3);
+  --primary-alpha-30: rgba(156, 39, 176, 0.35);
+  --primary-alpha-35: rgba(156, 39, 176, 0.4);
+  --primary-alpha-40: rgba(156, 39, 176, 0.45);
+
+  --border-color: #E5E5E5;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --hover-bg: var(--primary-alpha-5);
+}
+
+/* Dark Theme */
+.dark-theme {
+  --primary-color: #9C27B0;
+  --primary-color-text: #FFFFFF;
+  
+  --surface-a: #121212;
+  --surface-b: #1A1A1A;
+  --surface-c: #242424;
+  --surface-d: #2E2E2E;
+  --surface-e: #181818;
+  
+  --text-color: #F5F5F5;
+  --text-color-secondary: #B0B0B0;
+  --text-color-muted: #808080;
+
+  --primary-alpha-5: rgba(156, 39, 176, 0.08);
+  --primary-alpha-10: rgba(156, 39, 176, 0.15);
+  --primary-alpha-15: rgba(156, 39, 176, 0.2);
+  --primary-alpha-20: rgba(156, 39, 176, 0.25);
+  --primary-alpha-25: rgba(156, 39, 176, 0.3);
+  --primary-alpha-30: rgba(156, 39, 176, 0.35);
+  --primary-alpha-35: rgba(156, 39, 176, 0.4);
+  --primary-alpha-40: rgba(156, 39, 176, 0.45);
+  
+  --border-color: #3A3A3A;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --hover-bg: var(--primary-alpha-10);
+}
+
+/* Layout Styles */
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-a);
+  transition: background-color 0.3s ease;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 2rem;
+  background-color: var(--surface-a);
+}
+
+/* Loading Spinner */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem;
+  }
+}
+
+/* ============================================== */
+/* PRIMENG COMPONENT CUSTOMIZATION */
+/* ============================================== */
+
+/* Buttons */
+.p-button {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color-text) !important;
+  font-weight: 500;
+  
+  &:hover {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 2px var(--primary-alpha-20);
+  }
+  
+  &.p-button-secondary {
+    background-color: transparent;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+      border-color: var(--primary-color-dark);
+      color: var(--primary-color-dark);
+    }
+  }
+  
+  &.p-button-text {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--primary-color);
+    
+    &:hover {
+      background-color: var(--hover-bg) !important;
+      color: var(--primary-color-dark) !important;
+    }
+  }
+
+  /* Warning Button */
+  &.p-button-warning {
+    background-color: var(--warning-color);
+    border-color: var(--warning-color);
+    color: white;
+    
+    &:hover {
+      background-color: var(--attention-color);
+      border-color: var(--attention-color);
+    }
+  }
+
+  /* Success Button */
+  &.p-button-success {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+    color: white;
+    
+    &:hover {
+      background-color: #16a34a;
+      border-color: #16a34a;
+    }
+  }
+
+  /* Danger Button */
+  &.p-button-danger {
+    background-color: var(--error-color);
+    border-color: var(--error-color);
+    color: white;
+    
+    &:hover {
+      background-color: #dc2626;
+      border-color: #dc2626;
+    }
+  }
+
+  /* Info Button */
+  &.p-button-info {
+    background-color: var(--info-color);
+    border-color: var(--info-color);
+    color: white;
+    
+    &:hover {
+      background-color: #2563eb;
+      border-color: #2563eb;
+    }
+  }
+
+  /* Help Button */
+  &.p-button-help {
+    background-color: #8b5cf6;
+    border-color: #8b5cf6;
+    color: white;
+    
+    &:hover {
+      background-color: #7c3aed;
+      border-color: #7c3aed;
+    }
+  }
+}
+
+/* Inputs */
+.p-inputtext,
+.p-inputtextarea,
+.p-password input,
+.p-dropdown,
+.p-multiselect,
+.p-calendar input {
+  border-color: var(--border-color) !important;
+  background-color: var(--surface-a) !important;
+  color: var(--text-color) !important;
+  
+  &:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 2px var(--primary-alpha-10) !important;
+    outline: none;
+  }
+  
+  &:hover:not(:focus) {
+    border-color: var(--primary-color) !important;
+  }
+  
+  &::placeholder {
+    color: var(--text-color-muted);
+  }
+}
+
+/* Dropdown */
+.p-dropdown {
+  &:not(.p-disabled):hover {
+    border-color: var(--primary-color);
+  }
+  
+  &:not(.p-disabled).p-focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-alpha-10);
+  }
+}
+
+.p-dropdown-panel {
+  background-color: var(--surface-e);
+  border-color: var(--border-color);
+  
+  .p-dropdown-items .p-dropdown-item {
+    color: var(--text-color);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    &.p-highlight {
+      background-color: var(--primary-color) !important;
+      color: var(--primary-color-text);
+    }
+  }
+}
+
+/* Cards */
+.p-card {
+  background-color: var(--surface-e);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
+  
+  .p-card-title {
+    color: var(--text-color);
+  }
+  
+  .p-card-subtitle {
+    color: var(--text-color-secondary);
+  }
+  
+  .p-card-content {
+    color: var(--text-color);
+  }
+}
+
+/* Data Tables */
+.p-datatable {
+  background-color: var(--surface-e);
+  border: 1px solid var(--border-color);
+  
+  .p-datatable-header {
+    background-color: var(--surface-b);
+    color: var(--text-color);
+  }
+  
+  .p-datatable-thead > tr > th {
+    background-color: var(--surface-c) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-color);
+    
+    &.p-highlight {
+      color: var(--primary-color);
+      
+      .p-sortable-column-icon {
+        color: var(--primary-color);
+      }
+    }
+  }
+  
+  .p-datatable-tbody > tr {
+    background-color: var(--surface-e);
+    border-color: var(--border-color);
+    
+    &:nth-child(even) {
+      background-color: var(--surface-b);
+    }
+    
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    > td {
+      border-color: var(--border-color);
+      color: var(--text-color);
+    }
+  }
+  
+  .p-datatable-footer {
+    background-color: var(--surface-b);
+    color: var(--text-color);
+  }
+}
+
+/* Paginator */
+.p-paginator {
+  background-color: var(--surface-b);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  
+  .p-paginator-element {
+    color: var(--text-color-secondary);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+      color: var(--primary-color);
+    }
+    
+    &.p-highlight {
+      background-color: var(--primary-color);
+      color: var(--primary-color-text);
+    }
+  }
+  
+  .p-paginator-current {
+    align-content: center;
+  }
+}
+
+/* Dialog */
+.p-dialog {
+  .p-dialog-header {
+    background-color: var(--surface-e);
+    
+    .p-dialog-title {
+      color: var(--text-color);
+    }
+    
+    .p-dialog-header-icon {
+      background: transparent !important;
+      border: none !important;
+      color: var(--text-color-secondary) !important;
+      
+      &:hover {
+        background-color: var(--surface-d) !important;
+        color: var(--text-color) !important;
+      }
+    }
+  }
+  
+  .p-dialog-content {
+    background-color: var(--surface-e);
+    color: var(--text-color);
+  }
+  
+  .p-dialog-footer {
+    color: var(--text-color);
+  }
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+  border: none;
+  background: var(--surface-c);
+  color: var(--text-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+
+  &:hover {
+    background: var(--hover-bg);
+    transform: scale(1.1);
+  }
+
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+/* PrimeNG InputSwitch Customization */
+.p-inputswitch {
+  .p-inputswitch-slider {
+    background: var(--surface-c);
+    border: 1.5px solid var(--border-color);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  &.p-inputswitch-checked .p-inputswitch-slider {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  .p-inputswitch-slider:before {
+    background: var(--primary-color-text);
+    box-shadow: 0 2px 8px var(--shadow-color);
+  }
+
+  &:not(.p-disabled):hover .p-inputswitch-slider {
+    border-color: var(--primary-color-dark);
+  }
+
+  &.p-inputswitch-checked:not(.p-disabled):hover .p-inputswitch-slider {
+    background: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+  }
+}
+
+/* PrimeNG ToggleSwitch Customization */
+.p-toggleswitch {
+  .p-toggleswitch-slider {
+    background: var(--surface-c);
+    border: 1.5px solid var(--border-color);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  &.p-toggleswitch-checked .p-toggleswitch-slider {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+  .p-toggleswitch-slider:before {
+    background: var(--primary-color-text);
+    box-shadow: 0 2px 8px var(--shadow-color);
+  }
+  &:not(.p-disabled):hover .p-toggleswitch-slider {
+    border-color: var(--primary-color-dark);
+  }
+  &.p-toggleswitch-checked:not(.p-disabled):hover .p-toggleswitch-slider {
+    background: var(--primary-color-dark) !important;
+    border-color: var(--primary-color-dark) !important;
+  }
+}
+
+.dark-theme {
+  .p-inputswitch {
+    .p-inputswitch-slider {
+      background: var(--surface-c) !important;
+    }
+    &.p-toggleswitch-checked .p-toggleswitch-slider {
+      background: var(--primary-color) !important;
+    }
+    .p-inputswitch-slider:before {
+      background: var(--primary-color-text) !important;
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+  }
+
+  .p-card {
+    background-color: var(--surface-e);
+    
+    .p-card-content {
+      background-color: var(--surface-e);
+      color: var(--text-color);
+    }
+  }
+  
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      background-color: var(--surface-c);
+      border-color: var(--border-color);
+      color: var(--text-color);
+    }
+    
+    .p-datatable-tbody > tr {
+      background-color: var(--surface-e);
+      border-color: var(--border-color);
+      
+      &:nth-child(even) {
+        background-color: var(--surface-b);
+      }
+      
+      > td {
+        border-color: var(--border-color);
+        color: var(--text-color);
+      }
+    }
+  }
+  
+  .p-dialog {
+    .p-dialog-header {
+      background-color: var(--surface-e) !important;
+    }
+    
+    .p-dialog-content {
+      background-color: var(--surface-e) !important;
+    }
+    
+    .p-dialog-footer {
+      background-color: var(--surface-b) !important;
+    }
+  }
+}
+
+/* Sidebar and Menu */
+.p-sidebar {
+  background-color: var(--surface-e);
+  border-color: var(--border-color);
+  
+  .p-sidebar-header {
+    background-color: var(--surface-b);
+    border-bottom-color: var(--border-color);
+    
+    .p-sidebar-close {
+      background-color: transparent !important;
+      border: none !important;
+      color: var(--text-color-secondary) !important;
+      
+      &:hover {
+        background-color: var(--surface-d) !important;
+        color: var(--text-color) !important;
+      }
+    }
+  }
+}
+
+.p-menu {
+  background-color: var(--surface-e);
+  border-color: var(--border-color);
+  
+  .p-menuitem-link {
+    color: var(--text-color);
+    
+    &:hover {
+      background-color: var(--hover-bg);
+    }
+    
+    &:focus {
+      background-color: var(--hover-bg);
+    }
+    
+    .p-menuitem-icon {
+      color: var(--text-color-secondary);
+    }
+  }
+  
+  .p-menuitem.p-highlight .p-menuitem-link {
+    background-color: var(--primary-color);
+    color: var(--primary-color-text);
+    
+    .p-menuitem-icon {
+      color: var(--primary-color-text);
+    }
+  }
+}
+
+/* Chips and Tags */
+.p-chip {
+  background-color: var(--primary-alpha-10);
+  color: var(--primary-color-dark);
+  border-radius: 1rem;
+  
+  .p-chip-remove-icon {
+    color: var(--primary-color);
+    
+    &:hover {
+      color: var(--primary-color-dark);
+    }
+  }
+}
+
+.p-tag {
+  background-color: var(--primary-color);
+  color: var(--primary-color-text);
+  
+  &.p-tag-success {
+    background-color: var(--success-color);
+  }
+  
+  &.p-tag-warning {
+    background-color: var(--warning-color);
+  }
+  
+  &.p-tag-danger {
+    background-color: var(--error-color);
+  }
+  
+  &.p-tag-info {
+    background-color: var(--info-color);
+  }
+}
+
+/* Breadcrumb */
+.p-breadcrumb {
+  background-color: var(--surface-b);
+  border-color: var(--border-color);
+  border-radius: 0.5rem;
+  
+  .p-breadcrumb-list {
+    .p-menuitem-link {
+      color: var(--text-color-secondary);
+      
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+    
+    .p-menuitem:last-child .p-menuitem-link {
+      color: var(--text-color);
+      font-weight: 500;
+    }
+  }
+  
+  .p-breadcrumb-chevron {
+    color: var(--text-color-muted);
+  }
+}

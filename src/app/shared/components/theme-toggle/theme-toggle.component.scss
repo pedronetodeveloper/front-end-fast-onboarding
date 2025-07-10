@@ -1,0 +1,83 @@
+.theme-toggle-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.theme-toggle-btn {
+  border: none;
+  background: var(--surface-c);
+  color: var(--text-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px var(--shadow-color);
+
+  &:hover {
+    background: var(--hover-bg);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px var(--shadow-color);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover i {
+    transform: rotate(15deg);
+  }
+}
+
+.advanced-theme-toggle {
+  .p-button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    
+    .p-button-icon {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+/* Dark mode specific styles */
+.dark-theme {
+  .theme-toggle-btn {
+    background: var(--surface-c);
+    color: var(--text-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    
+    &:hover {
+      background: var(--hover-bg);
+    }
+  }
+}
+
+/* Animation for theme transition */
+@keyframes themeTransition {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.theme-toggle-btn.transitioning {
+  animation: themeTransition 0.5s ease-in-out;
+}

@@ -1,0 +1,223 @@
+<div class="home-container" [@pageAnimation]>
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          {{ "home.welcome" | translate }}
+          <span class="highlight">{{ "project.name" | translate }}</span>
+        </h1>
+        <p class="hero-subtitle">
+          {{ "home.subtitle" | translate }}
+        </p>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-image">
+          <i class="pi pi-bolt hero-icon"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack Section -->
+  <!-- <section class="tech-stack-section">
+    <div class="section-container">
+      <h2 class="section-title">{{ "home.techStack.title" | translate }}</h2>
+      <p class="section-subtitle">
+        {{ "home.techStack.description" | translate }}
+      </p>
+
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="tech-icon angular">
+            <i class="pi pi-android"></i>
+          </div>
+          <h3>Angular 19</h3>
+          <p>{{ "home.techStack.angular" | translate }}</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon primeng">
+            <i class="pi pi-palette"></i>
+          </div>
+          <h3>PrimeNG</h3>
+          <p>{{ "home.techStack.primeng" | translate }}</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon typescript">
+            <i class="pi pi-code"></i>
+          </div>
+          <h3>TypeScript</h3>
+          <p>{{ "home.techStack.typescript" | translate }}</p>
+        </div>
+
+        <div class="tech-card">
+          <div class="tech-icon scss">
+            <i class="pi pi-sparkles"></i>
+          </div>
+          <h3>SCSS</h3>
+          <p>{{ "home.techStack.scss" | translate }}</p>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Theme Customization Section -->
+  <!-- <section class="theme-section">
+    <div class="section-container">
+      <h2 class="section-title">{{ "home.themes.title" | translate }}</h2>
+      <p class="section-subtitle">
+        {{ "home.themes.description" | translate }}
+      </p>
+
+      <div class="theme-demo">
+        <div class="theme-controls">
+          <h3>{{ "home.themes.customize" | translate }}</h3>
+          <div class="color-palette">
+            <div class="color-group">
+              <label>{{ "home.themes.primaryColor" | translate }}</label>
+              <div class="color-options">
+                <button
+                  class="color-btn red active"
+                  (click)="changeTheme('red')"
+                  [title]="'Red Theme'"
+                ></button>
+                <button
+                  class="color-btn blue"
+                  (click)="changeTheme('blue')"
+                  [title]="'Blue Theme'"
+                ></button>
+                <button
+                  class="color-btn green"
+                  (click)="changeTheme('green')"
+                  [title]="'Green Theme'"
+                ></button>
+                <button
+                  class="color-btn purple"
+                  (click)="changeTheme('purple')"
+                  [title]="'Purple Theme'"
+                ></button>
+              </div>
+            </div>
+
+            <div class="theme-toggle">
+              <label>{{ "home.themes.darkMode" | translate }}</label>
+              <p-inputSwitch
+                [(ngModel)]="isDarkMode"
+                (onChange)="toggleDarkMode()"
+              >
+              </p-inputSwitch>
+            </div>
+          </div>
+        </div>
+
+        <div class="theme-preview">
+          <h3>{{ "home.themes.preview" | translate }}</h3>
+          <div class="preview-components">
+            <p-button [label]="'Button'" icon="pi pi-check"> </p-button>
+            <input
+              type="text"
+              pInputText
+              placeholder="Input Text"
+              styleClass="preview-input"
+            />
+            <p-card styleClass="preview-card">
+              <p>{{ "home.themes.sampleCard" | translate }}</p>
+            </p-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-container">
+      <h2 class="section-title">{{ "home.features.title" | translate }}</h2>
+      <p class="section-subtitle">
+        {{ "home.features.description" | translate }}
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-shield"></i>
+          </div>
+          <h3>{{ "home.features.authentication.title" | translate }}</h3>
+          <p>{{ "home.features.authentication.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>Simples e confiavel</li>
+            <li>Controle de acessos e rapidez</li>
+            <li>{{ "home.features.authentication.security" | translate }}</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-globe"></i>
+          </div>
+          <h3>{{ "home.features.i18n.title" | translate }}</h3>
+          <p>{{ "home.features.i18n.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>{{ "home.features.i18n.multiLanguage" | translate }}</li>
+            <li>{{ "home.features.i18n.dynamic" | translate }}</li>
+            <li>{{ "home.features.i18n.languages" | translate }}</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-mobile"></i>
+          </div>
+          <h3>{{ "home.features.responsive.title" | translate }}</h3>
+          <p>{{ "home.features.responsive.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>{{ "home.features.responsive.mobile" | translate }}</li>
+            <li>{{ "home.features.responsive.tablet" | translate }}</li>
+            <li>{{ "home.features.responsive.desktop" | translate }}</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-cog"></i>
+          </div>
+          <h3>{{ "home.features.lgpd.title" | translate }}</h3>
+          <p>{{ "home.features.lgpd.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>{{ "home.features.lgpd.confiabilite" | translate }}</li>
+            <li>{{ "home.features.lgpd.transparency" | translate }}</li>
+            <li>{{ "home.features.lgpd.userControl" | translate }}</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-bolt"></i>
+          </div>
+          <h3>{{ "home.features.architecture.fastProcessing.title" | translate }}</h3>
+          <p>{{ "home.features.architecture.fastProcessing.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>{{ "home.features.architecture.fastProcessing" | translate }}</li>
+            <li>{{ "home.features.architecture.notifications" | translate }}</li>
+            <li>{{ "home.features.architecture.fastProcessing.dash" | translate }}</li>
+          </ul>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-cog"></i>
+          </div>
+          <h3>{{ "home.features.architecture.title" | translate }}</h3>
+          <p>{{ "home.features.architecture.description" | translate }}</p>
+          <ul class="feature-list">
+            <li>{{ "home.features.architecture.modular" | translate }}</li>
+            <li>{{ "home.features.architecture.services" | translate }}</li>
+            <li>{{ "home.features.architecture.guards" | translate }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

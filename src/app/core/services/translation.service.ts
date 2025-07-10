@@ -1,0 +1,895 @@
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+
+export interface Language {
+    code: string;
+    name: string;
+    flag: string;
+}
+
+@Injectable({
+    providedIn: "root",
+})
+export class TranslationService {
+    private currentLanguageSubject = new BehaviorSubject<string>("pt");
+    public currentLanguage$ = this.currentLanguageSubject.asObservable();
+
+    private translations: { [key: string]: { [key: string]: string } } = {
+        pt: {
+            // Title
+            "project.name": "Fast Onboarding",
+            "project.description": "Aplicativo de Verificação de Documentos.",
+
+            // Navigation
+            "nav.menu": "Menu",
+            "nav.home": "Início",
+            "nav.settings": "Configurações",
+            "nav.logout": "Sair",
+            "nav.userMenu": "Menu do usuário",
+            "nav.settings.section": "Configurações",
+            "nav.language": "Idioma",
+            "nav.theme": "Tema",
+            "nav.theme.light": "Tema Claro",
+            "nav.theme.dark": "Tema Escuro",
+
+            // Home Page
+            "home.welcome": "Bem-vindo ao",
+            "home.subtitle": "Solução de reconhecimento de documentos mais rápida do mercado.",
+            "home.getStarted": "Começar",
+            "home.documentation": "Documentação",
+
+            // Tech Stack Section
+            // "home.techStack.title": "Stack Tecnológica",
+            // "home.techStack.description": "Construído com as tecnologias mais modernas e confiáveis do mercado",
+            // "home.techStack.angular": "Framework poderoso para aplicações web dinâmicas e escaláveis",
+            // "home.techStack.primeng": "Biblioteca de componentes UI rica e personalizável",
+            // "home.techStack.typescript": "Linguagem tipada que oferece maior segurança e produtividade",
+            // "home.techStack.scss": "Pré-processador CSS para estilização avançada e modular",
+
+            // Themes Section
+            // "home.themes.title": "Personalização de Tema",
+            // "home.themes.description": "Customize a aparência da aplicação com diferentes cores e modo escuro",
+            // "home.themes.customize": "Personalizar Tema",
+            // "home.themes.primaryColor": "Cor Principal",
+            // "home.themes.darkMode": "Modo Escuro",
+            // "home.themes.preview": "Visualização",
+            // "home.themes.sampleCard": "Este é um exemplo de card com o tema atual",
+
+            // Features Section
+            "home.features.title": "Recursos Principais",
+            "home.features.description": "Funcionalidades avançadas prontas para uso em sua aplicação",
+            "home.features.authentication.title": "Autenticação Simples",
+            "home.features.authentication.description": "Sistema de autenticação de fácil controle",
+            "home.features.authentication.security": "Segurança para os candidatos",
+            "home.features.i18n.title": "Internacionalização",
+            "home.features.i18n.description": "Suporte completo a múltiplos idiomas e localização",
+            "home.features.i18n.multiLanguage": "Múltiplos Idiomas",
+            "home.features.i18n.dynamic": "Troca Dinâmica",
+            "home.features.i18n.languages": "Português, Inglês e Espanhol",
+            "home.features.responsive.title": "Design Responsivo",
+            "home.features.responsive.description": "Interface otimizada para todos os dispositivos e tamanhos de tela",
+            "home.features.responsive.mobile": "Mobile First",
+            "home.features.responsive.tablet": "Tablet Otimizado",
+            "home.features.responsive.desktop": "Desktop Completo",
+            "home.features.architecture.title": "Arquitetura Sólida",
+            "home.features.architecture.description": "Estrutura modular e escalável seguindo as melhores práticas",
+            "home.features.architecture.modular": "Estrutura Modular",
+            "home.features.architecture.services": "Serviços Organizados",
+            "home.features.architecture.guards": "Guards de Rota",
+            "home.features.architecture.fastProcessing": "Leitura e validação de documentos em alta velocidade",
+            "home.features.architecture.fastProcessing.title": "Rapidez e Rastreabilidade",
+            "home.features.architecture.fastProcessing.description": "Upload e validação em segundos",
+            "home.features.architecture.fastProcessing.dash": "Dashboards",
+            "home.features.architecture.notifications": "Notificações rápidas e eficientes para o usuário",
+            "home.features.lgpd.title": "Confiabilidade",
+            "home.features.lgpd.description": "Dados protegidos e mascarados",
+            "home.features.lgpd.confiabilite": "Segurança e conformidade",
+            "home.features.lgpd.transparency": "Transparência no uso dos dados",
+            "home.features.lgpd.userControl": "Controle do usuário sobre informações",
+
+            // Quick Start Section
+            "home.quickStart.title": "Como Começar",
+            "home.quickStart.step1.title": "Fazer Login",
+            "home.quickStart.step1.description": "Acesse a aplicação usando sua conta Microsoft",
+            "home.quickStart.step1.action": "Entrar",
+            "home.quickStart.step2.title": "Explorar Dashboard",
+            "home.quickStart.step2.description": "Navegue pelo painel principal e descubra as funcionalidades",
+            "home.quickStart.step2.action": "Ver Dashboard",
+            "home.quickStart.step3.title": "Personalizar",
+            "home.quickStart.step3.description": "Configure a aplicação de acordo com suas preferências",
+            "home.quickStart.step3.action": "Configurar",
+
+            // CTA Section
+            "home.cta.title": "Pronto para Começar?",
+            "home.cta.description": "Explore todas as funcionalidades e potencialize seu desenvolvimento",
+            "home.cta.start": "Começar Agora",
+
+            // Login
+            "login.welcome": "Bem-vindo!",
+            "login.description":
+                "Faça login com sua conta Microsoft para acessar o template",
+            "login.signIn": "Entrar com Microsoft",
+            "login.termsMessage":
+                "Ao fazer login, você concorda com nossos termos de uso e política de privacidade",
+            "login.secureAuth": "Autenticação segura via Azure Entra ID",
+            "login.tryAgain": "Tentar Novamente",
+            "login.clearAndTry": "Limpar e Tentar",
+            "login.reloadPage": "Recarregar Página",
+            "login.lastSession": "Última sessão:",
+            "login.quickLogin": "Login Rápido",
+            "login.loading": "Carregando...",
+
+            // Common
+            "common.online": "Online",
+            "common.actions": "Ações",
+            "common.edit": "Editar",
+            "common.delete": "Excluir",
+            "common.save": "Salvar",
+            "common.cancel": "Cancelar",
+            "common.refresh": "Atualizar",
+            "common.notInformed": "Não informado",
+            "common.search": "Buscar...",
+            "common.clearSearch": "Limpar busca",
+
+            // Navigation
+            "nav.usuarios": "Candidatos",
+            "nav.cursos": "Cursos",
+
+            // Usuario
+            "usuario.title": "Gestão de Candidatos",
+            "usuario.subtitle": "Gerencie os candidatos",
+            "usuario.new": "Novo Candidato",
+            "usuario.edit": "Editar Candidato",
+            "usuario.name": "Nome",
+            "usuario.email": "E-mail",
+            "usuario.matricula": "Matrícula",
+            "usuario.language": "Idioma",
+            "usuario.empty": "Nenhum candidato encontrado",
+            "usuario.namePlaceholder": "Digite o nome do candidato",
+            "usuario.emailPlaceholder": "Digite o e-mail do candidato",
+            "usuario.matriculaPlaceholder": "Digite a matrícula (opcional)",
+            "usuario.languagePlaceholder": "Selecione o idioma preferido",
+
+            // Curso
+            "curso.title": "Gestão de Cursos",
+            "curso.subtitle": "Gerencie os cursos dos usuários",
+            "curso.new": "Novo Curso",
+            "curso.edit": "Editar Curso",
+            "curso.student": "Estudante",
+            "curso.status": "Status",
+            "curso.initialLevel": "Nível Inicial",
+            "curso.currentLevel": "Nível Atual",
+            "curso.currentUnit": "Unidade Atual",
+            "curso.completedUnits": "Unidades Concluídas",
+            "curso.progress": "Progresso",
+            "curso.started": "Curso Iniciado",
+            "curso.completed": "concluídas",
+            "curso.empty": "Nenhum curso encontrado",
+            "curso.selectStudent": "Selecione um estudante",
+
+            // footer
+            "footer.allRights": "Todos os direitos reservados",
+
+            // PrimeNG Translations
+            "primeng.startsWith": "Começa com",
+            "primeng.contains": "Contém",
+            "primeng.notContains": "Não contém",
+            "primeng.endsWith": "Termina com",
+            "primeng.equals": "Igual a",
+            "primeng.notEquals": "Diferente de",
+            "primeng.noFilter": "Sem filtro",
+            "primeng.apply": "Aplicar",
+            "primeng.matchAll": "Corresponder a todos",
+            "primeng.matchAny": "Corresponder a qualquer",
+            "primeng.addRule": "Adicionar regra",
+            "primeng.removeRule": "Remover regra",
+            "primeng.accept": "Sim",
+            "primeng.reject": "Não",
+            "primeng.choose": "Escolher",
+            "primeng.upload": "Enviar",
+            "primeng.cancel": "Cancelar",
+            "primeng.completed": "Concluído",
+            "primeng.pending": "Pendente",
+            "primeng.dayNames":
+                "Domingo,Segunda-feira,Terça-feira,Quarta-feira,Quinta-feira,Sexta-feira,Sábado",
+            "primeng.dayNamesShort": "Dom,Seg,Ter,Qua,Qui,Sex,Sáb",
+            "primeng.dayNamesMin": "D,S,T,Q,Q,S,S",
+            "primeng.monthNames":
+                "Janeiro,Fevereiro,Março,Abril,Maio,Junho,Julho,Agosto,Setembro,Outubro,Novembro,Dezembro",
+            "primeng.monthNamesShort":
+                "Jan,Fev,Mar,Abr,Mai,Jun,Jul,Ago,Set,Out,Nov,Dez",
+            "primeng.chooseYear": "Escolher ano",
+            "primeng.chooseMonth": "Escolher mês",
+            "primeng.chooseDate": "Escolher data",
+            "primeng.prevDecade": "Década anterior",
+            "primeng.nextDecade": "Próxima década",
+            "primeng.prevYear": "Ano anterior",
+            "primeng.nextYear": "Próximo ano",
+            "primeng.prevMonth": "Mês anterior",
+            "primeng.nextMonth": "Próximo mês",
+            "primeng.prevHour": "Hora anterior",
+            "primeng.nextHour": "Próxima hora",
+            "primeng.prevMinute": "Minuto anterior",
+            "primeng.nextMinute": "Próximo minuto",
+            "primeng.prevSecond": "Segundo anterior",
+            "primeng.nextSecond": "Próximo segundo",
+            "primeng.am": "AM",
+            "primeng.pm": "PM",
+            "primeng.today": "Hoje",
+            "primeng.weekHeader": "Sm",
+            "primeng.firstDayOfWeek": "0",
+            "primeng.showMonthAfterYear": "false",
+            "primeng.dateFormat": "dd/mm/yy",
+            "primeng.weak": "Fraca",
+            "primeng.medium": "Média",
+            "primeng.strong": "Forte",
+            "primeng.passwordPrompt": "Digite uma senha",
+            "primeng.emptyFilterMessage": "Nenhum resultado encontrado",
+            "primeng.searchMessage": "{0} resultados disponíveis",
+            "primeng.selectionMessage": "{0} itens selecionados",
+            "primeng.emptySelectionMessage": "Nenhum item selecionado",
+            "primeng.emptySearchMessage": "Nenhum resultado encontrado",
+            "primeng.emptyMessage": "Nenhuma opção disponível",
+            "primeng.aria.trueLabel": "Verdadeiro",
+            "primeng.aria.falseLabel": "Falso",
+            "primeng.aria.nullLabel": "Não selecionado",
+            "primeng.aria.star": "estrela",
+            "primeng.aria.stars": "estrelas",
+            "primeng.aria.selectAll": "Todos os itens selecionados",
+            "primeng.aria.unselectAll": "Todos os itens desmarcados",
+            "primeng.aria.close": "Fechar",
+            "primeng.aria.previous": "Anterior",
+            "primeng.aria.next": "Próximo",
+            "primeng.aria.navigation": "Navegação",
+            "primeng.aria.scrollTop": "Rolar para o topo",
+            "primeng.aria.moveUp": "Mover para cima",
+            "primeng.aria.moveTop": "Mover para o topo",
+            "primeng.aria.moveDown": "Mover para baixo",
+            "primeng.aria.moveBottom": "Mover para baixo",
+            "primeng.aria.moveToTarget": "Mover para o destino",
+            "primeng.aria.moveToSource": "Mover para a origem",
+            "primeng.aria.moveAllToTarget": "Mover todos para o destino",
+            "primeng.aria.moveAllToSource": "Mover todos para a origem",
+            "primeng.aria.pageLabel": "Página {page}",
+            "primeng.aria.firstPageLabel": "Primeira página",
+            "primeng.aria.lastPageLabel": "Última página",
+            "primeng.aria.nextPageLabel": "Próxima página",
+            "primeng.aria.prevPageLabel": "Página anterior",
+            "primeng.aria.rowsPerPageLabel": "Linhas por página",
+            "primeng.aria.jumpToPageDropdownLabel": "Ir para a página",
+            "primeng.aria.jumpToPageInputLabel": "Ir para a página",
+            "primeng.aria.selectRow": "Linha selecionada",
+            "primeng.aria.unselectRow": "Linha desmarcada",
+            "primeng.aria.expandRow": "Linha expandida",
+            "primeng.aria.collapseRow": "Linha recolhida",
+            "primeng.aria.showFilterMenu": "Mostrar menu de filtro",
+            "primeng.aria.hideFilterMenu": "Ocultar menu de filtro",
+            "primeng.aria.filterOperator": "Operador de filtro",
+            "primeng.aria.filterConstraint": "Restrição de filtro",
+            "primeng.aria.editRow": "Editar linha",
+            "primeng.aria.saveEdit": "Salvar edição",
+            "primeng.aria.cancelEdit": "Cancelar edição",
+            "primeng.aria.listView": "Visualização de lista",
+            "primeng.aria.gridView": "Visualização de grade",
+            "primeng.aria.slide": "Slide",
+            "primeng.aria.slideNumber": "{slideNumber}",
+            "primeng.aria.zoomImage": "Ampliar imagem",
+            "primeng.aria.zoomIn": "Ampliar",
+            "primeng.aria.zoomOut": "Reduzir",
+            "primeng.aria.rotateRight": "Girar à direita",
+            "primeng.aria.rotateLeft": "Girar à esquerda",
+        },
+
+        en: {
+            // Title
+            "project.name": "Angular Template",
+            "project.description": "Agile template for web applications.",
+
+            // Navigation
+            "nav.menu": "Menu",
+            "nav.home": "Home",
+            "nav.settings": "Settings",
+            "nav.logout": "Logout",
+            "nav.userMenu": "User menu",
+            "nav.settings.section": "Settings",
+            "nav.language": "Language",
+            "nav.theme": "Theme",
+            "nav.theme.light": "Light Theme",
+            "nav.theme.dark": "Dark Theme",
+
+            // Home Page
+            "home.welcome": "Welcome to",
+            "home.subtitle": "Modern and scalable solution for web development with Angular 19 and PrimeNG",
+            "home.getStarted": "Get Started",
+            "home.documentation": "Documentation",
+
+            // Tech Stack Section
+            "home.techStack.title": "Technology Stack",
+            "home.techStack.description": "Built with the most modern and reliable technologies on the market",
+            "home.techStack.angular": "Powerful framework for dynamic and scalable web applications",
+            "home.techStack.primeng": "Rich and customizable UI component library",
+            "home.techStack.typescript": "Typed language that offers greater security and productivity",
+            "home.techStack.scss": "CSS preprocessor for advanced and modular styling",
+
+            // Themes Section
+            "home.themes.title": "Theme Customization",
+            "home.themes.description": "Customize the application appearance with different colors and dark mode",
+            "home.themes.customize": "Customize Theme",
+            "home.themes.primaryColor": "Primary Color",
+            "home.themes.darkMode": "Dark Mode",
+            "home.themes.preview": "Preview",
+            "home.themes.sampleCard": "This is an example card with the current theme",
+
+            // Features Section
+            "home.features.title": "Main Features",
+            "home.features.description": "Advanced features ready to use in your application",
+            "home.features.authentication.title": "Simple Authentication",
+            "home.features.authentication.description": "Easy-to-control authentication system",
+            "home.features.authentication.security": "Security for candidates",
+            "home.features.i18n.title": "Internationalization",
+            "home.features.i18n.description": "Full support for multiple languages and localization",
+            "home.features.i18n.multiLanguage": "Multiple Languages",
+            "home.features.i18n.dynamic": "Dynamic Switching",
+            "home.features.i18n.languages": "Portuguese, English and Spanish",
+            "home.features.responsive.title": "Responsive Design",
+            "home.features.responsive.description": "Interface optimized for all devices and screen sizes",
+            "home.features.responsive.mobile": "Mobile First",
+            "home.features.responsive.tablet": "Tablet Optimized",
+            "home.features.responsive.desktop": "Full Desktop",
+            "home.features.architecture.title": "Solid Architecture",
+            "home.features.architecture.description": "Modular and scalable structure following best practices",
+            "home.features.architecture.modular": "Modular Structure",
+            "home.features.architecture.services": "Organized Services",
+            "home.features.architecture.guards": "Route Guards",
+            "home.features.architecture.fastProcessing": "High-speed document reading and validation",
+            "home.features.architecture.fastProcessing.title": "Speed and Traceability",
+            "home.features.architecture.fastProcessing.description": "Upload and validation in seconds",
+            "home.features.architecture.fastProcessing.dash": "Dashboards",
+            "home.features.architecture.notifications": "Quick and efficient notifications for the user",
+            "home.features.lgpd.title": "Reliability",
+            "home.features.lgpd.description": "Protected and masked data",
+            "home.features.lgpd.confiabilite": "Security and compliance",
+            "home.features.lgpd.transparency": "Transparency in data usage",
+            "home.features.lgpd.userControl": "User control over information",
+
+            // Quick Start Section
+            "home.quickStart.title": "Getting Started",
+            "home.quickStart.step1.title": "Sign In",
+            "home.quickStart.step1.description": "Access the application using your Microsoft account",
+            "home.quickStart.step1.action": "Sign In",
+            "home.quickStart.step2.title": "Explore Dashboard",
+            "home.quickStart.step2.description": "Navigate through the main panel and discover the features",
+            "home.quickStart.step2.action": "View Dashboard",
+            "home.quickStart.step3.title": "Customize",
+            "home.quickStart.step3.description": "Configure the application according to your preferences",
+            "home.quickStart.step3.action": "Configure",
+
+            // CTA Section
+            "home.cta.title": "Ready to Get Started?",
+            "home.cta.description": "Explore all features and boost your development",
+            "home.cta.start": "Start Now",
+
+            // Login
+            "login.subtitle": "Automation and Monitoring System",
+            "login.welcome": "Welcome!",
+            "login.description":
+                "Sign in with your Microsoft account to access the template",
+            "login.signIn": "Sign in with Microsoft",
+            "login.termsMessage":
+                "By signing in, you agree to our terms of use and privacy policy",
+            "login.secureAuth": "Secure authentication via Azure Entra ID",
+            "login.tryAgain": "Try Again",
+            "login.clearAndTry": "Clear and Try",
+            "login.reloadPage": "Reload Page",
+            "login.lastSession": "Last session:",
+            "login.quickLogin": "Quick Login",
+            "login.loading": "Loading...",
+
+            // Common
+            "common.online": "Online",
+            "common.actions": "Actions",
+            "common.edit": "Edit",
+            "common.delete": "Delete",
+            "common.save": "Save",
+            "common.cancel": "Cancel",
+            "common.refresh": "Refresh",
+            "common.notInformed": "Not informed",
+            "common.search": "Search...",
+            "common.clearSearch": "Clear search",
+
+            // Navigation
+            "nav.usuarios": "Users",
+            "nav.cursos": "Courses",
+
+            // Usuario
+            "usuario.title": "User Management",
+            "usuario.subtitle": "Manage system users",
+            "usuario.new": "New User",
+            "usuario.edit": "Edit User",
+            "usuario.name": "Name",
+            "usuario.email": "Email",
+            "usuario.matricula": "Registration",
+            "usuario.language": "Language",
+            "usuario.courses": "Courses",
+            "usuario.empty": "No users found",
+            "usuario.namePlaceholder": "Enter user name",
+            "usuario.emailPlaceholder": "Enter user email",
+            "usuario.matriculaPlaceholder": "Enter registration (optional)",
+            "usuario.languagePlaceholder": "Select preferred language",
+
+            // Curso
+            "curso.title": "Course Management",
+            "curso.subtitle": "Manage user courses",
+            "curso.new": "New Course",
+            "curso.edit": "Edit Course",
+            "curso.student": "Student",
+            "curso.status": "Status",
+            "curso.initialLevel": "Initial Level",
+            "curso.currentLevel": "Current Level",
+            "curso.currentUnit": "Current Unit",
+            "curso.completedUnits": "Completed Units",
+            "curso.progress": "Progress",
+            "curso.started": "Course Started",
+            "curso.completed": "completed",
+            "curso.empty": "No courses found",
+            "curso.selectStudent": "Select a student",
+
+            // footer
+            "footer.allRights": "All rights reserved",
+
+            // PrimeNG Translations
+            "primeng.startsWith": "Starts with",
+            "primeng.contains": "Contains",
+            "primeng.notContains": "Not contains",
+            "primeng.endsWith": "Ends with",
+            "primeng.equals": "Equals",
+            "primeng.notEquals": "Not equals",
+            "primeng.noFilter": "No Filter",
+            "primeng.apply": "Apply",
+            "primeng.matchAll": "Match All",
+            "primeng.matchAny": "Match Any",
+            "primeng.addRule": "Add Rule",
+            "primeng.removeRule": "Remove Rule",
+            "primeng.accept": "Yes",
+            "primeng.reject": "No",
+            "primeng.choose": "Choose",
+            "primeng.upload": "Upload",
+            "primeng.cancel": "Cancel",
+            "primeng.completed": "Completed",
+            "primeng.pending": "Pending",
+            "primeng.dayNames":
+                "Sunday,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday",
+            "primeng.dayNamesShort": "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+            "primeng.dayNamesMin": "Su,Mo,Tu,We,Th,Fr,Sa",
+            "primeng.monthNames":
+                "January,February,March,April,May,June,July,August,September,October,November,December",
+            "primeng.monthNamesShort":
+                "Jan,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov,Dec",
+            "primeng.chooseYear": "Choose Year",
+            "primeng.chooseMonth": "Choose Month",
+            "primeng.chooseDate": "Choose Date",
+            "primeng.prevDecade": "Previous Decade",
+            "primeng.nextDecade": "Next Decade",
+            "primeng.prevYear": "Previous Year",
+            "primeng.nextYear": "Next Year",
+            "primeng.prevMonth": "Previous Month",
+            "primeng.nextMonth": "Next Month",
+            "primeng.prevHour": "Previous Hour",
+            "primeng.nextHour": "Next Hour",
+            "primeng.prevMinute": "Previous Minute",
+            "primeng.nextMinute": "Next Minute",
+            "primeng.prevSecond": "Previous Second",
+            "primeng.nextSecond": "Next Second",
+            "primeng.am": "AM",
+            "primeng.pm": "PM",
+            "primeng.today": "Today",
+            "primeng.weekHeader": "Wk",
+            "primeng.firstDayOfWeek": "0",
+            "primeng.showMonthAfterYear": "false",
+            "primeng.dateFormat": "mm/dd/yyyy",
+            "primeng.weak": "Weak",
+            "primeng.medium": "Medium",
+            "primeng.strong": "Strong",
+            "primeng.passwordPrompt": "Enter a password",
+            "primeng.emptyFilterMessage": "No results found",
+            "primeng.searchMessage": "{0} results are available",
+            "primeng.selectionMessage": "{0} items selected",
+            "primeng.emptySelectionMessage": "No selected item",
+            "primeng.emptySearchMessage": "No results found",
+            "primeng.emptyMessage": "No available options",
+            "primeng.aria.trueLabel": "True",
+            "primeng.aria.falseLabel": "False",
+            "primeng.aria.nullLabel": "Not Selected",
+            "primeng.aria.star": "star",
+            "primeng.aria.stars": "stars",
+            "primeng.aria.selectAll": "All items selected",
+            "primeng.aria.unselectAll": "All items unselected",
+            "primeng.aria.close": "Close",
+            "primeng.aria.previous": "Previous",
+            "primeng.aria.next": "Next",
+            "primeng.aria.navigation": "Navigation",
+            "primeng.aria.scrollTop": "Scroll Top",
+            "primeng.aria.moveUp": "Move Up",
+            "primeng.aria.moveTop": "Move Top",
+            "primeng.aria.moveDown": "Move Down",
+            "primeng.aria.moveBottom": "Move Bottom",
+            "primeng.aria.moveToTarget": "Move to Target",
+            "primeng.aria.moveToSource": "Move to Source",
+            "primeng.aria.moveAllToTarget": "Move All to Target",
+            "primeng.aria.moveAllToSource": "Move All to Source",
+            "primeng.aria.pageLabel": "Page {page}",
+            "primeng.aria.firstPageLabel": "First Page",
+            "primeng.aria.lastPageLabel": "Last Page",
+            "primeng.aria.nextPageLabel": "Next Page",
+            "primeng.aria.prevPageLabel": "Previous Page",
+            "primeng.aria.rowsPerPageLabel": "Rows per page",
+            "primeng.aria.jumpToPageDropdownLabel": "Jump to Page Dropdown",
+            "primeng.aria.jumpToPageInputLabel": "Jump to Page Input",
+            "primeng.aria.selectRow": "Row Selected",
+            "primeng.aria.unselectRow": "Row Unselected",
+            "primeng.aria.expandRow": "Row Expanded",
+            "primeng.aria.collapseRow": "Row Collapsed",
+            "primeng.aria.showFilterMenu": "Show Filter Menu",
+            "primeng.aria.hideFilterMenu": "Hide Filter Menu",
+            "primeng.aria.filterOperator": "Filter Operator",
+            "primeng.aria.filterConstraint": "Filter Constraint",
+            "primeng.aria.editRow": "Edit Row",
+            "primeng.aria.saveEdit": "Save Edit",
+            "primeng.aria.cancelEdit": "Cancel Edit",
+            "primeng.aria.listView": "List View",
+            "primeng.aria.gridView": "Grid View",
+            "primeng.aria.slide": "Slide",
+            "primeng.aria.slideNumber": "{slideNumber}",
+            "primeng.aria.zoomImage": "Zoom Image",
+            "primeng.aria.zoomIn": "Zoom In",
+            "primeng.aria.zoomOut": "Zoom Out",
+            "primeng.aria.rotateRight": "Rotate Right",
+            "primeng.aria.rotateLeft": "Rotate Left",
+        },
+
+        es: {
+            // Title
+            "project.name": "Angular Template",
+            "project.description": "Plantilla ágil para aplicações web.",
+
+            // Navigation
+            "nav.menu": "Menú",
+            "nav.home": "Inicio",
+            "nav.settings": "Configuraciones",
+            "nav.logout": "Salir",
+            "nav.userMenu": "Menú de usuario",
+            "nav.settings.section": "Configuraciones",
+            "nav.language": "Idioma",
+            "nav.theme": "Tema",
+            "nav.theme.light": "Tema Claro",
+            "nav.theme.dark": "Tema Oscuro",
+
+            // Home Page
+            "home.welcome": "Bienvenido a",
+            "home.subtitle": "Solución moderna e escalable para desenvolvimento web com Angular 19 e PrimeNG",
+            "home.getStarted": "Comenzar",
+            "home.documentation": "Documentación",
+
+            // Tech Stack Section
+            "home.techStack.title": "Stack Tecnológico",
+            "home.techStack.description": "Construído com as tecnologias mais modernas e confiáveis do mercado",
+            "home.techStack.angular": "Framework poderoso para aplicações web dinâmicas e escaláveis",
+            "home.techStack.primeng": "Biblioteca de componentes UI rica e personalizável",
+            "home.techStack.typescript": "Lenguaje tipado que oferece maior segurança e produtividade",
+            "home.techStack.scss": "Preprocesador CSS para estilização avançada e modular",
+
+            // Themes Section
+            "home.themes.title": "Personalização de Tema",
+            "home.themes.description": "Personaliza a aparência da aplicação com diferentes cores e modo escuro",
+            "home.themes.customize": "Personalizar Tema",
+            "home.themes.primaryColor": "Color Principal",
+            "home.themes.darkMode": "Modo Escuro",
+            "home.themes.preview": "Vista Previa",
+            "home.themes.sampleCard": "Este é um exemplo de tarjeta com o tema atual",
+
+            // Features Section
+            "home.features.title": "Características Principais",
+            "home.features.description": "Funcionalidades avançadas listas para usar em sua aplicação",
+            "home.features.authentication.title": "Autenticación Segura",
+            "home.features.authentication.description": "Sistema de autenticação integrado com Microsoft Azure Entra ID",
+            "home.features.authentication.security": "Segurança Empresarial",
+            "home.features.i18n.title": "Internacionalização",
+            "home.features.i18n.description": "Suporte completo para múltiplos idiomas e localização",
+            "home.features.i18n.multiLanguage": "Múltiplos Idiomas",
+            "home.features.i18n.dynamic": "Troca Dinâmica",
+            "home.features.i18n.languages": "Português, Inglês e Espanhol",
+            "home.features.responsive.title": "Design Responsivo",
+            "home.features.responsive.description": "Interface otimizada para todos os dispositivos e tamanhos de tela",
+            "home.features.responsive.mobile": "Mobile First",
+            "home.features.responsive.tablet": "Tablet Otimizado",
+            "home.features.responsive.desktop": "Desktop Completo",
+            "home.features.architecture.title": "Arquitetura Sólida",
+            "home.features.architecture.description": "Estrutura modular e escalável seguindo as melhores práticas",
+            "home.features.architecture.modular": "Estrutura Modular",
+            "home.features.architecture.services": "Serviços Organizados",
+            "home.features.architecture.guards": "Guards de Rota",
+            "home.features.architecture.fastProcessing": "Leitura e validação de documentos em alta velocidade",
+            "home.features.architecture.fastProcessing.title": "Rapidez e Rastreabilidade",
+            "home.features.architecture.fastProcessing.description": "Upload e validação em segundos",
+            "home.features.architecture.fastProcessing.dash": "Dashboards",
+            "home.features.architecture.notifications": "Notificações rápidas e eficientes para o usuário",
+            "home.features.lgpd.transparency": "Transparência no uso de los dados",
+            "home.features.lgpd.userControl": "Controle do usuário sobre a informação",
+
+            // Quick Start Section
+            "home.quickStart.title": "Como Começar",
+            "home.quickStart.step1.title": "Iniciar Sessão",
+            "home.quickStart.step1.description": "Acesse a aplicação usando sua conta Microsoft",
+            "home.quickStart.step1.action": "Iniciar Sessão",
+            "home.quickStart.step2.title": "Explorar Dashboard",
+            "home.quickStart.step2.description": "Navegue pelo painel principal e descubra as funcionalidades",
+            "home.quickStart.step2.action": "Ver Dashboard",
+            "home.quickStart.step3.title": "Personalizar",
+            "home.quickStart.step3.description": "Configure a aplicação de acordo com suas preferências",
+            "home.quickStart.step3.action": "Configurar",
+
+            // CTA Section
+            "home.cta.title": "¿Listo para Comenzar?",
+            "home.cta.description": "Explora todas las funcionalidades y potencia tu desenvolvimento",
+            "home.cta.start": "Comenzar Agora",
+
+            // Login
+            "login.subtitle": "Sistema de Automatização e Monitoreo",
+            "login.welcome": "¡Bienvenido!",
+            "login.description":
+                "Inicia sesión con tu cuenta de Microsoft para acceder al template",
+            "login.signIn": "Iniciar sesión con Microsoft",
+            "login.termsMessage":
+                "Al iniciar sesión, aceptas nuestros términos de uso e política de privacidad",
+            "login.secureAuth": "Autenticação segura vía Azure Entra ID",
+            "login.tryAgain": "Intentar de Nuevo",
+            "login.clearAndTry": "Limpiar e Intentar",
+            "login.reloadPage": "Recargar Página",
+            "login.lastSession": "Última sesión:",
+            "login.quickLogin": "Inicio Rápido",
+            "login.loading": "Cargando...",
+
+            // Common
+            "common.online": "En línea",
+            "common.actions": "Acciones",
+            "common.edit": "Editar",
+            "common.delete": "Eliminar",
+            "common.save": "Guardar",
+            "common.cancel": "Cancelar",
+            "common.refresh": "Actualizar",
+            "common.notInformed": "No informado",
+            "common.search": "Buscar...",
+            "common.clearSearch": "Limpiar búsqueda",
+
+            // Navigation
+            "nav.usuarios": "Usuarios",
+            "nav.cursos": "Cursos",
+
+            // Usuario
+            "usuario.title": "Gestión de Usuarios",
+            "usuario.subtitle": "Gestionar usuarios del sistema",
+            "usuario.new": "Nuevo Usuario",
+            "usuario.edit": "Editar Usuario",
+            "usuario.name": "Nombre",
+            "usuario.email": "Correo",
+            "usuario.matricula": "Matrícula",
+            "usuario.language": "Idioma",
+            "usuario.courses": "Cursos",
+            "usuario.empty": "No se encontraron usuarios",
+            "usuario.namePlaceholder": "Ingrese el nombre del usuario",
+            "usuario.emailPlaceholder": "Ingrese el correo del usuario",
+            "usuario.matriculaPlaceholder": "Ingrese la matrícula (opcional)",
+            "usuario.languagePlaceholder": "Seleccione el idioma preferido",
+
+            // Curso
+            "curso.title": "Gestión de Cursos",
+            "curso.subtitle": "Gestionar cursos de usuarios",
+            "curso.new": "Nuevo Curso",
+            "curso.edit": "Editar Curso",
+            "curso.student": "Estudiante",
+            "curso.status": "Estado",
+            "curso.initialLevel": "Nivel Inicial",
+            "curso.currentLevel": "Nivel Atual",
+            "curso.currentUnit": "Unidad Actual",
+            "curso.completedUnits": "Unidades Completadas",
+            "curso.progress": "Progreso",
+            "curso.started": "Curso Iniciado",
+            "curso.completed": "completadas",
+            "curso.empty": "No se encontraron cursos",
+            "curso.selectStudent": "Seleccione un estudiante",
+
+            // footer
+            "footer.allRights": "Reservados todos os direitos",
+
+            // PrimeNG Translations
+            "primeng.startsWith": "Comienza con",
+            "primeng.contains": "Contiene",
+            "primeng.notContains": "No contiene",
+            "primeng.endsWith": "Termina con",
+            "primeng.equals": "Igual a",
+            "primeng.notEquals": "Diferente de",
+            "primeng.noFilter": "Sin filtro",
+            "primeng.apply": "Aplicar",
+            "primeng.matchAll": "Coincidir con todos",
+            "primeng.matchAny": "Coincidir con cualquiera",
+            "primeng.addRule": "Agregar regla",
+            "primeng.removeRule": "Eliminar regla",
+            "primeng.accept": "Sí",
+            "primeng.reject": "No",
+            "primeng.choose": "Elegir",
+            "primeng.upload": "Subir",
+            "primeng.cancel": "Cancelar",
+            "primeng.completed": "Completado",
+            "primeng.pending": "Pendiente",
+            "primeng.dayNames":
+                "Domingo,Lunes,Martes,Miércoles,Jueves,Viernes,Sábado",
+            "primeng.dayNamesShort": "Dom,Lun,Mar,Mié,Jue,Vie,Sáb",
+            "primeng.dayNamesMin": "D,L,M,M,J,V,S",
+            "primeng.monthNames":
+                "Enero,Febrero,Marzo,Abril,Mayo,Junio,Julio,Agosto,Septiembre,Octubre,Noviembre,Diciembre",
+            "primeng.monthNamesShort":
+                "Ene,Feb,Mar,Abr,May,Jun,Jul,Ago,Sep,Oct,Nov,Dic",
+            "primeng.chooseYear": "Elegir año",
+            "primeng.chooseMonth": "Elegir mes",
+            "primeng.chooseDate": "Elegir fecha",
+            "primeng.prevDecade": "Década anterior",
+            "primeng.nextDecade": "Próxima década",
+            "primeng.prevYear": "Año anterior",
+            "primeng.nextYear": "Próximo año",
+            "primeng.prevMonth": "Mes anterior",
+            "primeng.nextMonth": "Próximo mes",
+            "primeng.prevHour": "Hora anterior",
+            "primeng.nextHour": "Próxima hora",
+            "primeng.prevMinute": "Minuto anterior",
+            "primeng.nextMinute": "Próximo minuto",
+            "primeng.prevSecond": "Segundo anterior",
+            "primeng.nextSecond": "Próximo segundo",
+            "primeng.am": "AM",
+            "primeng.pm": "PM",
+            "primeng.today": "Hoy",
+            "primeng.weekHeader": "Sm",
+            "primeng.firstDayOfWeek": "1",
+            "primeng.showMonthAfterYear": "false",
+            "primeng.dateFormat": "dd/mm/yyyy",
+            "primeng.weak": "Débil",
+            "primeng.medium": "Media",
+            "primeng.strong": "Fuerte",
+            "primeng.passwordPrompt": "Ingrese una contraseña",
+            "primeng.emptyFilterMessage": "No se encontraron resultados",
+            "primeng.searchMessage": "{0} resultados disponibles",
+            "primeng.selectionMessage": "{0} elementos seleccionados",
+            "primeng.emptySelectionMessage": "Ningún elemento seleccionado",
+            "primeng.emptySearchMessage": "No se encontraron resultados",
+            "primeng.emptyMessage": "No hay opciones disponibles",
+            "primeng.aria.trueLabel": "Verdadero",
+            "primeng.aria.falseLabel": "Falso",
+            "primeng.aria.nullLabel": "No seleccionado",
+            "primeng.aria.star": "estrella",
+            "primeng.aria.stars": "estrelas",
+            "primeng.aria.selectAll": "Todos os itens selecionados",
+            "primeng.aria.unselectAll": "Todos os itens desmarcados",
+            "primeng.aria.close": "Fechar",
+            "primeng.aria.previous": "Anterior",
+            "primeng.aria.next": "Próximo",
+            "primeng.aria.navigation": "Navegação",
+            "primeng.aria.scrollTop": "Desplazar hacia arriba",
+            "primeng.aria.moveUp": "Mover hacia arriba",
+            "primeng.aria.moveTop": "Mover al inicio",
+            "primeng.aria.moveDown": "Mover hacia abajo",
+            "primeng.aria.moveBottom": "Mover al final",
+            "primeng.aria.moveToTarget": "Mover al destino",
+            "primeng.aria.moveToSource": "Mover al origen",
+            "primeng.aria.moveAllToTarget": "Mover todos al destino",
+            "primeng.aria.moveAllToSource": "Mover todos al origen",
+            "primeng.aria.pageLabel": "Página {page}",
+            "primeng.aria.firstPageLabel": "Primera página",
+            "primeng.aria.lastPageLabel": "Última página",
+            "primeng.aria.nextPageLabel": "Página siguiente",
+            "primeng.aria.prevPageLabel": "Página anterior",
+            "primeng.aria.rowsPerPageLabel": "Filas por página",
+            "primeng.aria.jumpToPageDropdownLabel": "Ir a la página",
+            "primeng.aria.jumpToPageInputLabel": "Ir a la página",
+            "primeng.aria.selectRow": "Fila selecionada",
+            "primeng.aria.unselectRow": "Fila deselecionada",
+            "primeng.aria.expandRow": "Fila expandida",
+            "primeng.aria.collapseRow": "Fila contraída",
+            "primeng.aria.showFilterMenu": "Mostrar menú de filtro",
+            "primeng.aria.hideFilterMenu": "Ocultar menú de filtro",
+            "primeng.aria.filterOperator": "Operador de filtro",
+            "primeng.aria.filterConstraint": "Restricción de filtro",
+            "primeng.aria.editRow": "Editar fila",
+            "primeng.aria.saveEdit": "Guardar edición",
+            "primeng.aria.cancelEdit": "Cancelar edição",
+            "primeng.aria.listView": "Vista de lista",
+            "primeng.aria.gridView": "Vista de cuadrícula",
+            "primeng.aria.slide": "Diapositiva",
+            "primeng.aria.slideNumber": "{slideNumber}",
+            "primeng.aria.zoomImage": "Ampliar imagen",
+            "primeng.aria.zoomIn": "Acercar",
+            "primeng.aria.zoomOut": "Alejar",
+            "primeng.aria.rotateRight": "Girar a la derecha",
+            "primeng.aria.rotateLeft": "Girar à esquerda",
+        },
+    };
+
+    public availableLanguages: Language[] = [
+        { code: "pt", name: "Português", flag: "assets/images/flags/br.svg" },
+        { code: "en", name: "English", flag: "assets/images/flags/us.svg" },
+        { code: "es", name: "Español", flag: "assets/images/flags/es.svg" },
+    ];
+
+    constructor() {
+        // Load saved language from localStorage
+        const savedLanguage = localStorage.getItem("language");
+        if (
+            savedLanguage &&
+            this.availableLanguages.some((lang) => lang.code === savedLanguage)
+        ) {
+            this.currentLanguageSubject.next(savedLanguage);
+        }
+    }
+
+    getCurrentLanguage(): string {
+        return this.currentLanguageSubject.value;
+    }
+
+    setLanguage(languageCode: string): void {
+        if (this.availableLanguages.some((lang) => lang.code === languageCode)) {
+            this.currentLanguageSubject.next(languageCode);
+            localStorage.setItem("language", languageCode);
+        }
+    }
+
+    translate(key: string): string {
+        const currentLang = this.getCurrentLanguage();
+        const translation = this.translations[currentLang]?.[key];
+        return translation || key; // Return key if translation not found
+    }
+
+    getAvailableLanguages(): Language[] {
+        return this.availableLanguages;
+    }
+
+    /**
+     * Obtém as traduções do PrimeNG no formato esperado pela biblioteca
+     */
+    getPrimeNGTranslations(languageCode?: string): any {
+        const lang = languageCode || this.getCurrentLanguage();
+        const translations = this.translations[lang];
+
+        if (!translations) {
+            return {};
+        }
+
+        // Filtrar apenas as traduções do PrimeNG e formatar
+        const primeNGTranslations = Object.keys(translations)
+            .filter((key) => key.startsWith("primeng."))
+            .reduce((acc, key) => {
+                const primeNGKey = key.replace("primeng.", "");
+                let value: any = translations[key];
+
+                // Processamento especial para alguns campos
+                if (
+                    primeNGKey === "dayNames" ||
+                    primeNGKey === "dayNamesShort" ||
+                    primeNGKey === "dayNamesMin" ||
+                    primeNGKey === "monthNames" ||
+                    primeNGKey === "monthNamesShort"
+                ) {
+                    // Converter string separada por vírgula em array
+                    value = value.split(",");
+                } else if (primeNGKey === "firstDayOfWeek") {
+                    // Converter para número
+                    value = parseInt(value, 10);
+                } else if (primeNGKey === "showMonthAfterYear") {
+                    // Converter para boolean
+                    value = value === "true";
+                }
+
+                acc[primeNGKey] = value;
+                return acc;
+            }, {} as any);
+
+        return primeNGTranslations;
+    }
+}

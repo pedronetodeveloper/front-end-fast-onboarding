@@ -1,0 +1,20 @@
+<p-dropdown 
+  [options]="languages" 
+  [(ngModel)]="selectedLanguage"
+  (onChange)="onLanguageChange($event.value)"
+  optionLabel="name"
+  placeholder="Select Language"
+  styleClass="language-selector">
+  <ng-template pTemplate="selectedItem">
+    <div class="language-item" *ngIf="selectedLanguage">
+      <img [src]="selectedLanguage.flag" [alt]="selectedLanguage.name" class="flag">
+      <span class="name">{{ selectedLanguage.name }}</span>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="item" let-language>
+    <div class="language-item">
+      <img [src]="language.flag" [alt]="language.name" class="flag">
+      <span class="name">{{ language.name }}</span>
+    </div>
+  </ng-template>
+</p-dropdown>

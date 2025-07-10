@@ -1,0 +1,61 @@
+<!-- Desktop Sidebar -->
+<div class="sidebar-container" [class.collapsed]="!sidebarVisible" [class.mobile]="isMobile"
+    [class.hover-expanded]="hoverExpanded" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+        <div class="sidebar-brand" [class.collapsed]="!sidebarVisible && !hoverExpanded">
+            <span class="brand-text" *ngIf="sidebarVisible || hoverExpanded">{{ 'project.name' | translate }}</span>
+        </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+        <ul class="nav-list">
+            <li *ngFor="let item of menuItems" class="nav-item" [class.active]="isActive(item.route)"
+                [class.disabled]="item.requiresAuth && !isLoggedIn">
+
+                <a [routerLink]="item.route" class="nav-link" [class.disabled]="item.requiresAuth && !isLoggedIn"
+                    (click)="onMenuClick(item)" [pTooltip]="(!sidebarVisible && !hoverExpanded) ? (item.labelKey | translate) : ''"
+                    tooltipPosition="right">
+
+                    <div class="nav-icon">
+                        <i [class]="item.icon"></i>
+                        <span *ngIf="item.badge" class="nav-badge" [class]="item.badgeClass">
+                            {{ item.badge }}
+                        </span>
+                    </div>
+
+                    <span class="nav-label" *ngIf="sidebarVisible || hoverExpanded">
+                        {{ item.labelKey | translate }}
+                    </span>
+
+                    <i *ngIf="item.requiresAuth && !isLoggedIn && (sidebarVisible || hoverExpanded)"
+                        class="pi pi-lock nav-lock" [pTooltip]="'common.requiresAuth' | translate"></i>
+                </a>
+
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer" *ngIf="sidebarVisible || hoverExpanded">
+        <div class="user-info" *ngIf="isLoggedIn">
+            <div class="user-avatar">
+                <i class="pi pi-user"></i>
+            </div>
+            <div class="user-details">
+                <div class="user-name">{{ displayName }}</div>
+                <div class="user-status">{{ 'common.online' | translate }}</div>
+            </div>
+        </div>
+
+        <div class="auth-info" *ngIf="!isLoggedIn">
+            <p class="auth-message">{{ 'common.loginMessage' | translate }}</p>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Overlay -->
+<div class="sidebar-overlay" *ngIf="sidebarVisible && isMobile" (click)="closeSidebar()">
+</div>

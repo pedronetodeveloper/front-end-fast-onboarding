@@ -1,0 +1,488 @@
+// Sidebar Container - Using global styles
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 280px;
+  background: var(--surface-e);
+  border-right: 1px solid var(--border-color);
+  box-shadow: 2px 0 8px var(--shadow-color);
+  z-index: 1001;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+
+  &.collapsed {
+    width: 70px;
+    
+    &:not(.hover-expanded) {
+      .nav-label,
+      .brand-text {
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      .sidebar-footer {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
+
+  &.hover-expanded {
+    width: 280px;
+    box-shadow: 4px 0 16px var(--shadow-color);
+    
+    .nav-label,
+    .brand-text {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .sidebar-footer {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &.mobile {
+    transform: translateX(-100%);
+    
+    &:not(.collapsed) {
+      transform: translateX(0);
+    }
+  }
+}
+
+// Sidebar Header - Using global styles
+.sidebar-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 70px;
+  position: relative;
+
+  .sidebar-container.collapsed & {
+    justify-content: center;
+  }
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  width: 100%;
+
+  &.collapsed {
+    justify-content: center;
+    gap: 0;
+    position: relative;
+  }
+
+  &:not(.collapsed) {
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .brand-logo-t {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  &.collapsed .brand-logo-t {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    height: 50px;
+    width: 50px;
+  }
+
+  &:not(.collapsed) .brand-logo-t {
+    position: relative;
+    transform: none;
+    height: 50px;
+    width: 50px;
+    margin: 0;
+  }
+
+  .brand-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    white-space: nowrap;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+  }
+
+  .fallback-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    color: var(--primary-color);
+    font-weight: bold;
+    font-size: 2.5rem;
+    margin: 0 auto;
+  }
+
+  &.collapsed .fallback-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+}
+
+.sidebar-toggle-desktop {
+  background: transparent;
+  border: none;
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+
+  &:hover {
+    background: var(--hover-bg);
+    color: var(--text-color);
+  }
+
+  &.collapsed {
+    transform: rotate(180deg);
+  }
+
+  i {
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+}
+
+// Navigation - Using global styles
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+  }
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin: 0.25rem 0;
+  
+  &.active .nav-link {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+    
+    .nav-icon i {
+      color: var(--primary-color-text);
+    }
+  }
+
+  &.disabled .nav-link {
+    opacity: 0.5;
+    cursor: not-allowed;
+    
+    &:hover {
+      background: transparent;
+    }
+  }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+  position: relative;
+  border-radius: 0;
+  margin: 0 0.5rem;
+  border-radius: 8px;
+
+  &:hover:not(.disabled) {
+    background: var(--hover-bg);
+    color: var(--text-color);
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+}
+
+.nav-icon {
+  position: relative;
+  min-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+
+  i {
+    font-size: 1.25rem;
+    color: var(--text-color-secondary);
+    transition: color 0.3s ease;
+  }
+}
+
+.nav-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: var(--primary-color);
+  color: var(--primary-color-text);
+  border-radius: 10px;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.6rem;
+  font-weight: 600;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-label {
+  flex: 1;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nav-lock {
+  margin-left: auto;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.nav-description {
+  padding: 0 1rem 0.5rem 2.75rem;
+  
+  small {
+    color: var(--text-color-secondary);
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+}
+
+// Sidebar Footer - Using global styles
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--surface-b);
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--primary-color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  i {
+    font-size: 1.25rem;
+  }
+}
+
+.user-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.875rem;
+}
+
+.user-status {
+  color: var(--text-color-secondary);
+  font-size: 0.75rem;
+}
+
+.auth-info {
+  text-align: center;
+}
+
+.auth-message {
+  color: var(--text-color-secondary);
+  font-size: 0.75rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+// Mobile Overlay - Using global styles
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+// Dark Theme - Using global variables
+.dark-theme {
+  .sidebar-container {
+    background: var(--surface-e);
+    border-right-color: var(--border-color);
+  }
+
+  .nav-item.active .nav-link {
+    background: var(--primary-color);
+    color: var(--primary-color-text);
+  }
+
+  .nav-link:hover:not(.disabled) {
+    background: var(--hover-bg);
+  }
+
+  .sidebar-footer {
+    background: var(--surface-b);
+    border-top-color: var(--border-color);
+  }
+}
+
+// Responsive - Using global breakpoints
+@media (max-width: 767px) {
+  .sidebar-container {
+    width: 280px;
+    
+    &.collapsed {
+      width: 280px;
+    }
+  }
+
+  .nav-description {
+    padding-left: 2.75rem;
+  }
+}
+
+// Animations - Simple and clean
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+// Hover Effects - Using global hover styles
+.nav-item {
+  &:not(.disabled):not(.active) .nav-link:hover {
+    .nav-icon i {
+      color: var(--primary-color);
+      transform: scale(1.1);
+    }
+  }
+}
+
+.sidebar-container {
+  &:not(.mobile) {
+    &:hover {
+      &.collapsed {
+        box-shadow: 4px 0 20px var(--shadow-color);
+      }
+    }
+  }
+}
+
+@keyframes slideInNav {
+  from {
+    opacity: 0.7;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Focus States - Using global focus styles
+.nav-link:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -2px;
+}
+
+.sidebar-toggle-mobile:focus,
+.sidebar-toggle-desktop:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

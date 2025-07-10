@@ -1,0 +1,86 @@
+<div class="navbar-custom">
+    <div class="navbar-start">
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" (click)="toggleSidebar()" [pTooltip]="'nav.menu' | translate" tooltipPosition="bottom">
+            <i class="pi pi-bars"></i>
+        </button>
+
+        <div class="navbar-brand">
+            <span class="font-bold text-xl">{{ 'project.name' | translate }}</span>
+        </div>
+    </div>
+
+    <div class="navbar-end">
+        <!-- User is logged in -->
+        <ng-container *ngIf="isLoggedIn">
+            <div class="user-menu-container">
+                <button 
+                    class="user-menu-trigger" 
+                    (click)="toggleUserMenu($event)"
+                    [pTooltip]="'nav.userMenu' | translate" 
+                    tooltipPosition="bottom">
+                    <p-avatar 
+                        [label]="userInitials" 
+                        size="normal" 
+                        shape="circle"
+                        [style]="{ 'background-color': 'var(--primary-color)', 'color': 'var(--primary-color-text)' }">
+                    </p-avatar>
+                    <span class="user-name">{{ displayName }}</span>
+                    <i class="pi pi-chevron-down ml-2" [class.rotated]="isMenuOpen"></i>
+                </button>
+
+                <!-- Menu dropdown customizado -->
+                <div class="user-dropdown-menu" [class.show]="isMenuOpen" (click)="$event.stopPropagation()">
+                    <div class="menu-section">
+                        <div class="menu-header">{{ 'nav.settings.section' | translate }}</div>
+                        
+                        <div class="menu-item" (click)="toggleLanguageSubmenu()">
+                            <i class="pi pi-globe"></i>
+                            <span>{{ 'nav.language' | translate }}</span>
+                            <i class="pi pi-chevron-right ml-auto" [class.rotated]="isLanguageSubmenuOpen"></i>
+                        </div>
+                        
+                        <div class="submenu" [class.show]="isLanguageSubmenuOpen">
+                            <div class="menu-item submenu-item" (click)="changeLanguage('pt')">
+                                <img [src]="languageFlags['pt']" alt="Português" class="flag-image">
+                                <span>Português</span>
+                            </div>
+                            <div class="menu-item submenu-item" (click)="changeLanguage('es')">
+                                <img [src]="languageFlags['es']" alt="Español" class="flag-image">
+                                <span>Español</span>
+                            </div>
+                            <div class="menu-item submenu-item" (click)="changeLanguage('en')">
+                                <img [src]="languageFlags['en']" alt="English" class="flag-image">
+                                <span>English</span>
+                            </div>
+                        </div>
+                        
+                        <div class="menu-item" (click)="toggleTheme()">
+                            <i class="pi" [class.pi-sun]="themeService.isDarkMode()" [class.pi-moon]="!themeService.isDarkMode()"></i>
+                            <span>{{ themeService.isDarkMode() ? ('nav.theme.light' | translate) : ('nav.theme.dark' | translate) }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="menu-divider"></div>
+                    
+                    <div class="menu-item logout" (click)="logout()">
+                        <i class="pi pi-sign-out"></i>
+                        <span>{{ 'nav.logout' | translate }}</span>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- User is not logged in -->
+        <ng-container *ngIf="!isLoggedIn">
+            <!-- Language Selector -->
+            <app-language-selector class="mr-3"></app-language-selector>
+
+            <!-- Theme Toggle -->
+            <app-theme-toggle class="mr-3"></app-theme-toggle>
+
+            <p-button [label]="'login.signIn' | translate" icon="pi pi-sign-in" (onClick)="login()">
+            </p-button>
+        </ng-container>
+    </div>
+</div>
