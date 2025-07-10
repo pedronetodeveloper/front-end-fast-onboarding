@@ -58,3 +58,26 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
     })
   );
 };
+
+// Guard para checar roles
+export function roleGuard(roles: string[]): CanActivateFn {
+  return () => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+    return authService.isAuthenticated$.pipe(
+      take(1),
+      map(isAuthenticated => {
+        if (!isAuthenticated) {
+          router.navigate(['/login']);
+          return false;
+        }
+        if (authService.hasRole(roles)) {
+          return true;
+        } else {
+          router.navigate(['/home']); // Ou página de acesso negado
+          return false;
+        }
+      })
+    );
+  };
+}

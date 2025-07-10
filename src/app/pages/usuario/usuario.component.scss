@@ -158,6 +158,21 @@
       background-position: 200% 0;
     }
   }
+
+  // Garante que os ícones dos botões de ação herdem a cor do severity do PrimeNG
+  .usuario-container .action-buttons ::ng-deep .p-button .pi {
+    color: inherit !important;
+  }
+  // Cores específicas para cada severity (ajuste conforme o tema do PrimeNG)
+  .usuario-container .action-buttons ::ng-deep .p-button.p-button-info .pi {
+    color: var(--blue-500, #2196f3) !important;
+  }
+  .usuario-container .action-buttons ::ng-deep .p-button.p-button-help .pi {
+    color: var(--yellow-600, #fbc02d) !important;
+  }
+  .usuario-container .action-buttons ::ng-deep .p-button.p-button-danger .pi {
+    color: var(--red-500, #f44336) !important;
+  }
 }
 
 // Responsive

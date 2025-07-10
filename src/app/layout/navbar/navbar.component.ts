@@ -133,19 +133,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     console.log("Navbar: Starting logout...");
-
-    this.authService.logoutPopup().subscribe({
-      next: () => {
-        console.log("Navbar: Logout successful");
-        // A navegação será feita automaticamente pelo AppComponent
-        // que está escutando mudanças de estado de autenticação
-      },
-      error: (error: any) => {
-        console.error("Navbar: Logout failed:", error);
-        // Em caso de erro, tentar redirecionar manualmente
-        this.router.navigate(["/login"]);
-      },
-    });
+    this.authService.logout();
   }
 
   private setupAuthListener(): void {

@@ -16,7 +16,6 @@ import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 
 // Services
-import { UsuarioService } from '../../core/services/api/usuario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
@@ -59,13 +58,16 @@ import { InputIconModule } from 'primeng/inputicon';
   animations: [pageEnterAnimation]
 })
 export class UsuarioComponent implements OnInit {
-  private usuarioService = inject(UsuarioService);
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
   // Data
-  usuarios: Usuario[] = [];
-  filteredUsuarios: Usuario[] = [];
+  usuarios: Usuario[] = [
+    { nome: 'João Silva', email: 'joao.silva@email.com', matricula: '123456', idiomaPreferencia: 'pt' },
+    { nome: 'Maria Souza', email: 'maria.souza@email.com', matricula: '654321', idiomaPreferencia: 'en' },
+    { nome: 'Carlos Pereira', email: 'carlos.pereira@email.com', matricula: '789012', idiomaPreferencia: 'es' }
+  ];
+  filteredUsuarios: Usuario[] = [...this.usuarios];
   selectedUsuario: Usuario | null = null;
   loading = false;
 
@@ -93,31 +95,46 @@ export class UsuarioComponent implements OnInit {
     { label: 'Español', value: 'es' }
   ];
 
+  // Adiciona mock de documentos por usuário
+  documentosPorUsuario: Record<string, { nome: string; status: 'enviado' | 'pendente' }[]> = {
+    'joao.silva@email.com': [
+      { nome: 'RG', status: 'enviado' },
+      { nome: 'CPF', status: 'enviado' },
+      { nome: 'Título de Eleitor', status: 'pendente' },
+      { nome: 'Carteira de Trabalho', status: 'enviado' },
+      { nome: 'Comprovante de Endereço', status: 'pendente' }
+    ],
+    'maria.souza@email.com': [
+      { nome: 'RG', status: 'enviado' },
+      { nome: 'CPF', status: 'enviado' },
+      { nome: 'Título de Eleitor', status: 'enviado' },
+      { nome: 'Carteira de Trabalho', status: 'enviado' },
+      { nome: 'Comprovante de Endereço', status: 'enviado' }
+    ],
+    'carlos.pereira@email.com': [
+      { nome: 'RG', status: 'pendente' },
+      { nome: 'CPF', status: 'enviado' },
+      { nome: 'Título de Eleitor', status: 'pendente' },
+      { nome: 'Carteira de Trabalho', status: 'pendente' },
+      { nome: 'Comprovante de Endereço', status: 'enviado' }
+    ]
+  };
+  showDocumentosDialog = false;
+  documentosSelecionados: { nome: string; status: 'enviado' | 'pendente' }[] = [];
+  candidatoSelecionado: Usuario | null = null;
+
   ngOnInit(): void {
-    this.carregarUsuarios();
+    // Não carrega da API, já está mockado
+    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
    * Carregar lista de usuários
    */
   carregarUsuarios(): void {
-    this.loading = true;
-    this.usuarioService.listarUsuarios().subscribe({
-      next: (usuarios) => {
-        this.usuarios = usuarios;
-        this.filteredUsuarios = [...usuarios];
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar usuários:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao carregar lista de usuários'
-        });
-        this.loading = false;
-      }
-    });
+    // Não faz nada, pois os usuários já estão mockados
+    this.filteredUsuarios = [...this.usuarios];
+    this.loading = false;
   }
 
   /**
@@ -161,59 +178,33 @@ export class UsuarioComponent implements OnInit {
       });
       return;
     }
-
     this.loading = true;
-
-    if (this.isEditing && this.selectedUsuario?.id) {
-      // Atualizar usuário existente
-      this.usuarioService.atualizarUsuario(this.selectedUsuario.id, this.usuarioForm as UpdateUsuarioRequest).subscribe({
-        next: (usuario) => {
-          const index = this.usuarios.findIndex(u => u.id === usuario.id);
-          if (index !== -1) {
-            this.usuarios[index] = usuario;
-          }
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Usuário atualizado com sucesso'
-          });
-          this.fecharDialog();
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar usuário:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao atualizar usuário'
-          });
-          this.loading = false;
-        }
+    if (this.isEditing && this.selectedUsuario) {
+      // Atualizar usuário mock
+      const idx = this.usuarios.findIndex(u => u.email === this.selectedUsuario?.email);
+      if (idx !== -1) {
+        this.usuarios[idx] = { ...this.selectedUsuario, ...this.usuarioForm };
+      }
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Usuário atualizado com sucesso'
       });
+      this.fecharDialog();
+      this.loading = false;
     } else {
-      // Criar novo usuário
-      this.usuarioService.criarUsuario(this.usuarioForm as CreateUsuarioRequest).subscribe({
-        next: (usuario) => {
-          this.usuarios.push(usuario);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Usuário criado com sucesso'
-          });
-          this.fecharDialog();
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao criar usuário:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao criar usuário'
-          });
-          this.loading = false;
-        }
+      // Criar novo usuário mock
+      const novoUsuario = { ...this.usuarioForm };
+      this.usuarios.push(novoUsuario as Usuario);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Usuário criado com sucesso'
       });
+      this.fecharDialog();
+      this.loading = false;
     }
+    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
@@ -236,28 +227,12 @@ export class UsuarioComponent implements OnInit {
    * Excluir usuário
    */
   private excluirUsuario(usuario: Usuario): void {
-    if (!usuario.id) return;
-
-    this.loading = true;
-    this.usuarioService.deletarUsuario(usuario.id).subscribe({
-      next: () => {
-        this.usuarios = this.usuarios.filter(u => u.id !== usuario.id);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Usuário excluído com sucesso'
-        });
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao excluir usuário:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao excluir usuário'
-        });
-        this.loading = false;
-      }
+    this.usuarios = this.usuarios.filter(u => u.email !== usuario.email);
+    this.filteredUsuarios = [...this.usuarios];
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Usuário excluído com sucesso'
     });
   }
 
@@ -314,5 +289,23 @@ export class UsuarioComponent implements OnInit {
   onSort(event: any): void {
     this.sortField = event.field;
     this.sortOrder = event.order;
+  }
+
+  /**
+   * Abrir dialog de documentos do candidato
+   */
+  abrirDocumentos(usuario: Usuario) {
+    this.candidatoSelecionado = usuario;
+    this.documentosSelecionados = this.documentosPorUsuario[usuario.email || ''] || [];
+    this.showDocumentosDialog = true;
+  }
+
+  /**
+   * Fechar dialog de documentos
+   */
+  fecharDocumentosDialog() {
+    this.showDocumentosDialog = false;
+    this.documentosSelecionados = [];
+    this.candidatoSelecionado = null;
   }
 }

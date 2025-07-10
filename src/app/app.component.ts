@@ -86,13 +86,11 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((isAuthenticated: boolean) => {
         console.log('Auth state changed:', isAuthenticated);
-        
-        // Se o usuário fez logout, atualizar visibilidade da navegação
-        if (!isAuthenticated && !this.isLoginPage()) {
-          console.log('User logged out, redirecting to login');
-          this.router.navigate(['/login']);
-        }
-        
+        // DESABILITADO: Não redireciona mais para login ao perder autenticação
+        // if (!isAuthenticated && !this.isLoginPage()) {
+        //   console.log('User logged out, redirecting to login');
+        //   this.router.navigate(['/login']);
+        // }
         // Atualizar visibilidade da navegação baseado na rota atual
         this.updateNavigationVisibility(this.router.url);
       });
@@ -113,15 +111,13 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private checkAuthenticationForRoute(url: string): void {
-    // Lista de rotas que requerem autenticação
-    const protectedRoutes = ['/home'];
-    
-    const isProtectedRoute = protectedRoutes.some(route => url.startsWith(route));
-    
-    if (isProtectedRoute && !this.authService.isAuthenticated()) {
-      console.log('Access denied to protected route. Redirecting to login.');
-      this.router.navigate(['/login']);
-    }
+    // DESABILITADO: Permite acesso a todas as rotas sem autenticação
+    // const protectedRoutes = ['/home'];
+    // const isProtectedRoute = protectedRoutes.some(route => url.startsWith(route));
+    // if (isProtectedRoute && !this.authService.isAuthenticated()) {
+    //   console.log('Access denied to protected route. Redirecting to login.');
+    //   this.router.navigate(['/login']);
+    // }
   }
 
   private checkAuthenticationForCurrentRoute(): void {
@@ -129,24 +125,18 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private updateNavigationVisibility(url: string): void {
-    // Garantir que nunca mostra navegação na tela de login
+    // Mostra navegação em todas as rotas, mesmo sem autenticação
     const isLoginRoute = url === '/login' || url.startsWith('/login');
-    const isAuthenticated = this.authService.isAuthenticated();
-    
-    // Só mostrar navegação se não for rota de login E usuário estiver autenticado
-    this.showNavigation = !isLoginRoute && isAuthenticated;
+    this.showNavigation = !isLoginRoute;
     
     console.log(`Navigation visibility updated: ${this.showNavigation} for URL: ${url}`);
     console.log(`Current showNavigation state: ${this.showNavigation}`);
-    console.log(`Is login route: ${isLoginRoute}, Is authenticated: ${isAuthenticated}`);
+    console.log(`Is login route: ${isLoginRoute}`);
     
-    // Log adicional para debug
     if (isLoginRoute) {
       console.log('LOGIN ROUTE DETECTED - Hiding navbar and sidebar');
-    } else if (!isAuthenticated) {
-      console.log('USER NOT AUTHENTICATED - Hiding navbar and sidebar');
     } else {
-      console.log('NON-LOGIN ROUTE + AUTHENTICATED - Showing navbar and sidebar');
+      console.log('NÃO LOGIN ROUTE - Mostrando navbar e sidebar');
     }
   }
 

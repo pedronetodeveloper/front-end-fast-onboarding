@@ -1,23 +1,75 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
+import { TagModule } from 'primeng/tag';
+
+interface Documento {
+  nome: string;
+  status: 'enviado' | 'pendente';
+}
+
+interface UsuarioMock {
+  nome: string;
+  email: string;
+  documentos: Documento[];
+}
 
 @Component({
   selector: 'app-documentos-contratado',
-  imports: [ButtonModule, DialogModule, ToastModule],
-  providers: [MessageService],
+  standalone: true,
+  imports: [CommonModule, ButtonModule, CardModule, TagModule],
   templateUrl: './documentos-contratado.component.html',
-  styleUrl: './documentos-contratado.component.scss'
+  styleUrls: ['./documentos-contratado.component.scss']
 })
 export class DocumentosContratadoComponent {
-  statusDialog = false;
+  usuarios: UsuarioMock[] = [
+    {
+      nome: 'João Silva',
+      email: 'joao.silva@email.com',
+      documentos: [
+        { nome: 'RG', status: 'enviado' },
+        { nome: 'CPF', status: 'enviado' },
+        { nome: 'Título de Eleitor', status: 'pendente' },
+        { nome: 'Carteira de Trabalho', status: 'enviado' },
+        { nome: 'Comprovante de Endereço', status: 'pendente' }
+      ]
+    },
+    {
+      nome: 'Maria Souza',
+      email: 'maria.souza@email.com',
+      documentos: [
+        { nome: 'RG', status: 'enviado' },
+        { nome: 'CPF', status: 'enviado' },
+        { nome: 'Título de Eleitor', status: 'enviado' },
+        { nome: 'Carteira de Trabalho', status: 'enviado' },
+        { nome: 'Comprovante de Endereço', status: 'enviado' }
+      ]
+    },
+    {
+      nome: 'Carlos Pereira',
+      email: 'carlos.pereira@email.com',
+      documentos: [
+        { nome: 'RG', status: 'pendente' },
+        { nome: 'CPF', status: 'enviado' },
+        { nome: 'Título de Eleitor', status: 'pendente' },
+        { nome: 'Carteira de Trabalho', status: 'pendente' },
+        { nome: 'Comprovante de Endereço', status: 'enviado' }
+      ]
+    }
+  ];
 
-  constructor(private messageService: MessageService) {}
+  usuarioSelecionado: UsuarioMock | null = null;
 
-  abrirDialog() {
-    this.statusDialog = true;
-    this.messageService.add({severity:'info', summary:'Status', detail:'Todos os documentos obrigatórios foram enviados!'});
+  selecionarUsuario(usuario: UsuarioMock) {
+    this.usuarioSelecionado = usuario;
+  }
+
+  voltar() {
+    this.usuarioSelecionado = null;
+  }
+
+  get documentos() {
+    return this.usuarioSelecionado?.documentos || [];
   }
 }

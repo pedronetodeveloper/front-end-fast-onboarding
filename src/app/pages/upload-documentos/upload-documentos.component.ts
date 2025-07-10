@@ -3,10 +3,11 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-upload-documentos',
-  imports: [DialogModule, ButtonModule, ToastModule],
+  imports: [DialogModule, ButtonModule, ToastModule, CardModule],
   providers: [MessageService],
   templateUrl: './upload-documentos.component.html',
   styleUrl: './upload-documentos.component.scss'
@@ -14,6 +15,7 @@ import { MessageService } from 'primeng/api';
 export class UploadDocumentosComponent {
   displayDialog = false;
   arquivos: any = {};
+  loading = false;
 
   constructor(private messageService: MessageService) {}
 
@@ -26,12 +28,16 @@ export class UploadDocumentosComponent {
   }
 
   enviar() {
-    if (Object.keys(this.arquivos).length === 5) {
-      this.messageService.add({severity:'success', summary:'Sucesso', detail:'Documentos enviados com sucesso!'});
-      this.displayDialog = false;
-      this.arquivos = {};
-    } else {
-      this.messageService.add({severity:'error', summary:'Erro', detail:'Envie todos os documentos!'});
-    }
+    this.loading = true;
+    setTimeout(() => {
+      if (Object.keys(this.arquivos).length === 5) {
+        this.messageService.add({severity:'success', summary:'Sucesso', detail:'Documentos enviados com sucesso!'});
+        this.displayDialog = false;
+        this.arquivos = {};
+      } else {
+        this.messageService.add({severity:'error', summary:'Erro', detail:'Envie todos os documentos!'});
+      }
+      this.loading = false;
+    }, 1200);
   }
 }

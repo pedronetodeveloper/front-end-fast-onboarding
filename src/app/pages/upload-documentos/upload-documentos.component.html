@@ -1,62 +1,36 @@
-<div class="p-card" style="max-width: 500px; margin: 2rem auto; background: #fff; border: 1px solid #1976d2;">
-  <div class="p-card-header" style="background: #1976d2; color: #fff; padding: 1.5rem; font-size: 1.2rem;">Upload de Documentos</div>
-  <div class="p-card-body" style="padding: 2rem;">
-    <form class="p-fluid" autocomplete="off">
-      <div class="p-field p-mb-3">
-        <label for="rg">RG</label>
-        <input type="file" id="rg" name="rg" class="p-inputtext p-component" style="border-color: #1976d2;" />
+<div class="upload-documentos-container">
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>Upload de Documentos</h2>
+        <p class="card-subtitle">Envie os documentos obrigatórios para cadastro</p>
       </div>
-      <div class="p-field p-mb-3">
-        <label for="cpf">CPF</label>
-        <input type="file" id="cpf" name="cpf" class="p-inputtext p-component" style="border-color: #1976d2;" />
+    </ng-template>
+    <form class="upload-form" autocomplete="off">
+      <div class="form-field">
+        <label for="rg"><i class="pi pi-id-card"></i> RG</label>
+        <input type="file" id="rg" name="rg" (change)="onFileChange($event, 'rg')" />
       </div>
-      <div class="p-field p-mb-3">
-        <label for="titulo">Título de Eleitor</label>
-        <input type="file" id="titulo" name="titulo" class="p-inputtext p-component" style="border-color: #1976d2;" />
+      <div class="form-field">
+        <label for="cpf"><i class="pi pi-id-card"></i> CPF</label>
+        <input type="file" id="cpf" name="cpf" (change)="onFileChange($event, 'cpf')" />
       </div>
-      <div class="p-field p-mb-3">
-        <label for="ctps">Carteira de Trabalho</label>
-        <input type="file" id="ctps" name="ctps" class="p-inputtext p-component" style="border-color: #1976d2;" />
+      <div class="form-field">
+        <label for="titulo"><i class="pi pi-id-card"></i> Título de Eleitor</label>
+        <input type="file" id="titulo" name="titulo" (change)="onFileChange($event, 'titulo')" />
       </div>
-      <div class="p-field p-mb-4">
-        <label for="comprovante">Comprovante de Endereço</label>
-        <input type="file" id="comprovante" name="comprovante" class="p-inputtext p-component" style="border-color: #1976d2;" />
+      <div class="form-field">
+        <label for="ctps"><i class="pi pi-briefcase"></i> Carteira de Trabalho</label>
+        <input type="file" id="ctps" name="ctps" (change)="onFileChange($event, 'ctps')" />
       </div>
-      <button pButton type="submit" label="Enviar" style="background: #1976d2; border: none; color: #fff; width: 100%; font-weight: bold;"></button>
+      <div class="form-field">
+        <label for="comprovante"><i class="pi pi-home"></i> Comprovante de Endereço</label>
+        <input type="file" id="comprovante" name="comprovante" (change)="onFileChange($event, 'comprovante')" />
+      </div>
+      <div class="form-actions">
+        <button pButton type="submit" label="Enviar" class="p-button-primary" [loading]="loading"></button>
+      </div>
     </form>
-  </div>
-</div>
-<p-toast></p-toast>
-<p-dialog header="Upload de Documentos" [(visible)]="displayDialog" [modal]="true" [style]="{width: '90vw', maxWidth: '400px'}">
-  <form class="p-fluid" (ngSubmit)="enviar()">
-    <div class="p-field p-mb-3">
-      <i class="pi pi-id-card p-mr-2" style="color:#1976d2"></i>
-      <label for="rg">RG</label>
-      <input type="file" id="rg" name="rg" class="p-inputtext p-component" (change)="onFileChange($event, 'rg')" />
-    </div>
-    <div class="p-field p-mb-3">
-      <i class="pi pi-id-card p-mr-2" style="color:#1976d2"></i>
-      <label for="cpf">CPF</label>
-      <input type="file" id="cpf" name="cpf" class="p-inputtext p-component" (change)="onFileChange($event, 'cpf')" />
-    </div>
-    <div class="p-field p-mb-3">
-      <i class="pi pi-id-card p-mr-2" style="color:#1976d2"></i>
-      <label for="titulo">Título de Eleitor</label>
-      <input type="file" id="titulo" name="titulo" class="p-inputtext p-component" (change)="onFileChange($event, 'titulo')" />
-    </div>
-    <div class="p-field p-mb-3">
-      <i class="pi pi-briefcase p-mr-2" style="color:#1976d2"></i>
-      <label for="ctps">Carteira de Trabalho</label>
-      <input type="file" id="ctps" name="ctps" class="p-inputtext p-component" (change)="onFileChange($event, 'ctps')" />
-    </div>
-    <div class="p-field p-mb-4">
-      <i class="pi pi-home p-mr-2" style="color:#1976d2"></i>
-      <label for="comprovante">Comprovante de Endereço</label>
-      <input type="file" id="comprovante" name="comprovante" class="p-inputtext p-component" (change)="onFileChange($event, 'comprovante')" />
-    </div>
-    <button pButton type="submit" label="Enviar" class="p-button-primary" style="width: 100%; font-weight: bold;"></button>
-  </form>
-</p-dialog>
-<div class="p-text-center p-mt-5">
-  <button pButton icon="pi pi-upload" label="Fazer Upload de Documentos" (click)="abrirDialog()" class="p-button-primary" style="font-weight: bold;"></button>
+  </p-card>
+  <p-toast></p-toast>
 </div>

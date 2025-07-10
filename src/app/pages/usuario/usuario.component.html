@@ -87,8 +87,15 @@
           <td>
             <div class="action-buttons">
               <p-button 
-                icon="pi pi-pencil" 
+                icon="pi pi-eye" 
                 severity="info" 
+                size="small"
+                [title]="'Visualizar documentos'"
+                (onClick)="abrirDocumentos(usuario)">
+              </p-button>
+              <p-button 
+                icon="pi pi-pencil" 
+                severity="help" 
                 size="small"
                 [title]="'common.edit' | translate"
                 (onClick)="editarUsuario(usuario)">
@@ -237,6 +244,34 @@
           [loading]="loading">
         </p-button>
       </div>
+    </ng-template>
+  </p-dialog>
+
+  <!-- Dialog de Documentos do Candidato -->
+  <p-dialog 
+    header="Acompanhamento de Documentos" 
+    [(visible)]="showDocumentosDialog" 
+    [modal]="true" 
+    [style]="{width: '600px', maxWidth: '95vw'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div *ngIf="candidatoSelecionado">
+      <div class="doc-list-section">
+        <p class="doc-list-title">Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b>:</p>
+        <ul class="doc-list">
+          <li *ngFor="let doc of documentosSelecionados">
+            <span class="doc-name">{{ doc.nome }}</span>
+            <p-tag 
+              [value]="doc.status === 'enviado' ? 'Enviado' : 'Pendente'" 
+              [severity]="doc.status === 'enviado' ? 'success' : 'danger'"
+              class="doc-status-tag">
+            </p-tag>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <button pButton type="button" label="Fechar" icon="pi pi-times" (click)="showDocumentosDialog=false"></button>
     </ng-template>
   </p-dialog>
 

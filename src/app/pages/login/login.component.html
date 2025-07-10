@@ -2,128 +2,46 @@
   <div class="login-wrapper">
     <!-- Mensagem de Erro -->
     <div *ngIf="errorMessage" class="error-section">
-      <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4">
-      </p-message>
-
-      <!-- Botões de ação para diferentes tipos de erro -->
-      <div class="error-actions">
-        <!-- Botões para erros de interação -->
-        <div *ngIf="errorMessage.includes('interação') || errorMessage.includes('interaction') || errorMessage.includes('conflito')"
-             class="action-buttons">
-          <p-button 
-            [label]="'login.tryAgain' | translate" 
-            icon="pi pi-refresh" 
-            (click)="retryLogin()" 
-            severity="warn"
-            size="small" 
-            [disabled]="isLoggingIn"
-            styleClass="retry-btn">
-          </p-button>
-          <p-button 
-            [label]="'login.clearAndTry' | translate" 
-            icon="pi pi-trash" 
-            (click)="forceCleanAndRetry()" 
-            severity="secondary"
-            size="small" 
-            [disabled]="isLoggingIn"
-            styleClass="clear-btn">
-          </p-button>
-        </div>
-
-        <!-- Botão para erros de inicialização -->
-        <div *ngIf="errorMessage.includes('inicializar') || errorMessage.includes('não inicializado') || errorMessage.includes('Muitas tentativas')"
-             class="action-buttons">
-          <p-button 
-            [label]="'login.reloadPage' | translate" 
-            icon="pi pi-refresh" 
-            (click)="reloadPage()" 
-            severity="secondary"
-            size="small"
-            styleClass="reload-btn">
-          </p-button>
-        </div>
-      </div>
+      <p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
     </div>
-
     <!-- Card Principal de Login -->
     <div class="auth-card">
-      <!-- Header com Logo e Branding -->
       <div class="auth-header">
         <div class="brand-section">
-          <div class="logo-container">
-            <img 
-              alt="Fast Onboarding Logo" 
-              class="brand-logo"
-              (error)="onLogoError($event)">
-          </div>
-          <h1 class="brand-title">{{ 'project.name' | translate }}</h1>
+          <h5 class="brand-title">{{ 'project.name' | translate }}</h5>
           <p class="brand-subtitle">{{ 'project.description' | translate }}</p>
         </div>
       </div>
-              <!-- src="assets/images/tivit-logo.svg"  -->
-      <!-- Divisor -->
       <div class="auth-divider"></div>
-
-      <!-- Conteúdo Principal -->
       <div class="auth-content">
         <div class="welcome-section">
-          <h2 class="welcome-title">{{ 'login.welcome' | translate }}</h2>
-          <p class="welcome-description">
-            {{ 'login.description' | translate }}
-          </p>
+          <h5 class="welcome-title">{{ 'login.welcome' | translate }}</h5>
         </div>
-
-        <!-- Sessão Anterior (se existir) -->
-        <div *ngIf="lastLoginInfo && hasValidSession" class="session-info">
-          <div class="session-card">
-            <div class="session-header">
-              <i class="pi pi-user session-icon"></i>
-              <div class="session-details">
-                <span class="session-user">{{ lastLoginInfo.userInfo?.name || 'Usuário' }}</span>
-                <span class="session-time">{{ formatLastLogin(lastLoginInfo.lastLogin) }}</span>
-              </div>
+        <form (ngSubmit)="login()" autocomplete="off">
+          <div class="p-fluid">
+            <div class="p-field mb-2">
+              <label for="email">E-mail</label>
+              <input id="email" pInputText  type="email" [(ngModel)]="email" name="email" required autocomplete="username">
             </div>
-            <p-button 
-              [label]="'login.continueSession' | translate"
-              icon="pi pi-sign-in" 
-              (click)="quickLogin()"
-              severity="secondary"
-              size="small"
-              styleClass="session-btn">
-            </p-button>
+            <div class="p-field mb-3">
+              <label for="senha">Senha</label>
+              <input id="senha" pInputText type="password" [(ngModel)]="senha" name="senha" autocomplete="username"  required>
+            </div>
+            <div class="login-actions">
+              <p-button 
+                [label]="isLoggingIn ? 'Aguarde...' : 'Entrar'"
+                [icon]="isLoggingIn ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'"
+                [loading]="isLoggingIn"
+                styleClass="w-full main-login-btn"
+                size="large"
+                type="submit">
+              </p-button>
+            </div>
           </div>
-        </div>
-
-        <!-- Botão Principal de Login -->
-        <div class="login-actions">
-          <p-button 
-            [label]="isLoggingIn ? ('login.loading' | translate) : ('login.signIn' | translate)"
-            [icon]="isLoggingIn ? 'pi pi-spin pi-spinner' : 'pi pi-microsoft'"
-            (click)="login()" 
-            [loading]="isLoggingIn"
-            styleClass="w-full main-login-btn"
-            size="large">
-          </p-button>
-
-          <div class="login-help">
-            <small class="help-text">
-              {{ 'login.termsMessage' | translate }}
-            </small>
-          </div>
-        </div>
-      </div>
-
-      <!-- Footer -->
-      <div class="auth-footer">
-        <div class="security-info">
-          <i class="pi pi-shield security-icon"></i>
-          <span class="security-text">{{ 'login.secureAuth' | translate }}</span>
-        </div>
+        </form>
       </div>
     </div>
   </div>
-
-  <!-- Background Decorativo -->
   <div class="bg-decoration">
     <div class="decoration-circle circle-1"></div>
     <div class="decoration-circle circle-2"></div>
