@@ -20,7 +20,7 @@ import { UsuarioService } from '../../core/services/api/usuario.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../shared/interface/usuario.interface';
+import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest, CreateUsuarioPlataformaRequest, UpdateUsuarioPlataformaRequest, UsuarioPlataforma } from '../../shared/interface/usuario.interface';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -58,15 +58,18 @@ import { InputIconModule } from 'primeng/inputicon';
   styleUrl: './usuario-plataforma.component.scss',
   animations: [pageEnterAnimation]
 })
-export class UsuarioComponent implements OnInit {
-  private usuarioService = inject(UsuarioService);
-  private confirmationService = inject(ConfirmationService);
+export class UsuarioPlataformComponent implements OnInit {
+ private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
 
   // Data
-  usuarios: Usuario[] = [];
-  filteredUsuarios: Usuario[] = [];
-  selectedUsuario: Usuario | null = null;
+  usuarios: UsuarioPlataforma[] = [
+    { nome: 'João Silva', email: 'joao.silva@email.com', empresa: 'Tivit', idiomaPreferencia: 'pt' },
+    { nome: 'Maria Souza', email: 'maria.souza@email.com', empresa: 'DevApi', idiomaPreferencia: 'en' },
+    { nome: 'Carlos Pereira', email: 'carlos.pereira@email.com', empresa: 'StoneAge', idiomaPreferencia: 'es' }
+  ];
+  filteredUsuarios: UsuarioPlataforma[] = [...this.usuarios];
+  selectedUsuario: UsuarioPlataforma | null = null;
   loading = false;
 
   // Search and filter
@@ -76,13 +79,14 @@ export class UsuarioComponent implements OnInit {
 
   // Dialog states
   displayDialog = false;
+  displayDialogInfo = false;
   isEditing = false;
 
   // Form data
-  usuarioForm: CreateUsuarioRequest | UpdateUsuarioRequest = {
+  usuarioForm: CreateUsuarioPlataformaRequest | UpdateUsuarioPlataformaRequest = {
+    empresa: '',
     nome: '',
     email: '',
-    matricula: '',
     idiomaPreferencia: 'pt'
   };
 
@@ -93,31 +97,30 @@ export class UsuarioComponent implements OnInit {
     { label: 'Español', value: 'es' }
   ];
 
+  empresaOptions = [
+    { label: 'Tivit', value: 'pt' },
+    { label: 'DevApi', value: 'pt' },
+    { label: 'StoneAge', value: 'pt' }
+  ];
+
+  candidatoSelecionado: Usuario | null = null;
+
   ngOnInit(): void {
-    this.carregarUsuarios();
+    // Não carrega da API, já está mockado
+    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
    * Carregar lista de usuários
    */
   carregarUsuarios(): void {
-    this.loading = true;
-    this.usuarioService.listarUsuarios().subscribe({
-      next: (usuarios) => {
-        this.usuarios = usuarios;
-        this.filteredUsuarios = [...usuarios];
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar usuários:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao carregar lista de usuários'
-        });
-        this.loading = false;
-      }
-    });
+    // Não faz nada, pois os usuários já estão mockados
+    this.filteredUsuarios = [...this.usuarios];
+    this.loading = false;
+  }
+
+  abrirModal():void{
+    this.displayDialogInfo = true;
   }
 
   /**
@@ -125,9 +128,9 @@ export class UsuarioComponent implements OnInit {
    */
   novoUsuario(): void {
     this.usuarioForm = {
+      empresa: '',
       nome: '',
       email: '',
-      matricula: '',
       idiomaPreferencia: 'pt'
     };
     this.isEditing = false;
@@ -137,11 +140,11 @@ export class UsuarioComponent implements OnInit {
   /**
    * Abrir dialog para editar usuário
    */
-  editarUsuario(usuario: Usuario): void {
+  editarUsuario(usuario: UsuarioPlataforma): void {
     this.usuarioForm = {
+      empresa: usuario.empresa || '',
       nome: usuario.nome || '',
       email: usuario.email || '',
-      matricula: usuario.matricula || '',
       idiomaPreferencia: usuario.idiomaPreferencia || 'pt'
     };
     this.selectedUsuario = usuario;
@@ -161,59 +164,33 @@ export class UsuarioComponent implements OnInit {
       });
       return;
     }
-
     this.loading = true;
-
-    if (this.isEditing && this.selectedUsuario?.id) {
-      // Atualizar usuário existente
-      this.usuarioService.atualizarUsuario(this.selectedUsuario.id, this.usuarioForm as UpdateUsuarioRequest).subscribe({
-        next: (usuario) => {
-          const index = this.usuarios.findIndex(u => u.id === usuario.id);
-          if (index !== -1) {
-            this.usuarios[index] = usuario;
-          }
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Usuário atualizado com sucesso'
-          });
-          this.fecharDialog();
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao atualizar usuário:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao atualizar usuário'
-          });
-          this.loading = false;
-        }
+    if (this.isEditing && this.selectedUsuario) {
+      // Atualizar usuário mock
+      const idx = this.usuarios.findIndex(u => u.email === this.selectedUsuario?.email);
+      if (idx !== -1) {
+        this.usuarios[idx] = { ...this.selectedUsuario, ...this.usuarioForm };
+      }
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Usuário atualizado com sucesso'
       });
+      this.fecharDialog();
+      this.loading = false;
     } else {
-      // Criar novo usuário
-      this.usuarioService.criarUsuario(this.usuarioForm as CreateUsuarioRequest).subscribe({
-        next: (usuario) => {
-          this.usuarios.push(usuario);
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Usuário criado com sucesso'
-          });
-          this.fecharDialog();
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Erro ao criar usuário:', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao criar usuário'
-          });
-          this.loading = false;
-        }
+      // Criar novo usuário mock
+      const novoUsuario = { ...this.usuarioForm };
+      this.usuarios.push(novoUsuario as Usuario);
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Usuário criado com sucesso'
       });
+      this.fecharDialog();
+      this.loading = false;
     }
+    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
@@ -236,28 +213,12 @@ export class UsuarioComponent implements OnInit {
    * Excluir usuário
    */
   private excluirUsuario(usuario: Usuario): void {
-    if (!usuario.id) return;
-
-    this.loading = true;
-    this.usuarioService.deletarUsuario(usuario.id).subscribe({
-      next: () => {
-        this.usuarios = this.usuarios.filter(u => u.id !== usuario.id);
-        this.messageService.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Usuário excluído com sucesso'
-        });
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Erro ao excluir usuário:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao excluir usuário'
-        });
-        this.loading = false;
-      }
+    this.usuarios = this.usuarios.filter(u => u.email !== usuario.email);
+    this.filteredUsuarios = [...this.usuarios];
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Sucesso',
+      detail: 'Usuário excluído com sucesso'
     });
   }
 
@@ -270,7 +231,7 @@ export class UsuarioComponent implements OnInit {
     this.usuarioForm = {
       nome: '',
       email: '',
-      matricula: '',
+      empresa: '',
       idiomaPreferencia: 'pt'
     };
   }
@@ -296,7 +257,7 @@ export class UsuarioComponent implements OnInit {
     this.filteredUsuarios = this.usuarios.filter(usuario => 
       (usuario.nome?.toLowerCase().includes(searchTermLower)) ||
       (usuario.email?.toLowerCase().includes(searchTermLower)) ||
-      (usuario.matricula?.toLowerCase().includes(searchTermLower))
+      (usuario.empresa?.toLowerCase().includes(searchTermLower))
     );
   }
 
@@ -315,4 +276,5 @@ export class UsuarioComponent implements OnInit {
     this.sortField = event.field;
     this.sortOrder = event.order;
   }
+
 }

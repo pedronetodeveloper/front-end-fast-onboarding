@@ -2,8 +2,8 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="card-header">
-        <h2>{{ 'usuario.title' | translate }}</h2>
-        <p class="card-subtitle">{{ 'usuario.subtitle' | translate }}</p>
+        <h2>{{ 'usuario-plataform.title' | translate }}</h2>
+        <p class="card-subtitle">{{ 'usuario-plataform.subtitle' | translate }}</p>
       </div>
     </ng-template>
 
@@ -11,9 +11,17 @@
       <ng-template pTemplate="left">
         <p-button 
           severity="success" 
-          [label]="'usuario.new' | translate"
+          [label]="'usuario-plataform.new' | translate"
           icon="pi pi-plus" 
           (onClick)="novoUsuario()">
+        </p-button>
+        <p-button
+          class="ml-2"
+          icon="pi pi-info" 
+          severity="info" 
+          size="small"
+          [title]="'Ao adicionar um novo usuário ...'"
+          (onClick)="abrirModal()">
         </p-button>
       </ng-template>
       
@@ -39,29 +47,39 @@
       
       <ng-template pTemplate="header">
         <tr>
+           <th pSortableColumn="empresa">
+            {{ 'usuario-plataform.empresa' | translate }}
+            <p-sortIcon field="empresa"></p-sortIcon>
+          </th>
           <th pSortableColumn="nome">
-            {{ 'usuario.name' | translate }}
+            {{ 'usuario-plataform.name' | translate }}
             <p-sortIcon field="nome"></p-sortIcon>
           </th>
           <th pSortableColumn="email">
-            {{ 'usuario.email' | translate }}
+            {{ 'usuario-plataform.email' | translate }}
             <p-sortIcon field="email"></p-sortIcon>
           </th>
-          <th pSortableColumn="matricula">
-            {{ 'usuario.matricula' | translate }}
-            <p-sortIcon field="matricula"></p-sortIcon>
-          </th>
           <th pSortableColumn="idiomaPreferencia">
-            {{ 'usuario.language' | translate }}
+            {{ 'usuario-plataform.language' | translate }}
             <p-sortIcon field="idiomaPreferencia"></p-sortIcon>
           </th>
-          <th>{{ 'usuario.courses' | translate }}</th>
           <th style="width: 200px">{{ 'common.actions' | translate }}</th>
         </tr>
       </ng-template>
       
       <ng-template pTemplate="body" let-usuario>
         <tr>
+          <td>
+            <i class="pi pi-building"></i>
+            <p-tag 
+              *ngIf="usuario.empresa; else noEmpresa"
+              [value]="usuario.empresa"
+              severity="info">
+            </p-tag>
+            <ng-template #noEmpresa>
+              <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
+            </ng-template>
+          </td>
           <td>
             <div class="user-info">
               <i class="pi pi-user user-icon"></i>
@@ -71,31 +89,15 @@
           <td>{{ usuario.email }}</td>
           <td>
             <p-tag 
-              *ngIf="usuario.matricula; else noMatricula"
-              [value]="usuario.matricula"
-              severity="info">
-            </p-tag>
-            <ng-template #noMatricula>
-              <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
-            </ng-template>
-          </td>
-          <td>
-            <p-tag 
               [value]="getIdiomaTag(usuario.idiomaPreferencia || 'pt')"
               severity="secondary">
-            </p-tag>
-          </td>
-          <td>
-            <p-tag 
-              [value]="(usuario.cursos?.length || 0).toString()"
-              severity="success">
             </p-tag>
           </td>
           <td>
             <div class="action-buttons">
               <p-button 
                 icon="pi pi-pencil" 
-                severity="info" 
+                severity="help" 
                 size="small"
                 [title]="'common.edit' | translate"
                 (onClick)="editarUsuario(usuario)">
@@ -162,7 +164,7 @@
           <td colspan="6" class="text-center">
             <div class="empty-state">
               <i class="pi pi-users empty-icon"></i>
-              <p>{{ 'usuario.empty' | translate }}</p>
+              <p>{{ 'usuario-plataform.empty' | translate }}</p>
             </div>
           </td>
         </tr>
@@ -172,7 +174,7 @@
 
   <!-- Dialog para criar/editar usuário -->
   <p-dialog 
-    [header]="isEditing ? ('usuario.edit' | translate) : ('usuario.new' | translate)"
+    [header]="isEditing ? ('usuario-plataform.edit' | translate) : ('usuario-plataform.new' | translate)"
     [(visible)]="displayDialog" 
     [modal]="true" 
     [style]="{width: '450px'}"
@@ -181,49 +183,53 @@
     
     <div class="dialog-content">
       <div class="field">
-        <label for="nome">{{ 'usuario.name' | translate }} *</label>
+
+      <div class="field">
+        <label for="nome">{{ 'usuario-plataform.empresa' | translate }} *</label>
+        <p-dropdown 
+          id="idioma"
+          [(ngModel)]="usuarioForm.empresa"
+          [options]="empresaOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          class="w-full"
+          [placeholder]="'usuario-plataform.empresaPlaceholder' | translate">
+        </p-dropdown>
+      </div>
+
+        <label for="nome">{{ 'usuario-plataform.name' | translate }} *</label>
         <input 
           id="nome"
           type="text" 
           pInputText 
           [(ngModel)]="usuarioForm.nome"
           class="w-full"
-          [placeholder]="'usuario.namePlaceholder' | translate" />
+          [placeholder]="'usuario-plataform.namePlaceholder' | translate" />
       </div>
 
       <div class="field">
-        <label for="email">{{ 'usuario.email' | translate }} *</label>
+        <label for="email">{{ 'usuario-plataform.email' | translate }} *</label>
         <input 
           id="email"
           type="email" 
           pInputText 
           [(ngModel)]="usuarioForm.email"
           class="w-full"
-          [placeholder]="'usuario.emailPlaceholder' | translate" />
+          [placeholder]="'usuario-plataform.emailPlaceholder' | translate" />
       </div>
 
       <div class="field">
-        <label for="matricula">{{ 'usuario.matricula' | translate }}</label>
-        <input 
-          id="matricula"
-          type="text" 
-          pInputText 
-          [(ngModel)]="usuarioForm.matricula"
-          class="w-full"
-          maxlength="6"
-          [placeholder]="'usuario.matriculaPlaceholder' | translate" />
-      </div>
-
-      <div class="field">
-        <label for="idioma">{{ 'usuario.language' | translate }}</label>
+        <label for="idioma">{{ 'usuario-plataform.language' | translate }}</label>
         <p-dropdown 
           id="idioma"
           [(ngModel)]="usuarioForm.idiomaPreferencia"
           [options]="idiomaOptions"
           optionLabel="label"
           optionValue="value"
+          appendTo="body"
           class="w-full"
-          [placeholder]="'usuario.languagePlaceholder' | translate">
+          [placeholder]="'usuario-plataform.languagePlaceholder' | translate">
         </p-dropdown>
       </div>
     </div>
@@ -245,6 +251,23 @@
         </p-button>
       </div>
     </ng-template>
+  </p-dialog>
+
+  <p-dialog 
+    [header]="('usuario.info' | translate)"
+    [(visible)]="displayDialogInfo" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false">
+
+    <div class="dialog-content">
+      <div class="field">
+        <p-tag severity="secondary"
+          [value]="'Ao adicionar o usuário no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma.'">
+        </p-tag>
+      </div>
+    </div>
   </p-dialog>
 
   <!-- Toast para mensagens -->

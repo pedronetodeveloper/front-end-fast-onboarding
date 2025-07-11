@@ -4,7 +4,18 @@ export interface Usuario {
   nome?: string;
   email?: string;
   idiomaPreferencia?: string;
-  cursos?: Curso[];
+  createdAt?: string;
+  updatedAt?: string;
+  createdBy?: string;
+  updatedBy?: string;
+}
+
+export interface UsuarioPlataforma {
+  id?: string;
+  empresa?: string;
+  nome?: string;
+  email?: string;
+  idiomaPreferencia?: string;
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;
@@ -22,6 +33,20 @@ export interface UpdateUsuarioRequest {
   matricula?: string;
   nome?: string;
   email?: string;
+  idiomaPreferencia?: string;
+}
+
+export interface CreateUsuarioPlataformaRequest {
+  empresa?: string;
+  nome: string;
+  email: string;
+  idiomaPreferencia?: string;
+}
+
+export interface UpdateUsuarioPlataformaRequest {
+  empresa?: string;
+  nome: string;
+  email: string;
   idiomaPreferencia?: string;
 }
 

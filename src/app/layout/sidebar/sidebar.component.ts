@@ -55,11 +55,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   // Menu base
   private allMenuItems: SidebarMenuItem[] = [
     { labelKey: 'nav.home', icon: 'pi pi-home', route: '/home', requiresAuth: true },
-    { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/usuario', requiresAuth: true },
-    { labelKey: 'nav.cursos', icon: 'pi pi-book', route: '/curso', requiresAuth: true },
-    { labelKey: 'nav.listaAcessos', icon: 'pi pi-list', route: '/lista-acessos', requiresAuth: true },
-    { labelKey: 'nav.documentos', icon: 'pi pi-folder', route: '/documentos-contratado', requiresAuth: true },
-    { labelKey: 'nav.upload', icon: 'pi pi-upload', route: '/upload-documentos', requiresAuth: true }
+    { labelKey: 'nav.upload', icon: 'pi pi-upload', route: '/upload-documentos', requiresAuth: true },
+    { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/candidatos', requiresAuth: true },
+    { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observabilidade', requiresAuth: true },
+    { labelKey: 'nav.users-plataform', icon: 'pi pi-users', route: '/controle-acessos', requiresAuth: true },
   ];
 
   menuItems: SidebarMenuItem[] = [];

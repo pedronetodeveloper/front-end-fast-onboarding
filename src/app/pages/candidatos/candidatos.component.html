@@ -15,6 +15,14 @@
           icon="pi pi-plus" 
           (onClick)="novoUsuario()">
         </p-button>
+        <p-button
+          class="ml-2"
+          icon="pi pi-info" 
+          severity="info" 
+          size="small"
+          [title]="'Ao adicionar um novo candidato ...'"
+          (onClick)="abrirModal()">
+        </p-button>
       </ng-template>
       
       <ng-template pTemplate="center">
@@ -222,6 +230,7 @@
           [options]="idiomaOptions"
           optionLabel="label"
           optionValue="value"
+          appendTo="body"
           class="w-full"
           [placeholder]="'usuario.languagePlaceholder' | translate">
         </p-dropdown>
@@ -273,6 +282,23 @@
     <ng-template pTemplate="footer">
       <button pButton type="button" label="Fechar" icon="pi pi-times" (click)="showDocumentosDialog=false"></button>
     </ng-template>
+  </p-dialog>
+
+  <p-dialog 
+    [header]="('usuario.info' | translate)"
+    [(visible)]="displayDialogInfo" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false">
+
+    <div class="dialog-content">
+      <div class="field">
+        <p-tag severity="secondary"
+          [value]="'Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para ser enviado os documentos.'">
+        </p-tag>
+      </div>
+    </div>
   </p-dialog>
 
   <!-- Toast para mensagens -->

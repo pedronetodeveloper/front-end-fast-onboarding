@@ -53,8 +53,8 @@ import { InputIconModule } from 'primeng/inputicon';
     InputIconModule
   ],
   providers: [ConfirmationService, MessageService],
-  templateUrl: './usuario.component.html',
-  styleUrl: './usuario.component.scss',
+  templateUrl: './candidatos.component.html',
+  styleUrl: './candidatos.component.scss',
   animations: [pageEnterAnimation]
 })
 export class UsuarioComponent implements OnInit {
@@ -78,6 +78,7 @@ export class UsuarioComponent implements OnInit {
 
   // Dialog states
   displayDialog = false;
+  displayDialogInfo = false;
   isEditing = false;
 
   // Form data
@@ -135,6 +136,10 @@ export class UsuarioComponent implements OnInit {
     // Não faz nada, pois os usuários já estão mockados
     this.filteredUsuarios = [...this.usuarios];
     this.loading = false;
+  }
+
+  abrirModal():void{
+    this.displayDialogInfo = true;
   }
 
   /**

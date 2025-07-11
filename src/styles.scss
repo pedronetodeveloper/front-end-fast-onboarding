@@ -82,6 +82,13 @@ body {
   --hover-bg: var(--primary-alpha-10);
 }
 
+.dark-theme .p-toolbar {
+  background-color: var(--surface-b);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px var(--shadow-color);
+}
+
 /* Layout Styles */
 .main-container {
   min-height: 100vh;

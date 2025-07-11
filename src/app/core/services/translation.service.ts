@@ -22,12 +22,15 @@ export class TranslationService {
 
             // Navigation
             "nav.menu": "Menu",
+            "nav.observability": "Observabilidade",
             "nav.home": "Início",
             "nav.settings": "Configurações",
             "nav.logout": "Sair",
             "nav.userMenu": "Menu do usuário",
+            "nav.users-plataform": "Controle de usuários",
             "nav.settings.section": "Configurações",
             "nav.language": "Idioma",
+            "nav.upload": "Subir arquivos",
             "nav.theme": "Tema",
             "nav.theme.light": "Tema Claro",
             "nav.theme.dark": "Tema Escuro",
@@ -38,26 +41,9 @@ export class TranslationService {
             "home.getStarted": "Começar",
             "home.documentation": "Documentação",
 
-            // Tech Stack Section
-            // "home.techStack.title": "Stack Tecnológica",
-            // "home.techStack.description": "Construído com as tecnologias mais modernas e confiáveis do mercado",
-            // "home.techStack.angular": "Framework poderoso para aplicações web dinâmicas e escaláveis",
-            // "home.techStack.primeng": "Biblioteca de componentes UI rica e personalizável",
-            // "home.techStack.typescript": "Linguagem tipada que oferece maior segurança e produtividade",
-            // "home.techStack.scss": "Pré-processador CSS para estilização avançada e modular",
-
-            // Themes Section
-            // "home.themes.title": "Personalização de Tema",
-            // "home.themes.description": "Customize a aparência da aplicação com diferentes cores e modo escuro",
-            // "home.themes.customize": "Personalizar Tema",
-            // "home.themes.primaryColor": "Cor Principal",
-            // "home.themes.darkMode": "Modo Escuro",
-            // "home.themes.preview": "Visualização",
-            // "home.themes.sampleCard": "Este é um exemplo de card com o tema atual",
-
             // Features Section
             "home.features.title": "Recursos Principais",
-            "home.features.description": "Funcionalidades avançadas prontas para uso em sua aplicação",
+            "home.features.description": "Funcionalidades prontas para agilizar suas contratações.",
             "home.features.authentication.title": "Autenticação Simples",
             "home.features.authentication.description": "Sistema de autenticação de fácil controle",
             "home.features.authentication.security": "Segurança para os candidatos",
@@ -106,11 +92,9 @@ export class TranslationService {
 
             // Login
             "login.welcome": "Bem-vindo!",
-            "login.description":
-                "Faça login com sua conta Microsoft para acessar o template",
-            "login.signIn": "Entrar com Microsoft",
-            "login.termsMessage":
-                "Ao fazer login, você concorda com nossos termos de uso e política de privacidade",
+            "login.description": "Faça login com sua conta para acessar a plataforma",
+            "login.signIn": "Entrar com a sua conta",
+            "login.termsMessage": "Ao fazer login, você concorda com nossos termos de uso e política de privacidade",
             "login.secureAuth": "Autenticação segura via Azure Entra ID",
             "login.tryAgain": "Tentar Novamente",
             "login.clearAndTry": "Limpar e Tentar",
@@ -140,6 +124,7 @@ export class TranslationService {
             "usuario.subtitle": "Gerencie os candidatos",
             "usuario.new": "Novo Candidato",
             "usuario.edit": "Editar Candidato",
+            "usuario.info": "Informações Importante",
             "usuario.name": "Nome",
             "usuario.email": "E-mail",
             "usuario.matricula": "Matrícula",
@@ -149,6 +134,22 @@ export class TranslationService {
             "usuario.emailPlaceholder": "Digite o e-mail do candidato",
             "usuario.matriculaPlaceholder": "Digite a matrícula (opcional)",
             "usuario.languagePlaceholder": "Selecione o idioma preferido",
+
+            // Usuario Plataforma
+            "usuario-plataform.title": "Gestão de Usuários",
+            "usuario-plataform.subtitle": "Gerencie os usuários da plataforma",
+            "usuario-plataform.new": "Novo usuário",
+            "usuario-plataform.edit": "Editar usuário",
+            "usuario-plataform.info": "Informações Importante",
+            "usuario-plataform.name": "Nome",
+            "usuario-plataform.empresa": "Empresa",
+            "usuario-plataform.empresaPlaceholder": "Selecione a empresa",
+            "usuario-plataform.email": "E-mail",
+            "usuario-plataform.language": "Idioma",
+            "usuario-plataform.empty": "Nenhum usuário encontrado",
+            "usuario-plataform.namePlaceholder": "Digite o nome do usuário",
+            "usuario-plataform.emailPlaceholder": "Digite o e-mail do usuário",
+            "usuario-plataform.languagePlaceholder": "Selecione o idioma preferido",
 
             // Curso
             "curso.title": "Gestão de Cursos",
@@ -302,23 +303,6 @@ export class TranslationService {
             "home.subtitle": "Modern and scalable solution for web development with Angular 19 and PrimeNG",
             "home.getStarted": "Get Started",
             "home.documentation": "Documentation",
-
-            // Tech Stack Section
-            "home.techStack.title": "Technology Stack",
-            "home.techStack.description": "Built with the most modern and reliable technologies on the market",
-            "home.techStack.angular": "Powerful framework for dynamic and scalable web applications",
-            "home.techStack.primeng": "Rich and customizable UI component library",
-            "home.techStack.typescript": "Typed language that offers greater security and productivity",
-            "home.techStack.scss": "CSS preprocessor for advanced and modular styling",
-
-            // Themes Section
-            "home.themes.title": "Theme Customization",
-            "home.themes.description": "Customize the application appearance with different colors and dark mode",
-            "home.themes.customize": "Customize Theme",
-            "home.themes.primaryColor": "Primary Color",
-            "home.themes.darkMode": "Dark Mode",
-            "home.themes.preview": "Preview",
-            "home.themes.sampleCard": "This is an example card with the current theme",
 
             // Features Section
             "home.features.title": "Main Features",
@@ -569,23 +553,6 @@ export class TranslationService {
             "home.subtitle": "Solución moderna e escalable para desenvolvimento web com Angular 19 e PrimeNG",
             "home.getStarted": "Comenzar",
             "home.documentation": "Documentación",
-
-            // Tech Stack Section
-            "home.techStack.title": "Stack Tecnológico",
-            "home.techStack.description": "Construído com as tecnologias mais modernas e confiáveis do mercado",
-            "home.techStack.angular": "Framework poderoso para aplicações web dinâmicas e escaláveis",
-            "home.techStack.primeng": "Biblioteca de componentes UI rica e personalizável",
-            "home.techStack.typescript": "Lenguaje tipado que oferece maior segurança e produtividade",
-            "home.techStack.scss": "Preprocesador CSS para estilização avançada e modular",
-
-            // Themes Section
-            "home.themes.title": "Personalização de Tema",
-            "home.themes.description": "Personaliza a aparência da aplicação com diferentes cores e modo escuro",
-            "home.themes.customize": "Personalizar Tema",
-            "home.themes.primaryColor": "Color Principal",
-            "home.themes.darkMode": "Modo Escuro",
-            "home.themes.preview": "Vista Previa",
-            "home.themes.sampleCard": "Este é um exemplo de tarjeta com o tema atual",
 
             // Features Section
             "home.features.title": "Características Principais",
