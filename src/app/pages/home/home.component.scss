@@ -1,3 +1,69 @@
+/* Forçar background do textarea do PrimeNG igual ao dos inputs */
+.contact-form textarea.p-inputtextarea,
+.contact-form .p-inputtextarea textarea {
+  background: var(--surface-d) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.contact-form textarea.p-inputtextarea:focus,
+.contact-form .p-inputtextarea textarea:focus {
+  outline: none;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
+}
+/* Forçar textarea PrimeNG a ter fundo igual ao dos inputs em todos os temas */
+.contact-form textarea.p-inputtextarea,
+.contact-form .p-inputtextarea {
+  background-color: var(--surface-d) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.contact-form textarea.p-inputtextarea:focus,
+.contact-form .p-inputtextarea:focus {
+  outline: none;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
+}
+/* Garantir textarea igual aos inputs (light e dark) */
+.contact-form textarea.p-inputtextarea {
+  background: var(--surface-d);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.contact-form textarea.p-inputtextarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px var(--primary-alpha-20);
+}
+.dark-theme {
+  .contact-section {
+    .section-container {
+      label {
+        color: var(--text-color);
+      }
+      input,
+      textarea,
+      .p-inputtextarea {
+        background: var(--surface-d) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--border-color) !important;
+      }
+      input:focus,
+      textarea:focus,
+      .p-inputtextarea:focus {
+        outline: none;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
+      }
+    }
+  }
+}
 /* Botão flutuante para rolar até o final da página */
 .scroll-to-bottom-btn {
   position: fixed;
@@ -33,7 +99,8 @@
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--surface-e);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   box-shadow: 0 2px 16px rgba(0,0,0,0.07);
   padding: 32px 24px;
@@ -721,6 +788,7 @@
 /* DARK THEME ADJUSTMENTS */
 /* =================================== */
 
+
 .dark-theme {
   .hero-banner::before {
     background: 
@@ -737,5 +805,20 @@
     box-shadow: 
       0 20px 40px rgba(0, 0, 0, 0.3),
       0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .contact-section {
+    background: var(--surface-b);
+    
+    .section-container {
+      background: var(--surface-e);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      
+      label, input, textarea {
+        color: var(--text-color);
+        background: var(--surface-e);
+      }
+    }
   }
 }

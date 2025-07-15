@@ -118,22 +118,22 @@
     <h2 class="section-title">Entre em contato</h2>
     <p class="section-subtitle">Fale com nossa equipe para obter acesso à plataforma.</p>
     <form class="contact-form" (ngSubmit)="enviarContato()" #contactForm="ngForm">
-      <div class="p-fluid">
-        <div class="p-field">
+      <div class="dialog-content">
+        <div class="field">
           <label for="nome">Nome</label>
-          <input id="nome" type="text" pInputText name="nome" [(ngModel)]="contato.nome" required />
+          <input id="nome" type="text" pInputText name="nome" [(ngModel)]="contato.nome" required class="w-full" placeholder="Digite seu nome" />
         </div>
-        <div class="p-field">
+        <div class="field">
           <label for="email">E-mail</label>
-          <input id="email" type="email" pInputText name="email" [(ngModel)]="contato.email" required email />
+          <input id="email" type="email" pInputText name="email" [(ngModel)]="contato.email" required email class="w-full" placeholder="Digite seu e-mail" />
         </div>
-        <div class="p-field">
+        <div class="field">
           <label for="empresa">Empresa</label>
-          <input id="empresa" type="text" pInputText name="empresa" [(ngModel)]="contato.empresa" required />
+          <input id="empresa" type="text" pInputText name="empresa" [(ngModel)]="contato.empresa" required class="w-full" placeholder="Digite o nome da empresa" />
         </div>
-        <div class="p-field">
+        <div class="field">
           <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" pInputTextarea name="mensagem" [(ngModel)]="contato.mensagem" rows="3" required></textarea>
+          <textarea id="mensagem" pInputTextarea name="mensagem" [(ngModel)]="contato.mensagem" rows="3" required class="w-full" placeholder="Digite sua mensagem"></textarea>
         </div>
       </div>
       <div class="dialog-actions">
