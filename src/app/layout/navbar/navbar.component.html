@@ -1,4 +1,4 @@
-<div class="navbar-custom">
+<div class="navbar-custom" [ngClass]="{'with-sidebar': isSidebarVisible}">
     <div class="navbar-start">
         <!-- Mobile Menu Button -->
         <button class="mobile-menu-btn" (click)="toggleSidebar()" [pTooltip]="'nav.menu' | translate" tooltipPosition="bottom">

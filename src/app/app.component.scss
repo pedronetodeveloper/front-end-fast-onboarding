@@ -36,11 +36,15 @@
   overflow-y: auto;
   transition: margin-left 0.3s ease;
   margin-top: 60px; /* Espaço para a navbar fixa */
-  margin-left: 70px; /* Espaço para a sidebar colapsada */
-  
-  &.with-sidebar {
-    margin-left: 70px; /* Sidebar colapsada por padrão */
-  }
+  margin-left: 0;
+}
+
+.content-wrapper.with-sidebar {
+  margin-left: 70px; /* Sidebar colapsada por padrão */
+}
+
+.content-wrapper.full-width {
+  margin-left: 0 !important;
 }
 
 .loading-container {

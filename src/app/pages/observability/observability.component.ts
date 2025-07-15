@@ -14,14 +14,12 @@ import { ToolbarModule } from 'primeng/toolbar';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
-import { MeterGroup } from 'primeng/metergroup';
 import { ChartModule } from 'primeng/chart';
 
 // Services
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../shared/interface/usuario.interface';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -53,7 +51,6 @@ import { InputIconModule } from 'primeng/inputicon';
     TranslatePipe,
     IconFieldModule,
     InputIconModule,
-    MeterGroup,
     ChartModule,
   ],
   providers: [ConfirmationService, MessageService],
@@ -68,18 +65,18 @@ export class ObservabilityComponent implements OnInit {
   displayDialogInfo = false;
 
   tempoMedioDocs = [
-  { label: 'RG', value: 120, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
-  { label: 'CPF', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
-  { label: 'Comprovante de Residência', value: 110, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
-  { label: 'Comprovante de Endereço', value: 105, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
-];
+    { label: 'observability.rg', value: 120, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
+    { label: 'observability.cpf', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
+    { label: 'observability.comprovanteResidencia', value: 110, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
+    { label: 'observability.comprovanteEndereco', value: 105, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
+  ];
 
-acuraciaDocs = [
-  { label: 'RG', value: 95, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
-  { label: 'CPF', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
-  { label: 'Comprovante de Residência', value: 92, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
-  { label: 'Comprovante de Endereço', value: 94, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
-];
+  acuraciaDocs = [
+    { label: 'observability.rg', value: 95, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
+    { label: 'observability.cpf', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
+    { label: 'observability.comprovanteResidencia', value: 92, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
+    { label: 'observability.comprovanteEndereco', value: 94, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
+  ];
 
 
   data: any;

@@ -1,0 +1,223 @@
+<div class="empresa-container" [@pageAnimation]>
+  <p-card>
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>{{ 'empresa.title' | translate }}</h2>
+        <p class="card-subtitle">{{ 'empresa.subtitle' | translate }}</p>
+      </div>
+    </ng-template>
+
+    <p-toolbar styleClass="mb-4">
+      <ng-template pTemplate="left">
+        <p-button 
+          severity="success" 
+          [label]="'empresa.new' | translate"
+          icon="pi pi-plus" 
+          (onClick)="novaEmpresa()">
+        </p-button>
+        <p-button
+          class="ml-2"
+          icon="pi pi-info" 
+          severity="info" 
+          size="small"
+          [title]="'Ao adicionar uma nova empresa ...'"
+          (onClick)="abrirModal()">
+        </p-button>
+      </ng-template>
+      <ng-template pTemplate="center">
+        <div class="search-container">
+            <p-iconfield>
+                <p-inputicon class="pi pi-search" />
+                <input type="text" pInputText placeholder="{{ 'common.search' | translate }}" />
+            </p-iconfield>
+        </div>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table 
+      [value]="filteredEmpresas" 
+      [loading]="loading"
+      [scrollable]="true"
+      scrollHeight="400px"
+      styleClass="p-datatable-striped"
+      [sortField]="sortField"
+      [sortOrder]="sortOrder"
+      (onSort)="onSort($event)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="nome">
+            {{ 'empresa.name' | translate }}
+            <p-sortIcon field="nome"></p-sortIcon>
+          </th>
+          <th pSortableColumn="plano">
+            {{ 'empresa.plan' | translate }}
+            <p-sortIcon field="plano"></p-sortIcon>
+          </th>
+          <th pSortableColumn="responsavel">
+            {{ 'empresa.responsavel' | translate }}
+            <p-sortIcon field="responsavel"></p-sortIcon>
+          </th>
+          <th pSortableColumn="cnpj">
+            {{ 'empresa.cnpj' | translate }}
+            <p-sortIcon field="cnpj"></p-sortIcon>
+          </th>
+          <th style="width: 200px">{{ 'common.actions' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-empresa>
+        <tr>
+          <td>
+            <div class="user-info">
+              <i class="pi pi-building user-icon"></i>
+              <span class="user-name">{{ empresa.nome }}</span>
+            </div>
+          </td>
+          <td>
+            <p-tag [value]="empresa.plano" severity="info"></p-tag>
+            <span *ngIf="empresa.usuarios > empresa.limiteUsuarios" class="text-danger ml-2">{{ 'empresa.planLimitExceeded' | translate }}</span>
+          </td>
+          <td>{{ empresa.responsavel }}</td>
+          <td>{{ empresa.cnpj }}</td>
+          <td>
+            <div class="action-buttons">
+              <p-button 
+                icon="pi pi-pencil" 
+                severity="help" 
+                size="small"
+                [title]="'common.edit' | translate"
+                (onClick)="editarEmpresa(empresa)">
+              </p-button>
+              <p-button 
+                icon="pi pi-trash" 
+                severity="danger" 
+                size="small"
+                [title]="'common.delete' | translate"
+                (onClick)="confirmarExclusao(empresa)">
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="loadingbody">
+        <tr *ngFor="let item of [1,2,3,4,5]">
+          <td>
+            <div class="user-info">
+              <div class="skeleton-icon"></div>
+              <div class="skeleton-text skeleton-name"></div>
+            </div>
+          </td>
+          <td><div class="skeleton-tag"></div></td>
+          <td><div class="skeleton-text skeleton-email"></div></td>
+          <td><div class="skeleton-tag"></div></td>
+          <td>
+            <div class="action-buttons">
+              <div class="skeleton-button"></div>
+              <div class="skeleton-button"></div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center">
+            <div class="empty-state">
+              <i class="pi pi-building empty-icon"></i>
+              <p>{{ 'empresa.empty' | translate }}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Dialog para criar/editar empresa -->
+  <p-dialog 
+    [header]="isEditing ? ('empresa.edit' | translate) : ('empresa.new' | translate)"
+    [(visible)]="displayDialog" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="dialog-content">
+      <div class="field">
+        <label for="nome">{{ 'empresa.name' | translate }} *</label>
+        <input 
+          id="nome"
+          type="text" 
+          pInputText 
+          [(ngModel)]="empresaForm.nome"
+          class="w-full"
+          [placeholder]="'empresa.namePlaceholder' | translate" />
+      </div>
+      <div class="field">
+        <label for="plano">{{ 'empresa.plan' | translate }} *</label>
+        <p-dropdown 
+          id="plano"
+          [(ngModel)]="empresaForm.plano"
+          [options]="planoOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          class="w-full"
+          [placeholder]="'empresa.planPlaceholder' | translate">
+        </p-dropdown>
+        <small *ngIf="empresaForm.usuarios > empresaForm.limiteUsuarios" class="text-danger">{{ 'empresa.planLimitExceeded' | translate }}</small>
+      </div>
+      <div class="field">
+        <label for="responsavel">{{ 'empresa.responsavel' | translate }} *</label>
+        <input 
+          id="responsavel"
+          type="text" 
+          pInputText 
+          [(ngModel)]="empresaForm.responsavel"
+          class="w-full"
+          [placeholder]="'empresa.responsavelPlaceholder' | translate" />
+      </div>
+      <div class="field">
+        <label for="cnpj">{{ 'empresa.cnpj' | translate }} *</label>
+        <input 
+          id="cnpj"
+          type="text" 
+          pInputText 
+          [(ngModel)]="empresaForm.cnpj"
+          class="w-full"
+          [placeholder]="'empresa.cnpjPlaceholder' | translate" />
+      </div>
+    </div>
+    <ng-template pTemplate="footer">
+      <div class="dialog-footer">
+        <p-button 
+          [label]="'common.cancel' | translate"
+          icon="pi pi-times" 
+          variant="outlined"
+          severity="secondary"
+          (onClick)="fecharDialog()">
+        </p-button>
+        <p-button 
+          [label]="'common.save' | translate"
+          icon="pi pi-check" 
+          (onClick)="salvarEmpresa()"
+          [loading]="loading">
+        </p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+
+  <p-dialog 
+    [header]="('empresa.info' | translate)"
+    [(visible)]="displayDialogInfo" 
+    [modal]="true" 
+    [style]="{width: '450px'}"
+    [draggable]="false"
+    [resizable]="false">
+    <div class="dialog-content">
+      <div class="field">
+        <p-tag severity="secondary"
+          [value]="'Ao adicionar a empresa no sistema, automaticamente será enviado o login para o responsável cadastrado.'">
+        </p-tag>
+      </div>
+    </div>
+  </p-dialog>
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>

@@ -4,43 +4,66 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">Tempo Médio de Processamento (ms)</span>
+        <span class="text-lg font-semibold">{{ 'observability.avgProcessingTime' | translate }}</span>
       </div>
     </ng-template>
-
-
-    <p-metergroup [value]="tempoMedioDocs" labelPosition="start">
-      <ng-template #label>
-        <div class="flex flex-wrap gap-4">
-          <ng-container *ngFor="let item of tempoMedioDocs">
-            <p-card class="flex-1" styleClass="border border-surface shadow-none">
-              <div class="flex justify-between gap-8">
-                <div class="flex flex-col gap-1">
-                  <span class="text-surface-500 dark:text-surface-400 text-sm">{{ item.label }}</span>
-                  <span class="font-bold text-lg">{{ item.value }}ms</span>
-                </div>
-                <span class="w-8 h-8 rounded-full inline-flex justify-center items-center text-center"
-                  [style]="{ 'background-color': item.color1, color: '#ffffff' }">
-                  <i [class]="item.icon"></i>
-                </span>
-              </div>
-            </p-card>
-          </ng-container>
+    <div class="flex flex-wrap gap-6 justify-center py-4">
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #6366f1; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.rg' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">120ms</span>
+          </div>
         </div>
-      </ng-template>
-
-      <ng-template #meter let-value let-class="class" let-width="size">
-        <span [class]="class"
-          [style]="{ background: 'linear-gradient(to right, ' + value.color1 + ', ' + value.color2 + ')', width: width }"></span>
-      </ng-template>
-
-      <ng-template #start let-totalPercent="totalPercent">
-        <div class="flex justify-between mt-4 mb-2">
-          <span>Documentos por Segundo</span>
-          <span class="absolute right-0 text-right">{{ totalPercent | number: '1.0-0' }} doc/s</span>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #22d3ee; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.cpf' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">110ms</span>
+          </div>
         </div>
-      </ng-template>
-    </p-metergroup>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #f59e42; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.titulo' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">130ms</span>
+          </div>
+        </div>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-briefcase" style="color: #10b981; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.ctps' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">125ms</span>
+          </div>
+        </div>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-home" style="color: #f43f5e; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.comprovante' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">115ms</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
   </p-card>
 
   <br>
@@ -48,49 +71,67 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">Acurácia (%) da Análise dos Documentos</span>
+        <span class="text-lg font-semibold">{{ 'observability.accuracyTitle' | translate }}</span>
       </div>
     </ng-template>
 
-
-    <p-metergroup [value]="acuraciaDocs" labelPosition="start">
-      <ng-template #label>
-        <div class="flex flex-wrap gap-4">
-          <ng-container *ngFor="let item of acuraciaDocs">
-            <p-card class="flex-1" styleClass="border border-surface shadow-none">
-              <div class="flex justify-between gap-8">
-                <div class="flex flex-col gap-1">
-                  <span class="text-surface-500 dark:text-surface-400 text-sm">{{ item.label }}</span>
-                  <span class="font-bold text-lg">{{ item.value }}%</span>
-                </div>
-                <span class="w-8 h-8 rounded-full inline-flex justify-center items-center text-center"
-                  [style]="{ 'background-color': item.color1, color: '#ffffff' }">
-                  <i [class]="item.icon"></i>
-                </span>
-              </div>
-            </p-card>
-          </ng-container>
+    <div class="flex flex-wrap gap-6 justify-center py-4">
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #6366f1; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.rg' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">98%</span>
+          </div>
         </div>
-      </ng-template>
-
-      <ng-template #meter let-value let-class="class" let-width="size">
-        <span [class]="class"
-          [style]="{ background: 'linear-gradient(to right, ' + value.color1 + ', ' + value.color2 + ')', width: width }"></span>
-      </ng-template>
-
-      <ng-template #start let-totalPercent="totalPercent">
-        <div class="flex justify-between mt-4 mb-2">
-          <span>Documentos Válidos</span>
-          <span class="absolute right-0 text-right">{{ totalPercent }}%</span>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #22d3ee; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.cpf' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">97%</span>
+          </div>
         </div>
-      </ng-template>
-
-      <ng-template #end>
-        <div class="flex justify-end mt-4">
-          <p-button label="Ver Detalhes" size="small" />
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-id-card" style="color: #f59e42; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.titulo' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">95%</span>
+          </div>
         </div>
-      </ng-template>
-    </p-metergroup>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-briefcase" style="color: #10b981; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.ctps' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">96%</span>
+          </div>
+        </div>
+      </p-card>
+      <p-card class="flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+        <div class="flex items-center gap-4 h-full px-4">
+          <span class="w-12 h-12 flex justify-center items-center">
+            <i class="pi pi-home" style="color: #f43f5e; font-size: 1rem;"></i>
+          </span>
+          <div class="flex flex-col justify-center h-full">
+            <span class="font-extrabold text-base text-surface-500 dark:text-surface-400 whitespace-nowrap overflow-hidden text-ellipsis">{{ 'upload.comprovante' | translate }}</span>
+            <span class="font-extrabold text-xl text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">94%</span>
+          </div>
+        </div>
+      </p-card>
+    </div>
   </p-card>
 
   <br>
@@ -98,7 +139,7 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">Documentos Processados por Dia</span>
+        <span class="text-lg font-semibold">{{ 'observability.docsPerDay' | translate }}</span>
       </div>
     </ng-template>
 
@@ -114,7 +155,7 @@
     <div class="dialog-content">
       <div class="field">
         <p-tag severity="secondary"
-          [value]="'Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para envio de documentos.'">
+          [value]="'observability.infoDialog' | translate">
         </p-tag>
       </div>
     </div>

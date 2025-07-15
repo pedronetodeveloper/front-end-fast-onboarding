@@ -10,10 +10,14 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
-  left: 70px; /* Deixa espaço para a sidebar colapsada */
+  left: 0;
   right: 0;
-  z-index: 999; /* Menor que a sidebar para ficar atrás */
+  z-index: 999;
   transition: left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.navbar-custom.with-sidebar {
+  left: 70px;
 }
 
 .navbar-start {

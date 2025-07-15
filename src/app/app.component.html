@@ -4,9 +4,8 @@
         <app-navbar></app-navbar>
 
         <div class="layout-body">
-            <app-sidebar></app-sidebar>
-
-            <main class="content-wrapper with-sidebar">
+            <app-sidebar *ngIf="showNavigation && (isSidebarVisible ?? true)"></app-sidebar>
+            <main [ngClass]="{'content-wrapper': true, 'with-sidebar': isSidebarVisible, 'full-width': !isSidebarVisible}">
                 <router-outlet></router-outlet>
             </main>
         </div>

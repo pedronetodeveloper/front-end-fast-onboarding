@@ -43,6 +43,7 @@ import { TranslatePipe } from "../../shared/pipes/translate.pipe";
   styleUrls: ["./navbar.component.scss"],
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  isSidebarVisible = false;
   @ViewChild("userMenu") userMenu!: Menu;
 
   isLoggedIn = false;
@@ -71,12 +72,23 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setLoginDisplay();
+    this.authService.isAuthenticated$.pipe(takeUntil(this.destroy$)).subscribe(isAuth => {
+      this.setLoginDisplay();
+      this.updateSidebarState();
+    });
+    this.updateSidebarState();
     this.setupAuthListener();
     this.initializeUserMenu();
     this.setupLanguageListener();
     this.setupClickOutsideListener();
     this.checkMobile();
     window.addEventListener("resize", () => this.checkMobile());
+  }
+
+  private updateSidebarState(): void {
+    // Sidebar só visível se usuário autenticado
+    const user = this.authService.getUser();
+    this.isSidebarVisible = !!user;
   }
 
   ngOnDestroy(): void {
@@ -99,36 +111,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private setLoginDisplay(): void {
-    const accounts = this.msalService.instance.getAllAccounts();
-    this.isLoggedIn = accounts.length > 0;
-
-    if (this.isLoggedIn && accounts[0]) {
-      const account = accounts[0];
-      this.displayName = account.name || account.username || "Usuário";
-
-      // Get initials from display name
+    // Mock login: detecta pelo AuthService
+    const user = this.authService.getUser();
+    this.isLoggedIn = !!user;
+    if (user) {
+      this.displayName = user.name || user.email || "Usuário";
       const nameParts = this.displayName.split(" ");
       this.userInitials =
         nameParts.length > 1
           ? (nameParts[0][0] + nameParts[1][0]).toUpperCase()
           : nameParts[0].substring(0, 2).toUpperCase();
+    } else {
+      this.displayName = "";
+      this.userInitials = "";
     }
   }
 
   login(): void {
-    const loginRequest: PopupRequest = {
-      scopes: ["openid", "profile", "User.Read"],
-    };
-
-    this.msalService.loginPopup(loginRequest).subscribe({
-      next: (result) => {
-        this.setLoginDisplay();
-        this.router.navigate(["/home"]);
-      },
-      error: (error: any) => {
-        console.error("Login failed:", error);
-      },
-    });
+    this.router.navigate(["/login"]);
   }
 
   logout(): void {

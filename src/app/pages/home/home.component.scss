@@ -1,3 +1,84 @@
+/* Botão flutuante para rolar até o final da página */
+.scroll-to-bottom-btn {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 1200;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  background: var(--primary-color, #1976d2);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: background 0.2s;
+}
+.scroll-to-bottom-btn:hover {
+  background: var(--primary-color-dark, #115293);
+}
+/* Estilo para centralizar e alinhar o formulário de contato */
+
+.contact-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background: var(--surface-b); /* mesma cor da features-section */
+}
+
+.contact-section .section-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.contact-form .p-field {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 0.75rem; /* mt-2 do PrimeFlex = 12px */
+}
+
+.contact-form label {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.dialog-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.dialog-actions button {
+  min-width: 140px;
+}
 /* =================================== */
 /* HOME COMPONENT STYLES */
 /* =================================== */

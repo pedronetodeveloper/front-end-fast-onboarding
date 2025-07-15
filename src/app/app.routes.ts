@@ -2,8 +2,12 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'empresas',
+    loadComponent: () => import('./pages/empresa/empresa.component').then(m => m.EmpresaComponent)
+  },
+  {
     path: '',
-    redirectTo: '/login',
+   redirectTo: '/home',
     pathMatch: 'full'
   },
   {
@@ -29,6 +33,10 @@ export const routes: Routes = [
   {
     path: 'observabilidade',
     loadComponent: () => import('./pages/observability/observability.component').then(m => m.ObservabilityComponent)
+  },
+  {
+    path: 'acompanhamento-documentos',
+    loadComponent: () => import('./pages/acompanhamento-documentos/acompanhamento-documentos.component').then(m => m.AcompanhamentoDocumentosComponent)
   },
   {
     path: '**',

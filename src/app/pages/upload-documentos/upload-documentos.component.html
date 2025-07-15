@@ -2,33 +2,33 @@
   <p-card>
     <ng-template pTemplate="header">
       <div class="card-header">
-        <h2>Upload de Documentos</h2>
-        <p class="card-subtitle">Envie os documentos obrigatórios para cadastro</p>
+        <h2>{{ 'upload.title' | translate }}</h2>
+        <p class="card-subtitle">{{ 'upload.subtitle' | translate }}</p>
       </div>
     </ng-template>
     <form class="upload-form" autocomplete="off">
       <div class="form-field">
-        <label for="rg"><i class="pi pi-id-card"></i> RG</label>
-        <input type="file" id="rg" name="rg" (change)="onFileChange($event, 'rg')" />
+        <label for="rg"><i class="pi pi-id-card"></i> {{ 'upload.rg' | translate }}</label>
+        <input type="file" id="rg" name="rg" (change)="onFileChange($event, 'rg')" [attr.title]="'upload.chooseFile' | translate" />
       </div>
       <div class="form-field">
-        <label for="cpf"><i class="pi pi-id-card"></i> CPF</label>
-        <input type="file" id="cpf" name="cpf" (change)="onFileChange($event, 'cpf')" />
+        <label for="cpf"><i class="pi pi-id-card"></i> {{ 'upload.cpf' | translate }}</label>
+        <input type="file" id="cpf" name="cpf" (change)="onFileChange($event, 'cpf')" [attr.title]="'upload.chooseFile' | translate" />
       </div>
       <div class="form-field">
-        <label for="titulo"><i class="pi pi-id-card"></i> Título de Eleitor</label>
-        <input type="file" id="titulo" name="titulo" (change)="onFileChange($event, 'titulo')" />
+        <label for="titulo"><i class="pi pi-id-card"></i> {{ 'upload.titulo' | translate }}</label>
+        <input type="file" id="titulo" name="titulo" (change)="onFileChange($event, 'titulo')" [attr.title]="'upload.chooseFile' | translate" />
       </div>
       <div class="form-field">
-        <label for="ctps"><i class="pi pi-briefcase"></i> Carteira de Trabalho</label>
-        <input type="file" id="ctps" name="ctps" (change)="onFileChange($event, 'ctps')" />
+        <label for="ctps"><i class="pi pi-briefcase"></i> {{ 'upload.ctps' | translate }}</label>
+        <input type="file" id="ctps" name="ctps" (change)="onFileChange($event, 'ctps')" [attr.title]="'upload.chooseFile' | translate" />
       </div>
       <div class="form-field">
-        <label for="comprovante"><i class="pi pi-home"></i> Comprovante de Endereço</label>
-        <input type="file" id="comprovante" name="comprovante" (change)="onFileChange($event, 'comprovante')" />
+        <label for="comprovante"><i class="pi pi-home"></i> {{ 'upload.comprovante' | translate }}</label>
+        <input type="file" id="comprovante" name="comprovante" (change)="onFileChange($event, 'comprovante')" [attr.title]="'upload.chooseFile' | translate" />
       </div>
       <div class="form-actions">
-        <button pButton type="submit" label="Enviar" class="p-button-primary" [loading]="loading"></button>
+        <button pButton type="submit" [label]="'upload.send' | translate" class="p-button-primary" [loading]="loading"></button>
       </div>
     </form>
   </p-card>

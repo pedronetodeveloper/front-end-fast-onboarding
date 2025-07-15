@@ -39,7 +39,8 @@ import { TranslationService } from './core/services/translation.service';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Fast Onboarding';
   showNavigation = false;
-  
+  isSidebarVisible = false;
+
   private readonly destroy$ = new Subject<void>();
   private msalBroadcastService = inject(MsalBroadcastService);
   private router = inject(Router);
@@ -128,16 +129,10 @@ export class AppComponent implements OnInit, OnDestroy {
     // Mostra navegação em todas as rotas, mesmo sem autenticação
     const isLoginRoute = url === '/login' || url.startsWith('/login');
     this.showNavigation = !isLoginRoute;
-    
-    console.log(`Navigation visibility updated: ${this.showNavigation} for URL: ${url}`);
-    console.log(`Current showNavigation state: ${this.showNavigation}`);
-    console.log(`Is login route: ${isLoginRoute}`);
-    
-    if (isLoginRoute) {
-      console.log('LOGIN ROUTE DETECTED - Hiding navbar and sidebar');
-    } else {
-      console.log('NÃO LOGIN ROUTE - Mostrando navbar e sidebar');
-    }
+
+    // Sidebar só visível se usuário autenticado
+    const user = this.authService.getUser();
+    this.isSidebarVisible = !!user;
   }
 
   isLoginPage(): boolean {

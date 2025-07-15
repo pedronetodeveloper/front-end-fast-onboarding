@@ -1,0 +1,35 @@
+.document-tracking-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 2rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.docs-table th, .docs-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.status-pendente {
+  color: #ff9800;
+  font-weight: 600;
+}
+.status-aprovado {
+  color: #4caf50;
+  font-weight: 600;
+}
+.status-rejeitado {
+  color: #f44336;
+  font-weight: 600;
+}

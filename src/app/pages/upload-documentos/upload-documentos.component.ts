@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -7,7 +8,7 @@ import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-upload-documentos',
-  imports: [DialogModule, ButtonModule, ToastModule, CardModule],
+  imports: [DialogModule, ButtonModule, ToastModule, CardModule, TranslatePipe],
   providers: [MessageService],
   templateUrl: './upload-documentos.component.html',
   styleUrl: './upload-documentos.component.scss'

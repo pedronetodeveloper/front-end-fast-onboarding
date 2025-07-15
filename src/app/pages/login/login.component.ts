@@ -52,14 +52,14 @@ export class LoginComponent implements OnInit {
     this.authService.login(this.email, this.senha).subscribe({
       next: (user) => {
         // Redireciona conforme o papel
-        if (user.role === 'desenvolvedor') {
-          this.router.navigate(['/home']);
+        if (user.role === 'admin') {
+          this.router.navigate(['/controle-acessos']);
         } else if (user.role === 'rh') {
-          this.router.navigate(['/usuario']);
+          this.router.navigate(['/candidatos']);
         } else if (user.role === 'candidato') {
-          this.router.navigate(['/documentos-contratado']);
+          this.router.navigate(['/upload-documentos']);
         } else {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/']);
         }
         this.isLoggingIn = false;
       },

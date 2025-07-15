@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 export interface AuthUser {
   name: string;
   email: string;
-  role: 'desenvolvedor' | 'rh' | 'candidato';
+  role: 'admin' | 'rh' | 'candidato';
   token: string;
 }
 
@@ -27,21 +27,48 @@ export class AuthService {
   /**
    * Login com email e senha
    */
+  /**
+   * Login mocado para 3 perfis: admin, rh, candidato
+   * admin: admin@admin.com / admin123@
+   * rh: rh@empresa.com / rh123@
+   * candidato: candidato@teste.com / candidato123@
+   */
   login(email: string, senha: string): Observable<AuthUser> {
-    // Exemplo genérico: espera resposta { name, email, role, token }
     return new Observable<AuthUser>(observer => {
-      this.http.post<AuthUser>(`${environment.api.url}/login`, { email, senha }).subscribe({
-        next: (user) => {
-          localStorage.setItem('user', JSON.stringify(user));
-          this.isAuthenticatedSubject.next(true);
-          observer.next(user);
-          observer.complete();
-        },
-        error: (err) => {
-          this.isAuthenticatedSubject.next(false);
-          observer.error(err);
-        }
-      });
+      let user: AuthUser | null = null;
+      const emailNorm = (email || '').trim().toLowerCase();
+      const senhaNorm = (senha || '').trim();
+      if (emailNorm === 'admin@admin.com' && senhaNorm === 'admin123@') {
+        user = {
+          name: 'Administrador',
+          email: 'admin@admin.com',
+          role: 'admin',
+          token: 'mocked-token-admin'
+        };
+      } else if (emailNorm === 'rh@empresa.com' && senhaNorm === 'rh123@') {
+        user = {
+          name: 'Recursos Humanos',
+          email: 'rh@empresa.com',
+          role: 'rh',
+          token: 'mocked-token-rh'
+        };
+      } else if (emailNorm === 'candidato@teste.com' && senhaNorm === 'candidato123@') {
+        user = {
+          name: 'Candidato Teste',
+          email: 'candidato@teste.com',
+          role: 'candidato',
+          token: 'mocked-token-candidato'
+        };
+      }
+      if (user) {
+        localStorage.setItem('user', JSON.stringify(user));
+        this.isAuthenticatedSubject.next(true);
+        observer.next(user);
+        observer.complete();
+      } else {
+        this.isAuthenticatedSubject.next(false);
+        observer.error('Usuário ou senha inválidos.');
+      }
     });
   }
 
@@ -51,7 +78,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('user');
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/home']);
   }
 
   /**

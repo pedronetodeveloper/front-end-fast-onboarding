@@ -54,10 +54,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   // Menu base
   private allMenuItems: SidebarMenuItem[] = [
-    { labelKey: 'nav.home', icon: 'pi pi-home', route: '/home', requiresAuth: true },
     { labelKey: 'nav.upload', icon: 'pi pi-upload', route: '/upload-documentos', requiresAuth: true },
+    { labelKey: 'nav.acompanhamento', icon: 'pi pi-file', route: '/acompanhamento-documentos', requiresAuth: true },
     { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/candidatos', requiresAuth: true },
     { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observabilidade', requiresAuth: true },
+    { labelKey: 'nav.empresas', icon: 'pi pi-building', route: '/empresas', requiresAuth: true },
     { labelKey: 'nav.users-plataform', icon: 'pi pi-users', route: '/controle-acessos', requiresAuth: true },
   ];
 
@@ -139,12 +140,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private updateMenuByRole(): void {
-    // Libera todos os menus para desenvolvimento sem autenticação
-    this.menuItems = this.allMenuItems;
-    this.isLoggedIn = true;
-    this.displayName = 'Dev';
-    /*
-    // Código original comentado para facilitar frontend sem backend
     const user = this.authService.getUser();
     this.isLoggedIn = !!user;
     this.displayName = user?.name || '';
@@ -152,20 +147,24 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.menuItems = [];
       return;
     }
-    if (user.role === 'desenvolvedor') {
-      this.menuItems = this.allMenuItems;
-    } else if (user.role === 'rh') {
+    if (user.role === 'admin') {
+      // Admin vê controle de empresas e usuários da plataforma
       this.menuItems = this.allMenuItems.filter(item =>
-        ['/home', '/usuario', '/lista-acessos', '/documentos-contratado'].includes(item.route)
+        ['/controle-acessos', '/empresas'].includes(item.route)
+      );
+    } else if (user.role === 'rh') {
+      // RH vê candidatos e observabilidade
+      this.menuItems = this.allMenuItems.filter(item =>
+        ['/candidatos', '/observabilidade'].includes(item.route)
       );
     } else if (user.role === 'candidato') {
+      // Candidato vê upload e acompanhamento de documentos
       this.menuItems = this.allMenuItems.filter(item =>
-        ['/home', '/documentos-contratado', '/upload-documentos'].includes(item.route)
+        ['/upload-documentos', '/acompanhamento-documentos'].includes(item.route)
       );
     } else {
       this.menuItems = [];
     }
-    */
   }
 
   toggleSidebar(): void {

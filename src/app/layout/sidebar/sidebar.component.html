@@ -1,5 +1,5 @@
 <!-- Desktop Sidebar -->
-<div class="sidebar-container" [class.collapsed]="!sidebarVisible" [class.mobile]="isMobile"
+<div *ngIf="isLoggedIn && menuItems.length > 0" class="sidebar-container" [class.collapsed]="!sidebarVisible" [class.mobile]="isMobile"
     [class.hover-expanded]="hoverExpanded" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 
     <!-- Sidebar Header -->

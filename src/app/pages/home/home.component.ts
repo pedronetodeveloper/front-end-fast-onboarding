@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +17,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 // Animations
 import { pageEnterAnimation } from '../../shared/animations';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +26,7 @@ import { pageEnterAnimation } from '../../shared/animations';
     CommonModule,
     RouterModule,
     FormsModule,
+    DialogModule,
     ButtonModule,
     CardModule,
     InputTextModule,
@@ -36,7 +38,45 @@ import { pageEnterAnimation } from '../../shared/animations';
   animations: [pageEnterAnimation]
 })
 export class HomeComponent implements OnInit {
+  isAtBottom = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    const docHeight = Math.max(
+      document.body.scrollHeight, document.documentElement.scrollHeight,
+      document.body.offsetHeight, document.documentElement.offsetHeight,
+      document.body.clientHeight, document.documentElement.clientHeight
+    );
+    // Consider at bottom if within 10px of the bottom
+    this.isAtBottom = (scrollTop + windowHeight) >= (docHeight - 10);
+  }
+
+  toggleScroll() {
+    if (this.isAtBottom) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  }
   private themeService = inject(ThemeService);
+
+  showContactDialog = false;
+  contato = {
+    nome: '',
+    email: '',
+    empresa: '',
+    mensagem: ''
+  };
+
+  enviarContato() {
+    // Aqui você pode implementar o envio para API ou serviço de email
+    // Exemplo: console.log(this.contato);
+    alert('Mensagem enviada com sucesso!');
+    this.showContactDialog = false;
+    this.contato = { nome: '', email: '', empresa: '', mensagem: '' };
+  }
   
   isDarkMode = false;
 
