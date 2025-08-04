@@ -423,8 +423,8 @@ export class TranslationService {
             // footer
             // "footer.allRights" já está definido abaixo, removido duplicata
             // Title
-            "project.name": "Angular Template",
-            "project.description": "Agile template for web applications.",
+            "project.name": "Fast Onboarding",
+            "project.description": "Document Verification Application.",
 
             // Navigation
             "nav.menu": "Menu",
@@ -479,7 +479,7 @@ export class TranslationService {
             // Quick Start Section
             "home.quickStart.title": "Getting Started",
             "home.quickStart.step1.title": "Sign In",
-            "home.quickStart.step1.description": "Access the application using your Microsoft account",
+            "home.quickStart.step1.description": "Log in with your account to access the platform",
             "home.quickStart.step1.action": "Sign In",
             "home.quickStart.step2.title": "Explore Dashboard",
             "home.quickStart.step2.description": "Navigate through the main panel and discover the features",
@@ -496,11 +496,9 @@ export class TranslationService {
             // Login
             "login.subtitle": "Automation and Monitoring System",
             "login.welcome": "Welcome!",
-            "login.description":
-                "Sign in with your Microsoft account to access the template",
-            "login.signIn": "Sign in with Microsoft",
-            "login.termsMessage":
-                "By signing in, you agree to our terms of use and privacy policy",
+            "login.description": "Log in with your account to access the platform",
+            "login.signIn": "Sign in with your account",
+            "login.termsMessage": "By logging in, you agree to our terms of use and privacy policy",
             "login.secureAuth": "Secure authentication via Azure Entra ID",
             "login.tryAgain": "Try Again",
             "login.clearAndTry": "Clear and Try",
@@ -756,8 +754,8 @@ export class TranslationService {
             // footer
             // "footer.allRights" já está definido abaixo, removido duplicata
             // Title
-            "project.name": "Angular Template",
-            "project.description": "Plantilla ágil para aplicações web.",
+            "project.name": "Fast Onboarding",
+            "project.description": "Solicitud de verificación de documentos",
 
             // Navigation
             "nav.menu": "Menú",
@@ -805,6 +803,9 @@ export class TranslationService {
             "home.features.architecture.notifications": "Notificações rápidas e eficientes para o usuário",
             "home.features.lgpd.transparency": "Transparência no uso de los dados",
             "home.features.lgpd.userControl": "Controle do usuário sobre a informação",
+            "home.features.lgpd.title": "Fiabilidad",
+            "home.features.lgpd.description": "Datos protegidos y enmascarados",
+            "home.features.lgpd.confiabilite": "Seguridad y cumplimiento",
 
             // Quick Start Section
             "home.quickStart.title": "Como Começar",
@@ -826,11 +827,9 @@ export class TranslationService {
             // Login
             "login.subtitle": "Sistema de Automatização e Monitoreo",
             "login.welcome": "¡Bienvenido!",
-            "login.description":
-                "Inicia sesión con tu cuenta de Microsoft para acceder al template",
-            "login.signIn": "Iniciar sesión con Microsoft",
-            "login.termsMessage":
-                "Al iniciar sesión, aceptas nuestros términos de uso e política de privacidad",
+            "login.description": "Inicia sesión con tu cuenta para acceder a la plataforma",
+            "login.signIn": "Inicia sesión con tu cuenta",
+            "login.termsMessage": "Al iniciar sesión, aceptas nuestros términos de uso y política de privacidad",
             "login.secureAuth": "Autenticação segura vía Azure Entra ID",
             "login.tryAgain": "Intentar de Nuevo",
             "login.clearAndTry": "Limpiar e Intentar",
