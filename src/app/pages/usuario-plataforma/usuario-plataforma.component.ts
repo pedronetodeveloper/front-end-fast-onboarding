@@ -16,7 +16,7 @@ import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 
 // Services
-import { UsuarioService } from '../../core/services/api/usuario.service';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
@@ -59,16 +59,13 @@ import { InputIconModule } from 'primeng/inputicon';
   animations: [pageEnterAnimation]
 })
 export class UsuarioPlataformComponent implements OnInit {
- private confirmationService = inject(ConfirmationService);
+  private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+  private localStorageService = inject(LocalStorageService);
 
   // Data
-  usuarios: UsuarioPlataforma[] = [
-    { nome: 'João Silva', email: 'joao.silva@email.com', empresa: 'Tivit', idiomaPreferencia: 'pt' },
-    { nome: 'Maria Souza', email: 'maria.souza@email.com', empresa: 'DevApi', idiomaPreferencia: 'en' },
-    { nome: 'Carlos Pereira', email: 'carlos.pereira@email.com', empresa: 'StoneAge', idiomaPreferencia: 'es' }
-  ];
-  filteredUsuarios: UsuarioPlataforma[] = [...this.usuarios];
+  usuarios: UsuarioPlataforma[] = [];
+  filteredUsuarios: UsuarioPlataforma[] = [];
   selectedUsuario: UsuarioPlataforma | null = null;
   loading = false;
 
@@ -106,15 +103,14 @@ export class UsuarioPlataformComponent implements OnInit {
   candidatoSelecionado: Usuario | null = null;
 
   ngOnInit(): void {
-    // Não carrega da API, já está mockado
-    this.filteredUsuarios = [...this.usuarios];
+    this.carregarUsuarios();
   }
 
   /**
    * Carregar lista de usuários
    */
   carregarUsuarios(): void {
-    // Não faz nada, pois os usuários já estão mockados
+    this.usuarios = this.localStorageService.getItem<UsuarioPlataforma>('usuarios-plataforma');
     this.filteredUsuarios = [...this.usuarios];
     this.loading = false;
   }
@@ -166,31 +162,37 @@ export class UsuarioPlataformComponent implements OnInit {
     }
     this.loading = true;
     if (this.isEditing && this.selectedUsuario) {
-      // Atualizar usuário mock
-      const idx = this.usuarios.findIndex(u => u.email === this.selectedUsuario?.email);
-      if (idx !== -1) {
-        this.usuarios[idx] = { ...this.selectedUsuario, ...this.usuarioForm };
-      }
+      // Atualizar usuário local
+      const usuarioAtualizado = {
+        ...this.selectedUsuario,
+        ...this.usuarioForm,
+        id: this.selectedUsuario.id || this.selectedUsuario.email || this.usuarioForm.email // sempre garante id
+      } as UsuarioPlataforma & { id: string };
+      this.localStorageService.updateItem('usuarios-plataforma', usuarioAtualizado);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
         detail: 'Usuário atualizado com sucesso'
       });
       this.fecharDialog();
+      this.carregarUsuarios();
       this.loading = false;
     } else {
-      // Criar novo usuário mock
-      const novoUsuario = { ...this.usuarioForm };
-      this.usuarios.push(novoUsuario as Usuario);
+      // Criar novo usuário local
+      const novoUsuario = {
+        ...this.usuarioForm,
+        id: this.usuarioForm.email // usa o email como id único
+      } as UsuarioPlataforma & { id: string };
+      this.localStorageService.addItem('usuarios-plataforma', novoUsuario);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
         detail: 'Usuário criado com sucesso'
       });
       this.fecharDialog();
+      this.carregarUsuarios();
       this.loading = false;
     }
-    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
@@ -213,8 +215,8 @@ export class UsuarioPlataformComponent implements OnInit {
    * Excluir usuário
    */
   private excluirUsuario(usuario: Usuario): void {
-    this.usuarios = this.usuarios.filter(u => u.email !== usuario.email);
-    this.filteredUsuarios = [...this.usuarios];
+    this.localStorageService.removeItem<{ id: any }>('usuarios-plataforma', usuario.id || usuario.email);
+    this.carregarUsuarios();
     this.messageService.add({
       severity: 'success',
       summary: 'Sucesso',

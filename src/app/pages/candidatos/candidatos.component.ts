@@ -17,6 +17,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 
 // Services
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 
 // Interfaces
 import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../shared/interface/usuario.interface';
@@ -60,14 +61,11 @@ import { InputIconModule } from 'primeng/inputicon';
 export class UsuarioComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
+  private localStorageService = inject(LocalStorageService);
 
   // Data
-  usuarios: Usuario[] = [
-    { nome: 'João Silva', email: 'joao.silva@email.com', matricula: '123456', idiomaPreferencia: 'pt' },
-    { nome: 'Maria Souza', email: 'maria.souza@email.com', matricula: '654321', idiomaPreferencia: 'en' },
-    { nome: 'Carlos Pereira', email: 'carlos.pereira@email.com', matricula: '789012', idiomaPreferencia: 'es' }
-  ];
-  filteredUsuarios: Usuario[] = [...this.usuarios];
+  usuarios: Usuario[] = [];
+  filteredUsuarios: Usuario[] = [];
   selectedUsuario: Usuario | null = null;
   loading = false;
 
@@ -125,15 +123,14 @@ export class UsuarioComponent implements OnInit {
   candidatoSelecionado: Usuario | null = null;
 
   ngOnInit(): void {
-    // Não carrega da API, já está mockado
-    this.filteredUsuarios = [...this.usuarios];
+    this.carregarUsuarios();
   }
 
   /**
    * Carregar lista de usuários
    */
   carregarUsuarios(): void {
-    // Não faz nada, pois os usuários já estão mockados
+    this.usuarios = this.localStorageService.getItem<Usuario>('candidatos');
     this.filteredUsuarios = [...this.usuarios];
     this.loading = false;
   }
@@ -185,31 +182,37 @@ export class UsuarioComponent implements OnInit {
     }
     this.loading = true;
     if (this.isEditing && this.selectedUsuario) {
-      // Atualizar usuário mock
-      const idx = this.usuarios.findIndex(u => u.email === this.selectedUsuario?.email);
-      if (idx !== -1) {
-        this.usuarios[idx] = { ...this.selectedUsuario, ...this.usuarioForm };
-      }
+      // Atualizar usuário local
+      const usuarioAtualizado = {
+        ...this.selectedUsuario,
+        ...this.usuarioForm,
+        id: this.selectedUsuario.id || this.selectedUsuario.email || this.usuarioForm.email
+      } as Usuario & { id: string };
+      this.localStorageService.updateItem('candidatos', usuarioAtualizado);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
         detail: 'Usuário atualizado com sucesso'
       });
       this.fecharDialog();
+      this.carregarUsuarios();
       this.loading = false;
     } else {
-      // Criar novo usuário mock
-      const novoUsuario = { ...this.usuarioForm };
-      this.usuarios.push(novoUsuario as Usuario);
+      // Criar novo usuário local
+      const novoUsuario = {
+        ...this.usuarioForm,
+        id: this.usuarioForm.email
+      } as Usuario & { id: string };
+      this.localStorageService.addItem('candidatos', novoUsuario);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
         detail: 'Usuário criado com sucesso'
       });
       this.fecharDialog();
+      this.carregarUsuarios();
       this.loading = false;
     }
-    this.filteredUsuarios = [...this.usuarios];
   }
 
   /**
@@ -217,7 +220,7 @@ export class UsuarioComponent implements OnInit {
    */
   confirmarExclusao(usuario: Usuario): void {
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir o usuário "${usuario.nome}"?`,
+      message: `Tem certeza que deseja excluir o candidato "${usuario.nome}"?`,
       header: 'Confirmar Exclusão',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sim',
@@ -232,12 +235,12 @@ export class UsuarioComponent implements OnInit {
    * Excluir usuário
    */
   private excluirUsuario(usuario: Usuario): void {
-    this.usuarios = this.usuarios.filter(u => u.email !== usuario.email);
-    this.filteredUsuarios = [...this.usuarios];
+    this.localStorageService.removeItem('candidatos', usuario.id || usuario.email);
+    this.carregarUsuarios();
     this.messageService.add({
       severity: 'success',
       summary: 'Sucesso',
-      detail: 'Usuário excluído com sucesso'
+      detail: 'Candidato excluído com sucesso'
     });
   }
 
