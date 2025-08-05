@@ -73,7 +73,7 @@
             </div>
           </td>
           <td>
-            <p-tag [value]="empresa.plano" severity="info"></p-tag>
+            <p-tag [value]="empresa.plano | translate" severity="info"></p-tag>
             <span *ngIf="empresa.usuarios > empresa.limiteUsuarios" class="text-danger ml-2">{{ 'empresa.planLimitExceeded' | translate }}</span>
           </td>
           <td>{{ empresa.responsavel }}</td>
@@ -159,6 +159,7 @@
           optionValue="value"
           appendTo="body"
           class="w-full"
+          (onChange)="onPlanoChange()"
           [placeholder]="'empresa.planPlaceholder' | translate">
         </p-dropdown>
         <small *ngIf="empresaForm.usuarios > empresaForm.limiteUsuarios" class="text-danger">{{ 'empresa.planLimitExceeded' | translate }}</small>
