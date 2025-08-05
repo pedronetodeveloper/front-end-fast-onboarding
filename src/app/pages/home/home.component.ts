@@ -8,9 +8,11 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { DropdownModule } from 'primeng/dropdown';
 
 // Services
 import { ThemeService } from '../../core/services/theme.service';
+import { TranslationService } from '../../core/services/translation.service';
 
 // Components and pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -32,6 +34,7 @@ import { DialogModule } from 'primeng/dialog';
     CardModule,
     InputTextModule,
     InputSwitchModule,
+    DropdownModule,
     TranslatePipe
   ],
   templateUrl: './home.component.html',
@@ -40,6 +43,8 @@ import { DialogModule } from 'primeng/dialog';
 })
 export class HomeComponent implements OnInit {
   private messageService = inject(MessageService);
+  private themeService = inject(ThemeService);
+  private translationService = inject(TranslationService);
   isAtBottom = false;
 
   @HostListener('window:scroll', [])
@@ -62,15 +67,83 @@ export class HomeComponent implements OnInit {
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
   }
-  private themeService = inject(ThemeService);
 
   showContactDialog = false;
   contato = {
     nome: '',
     email: '',
     empresa: '',
+    plano: '',
     mensagem: ''
   };
+
+  planos = [
+    {
+      nome: 'plans.start.name',
+      perfil: 'plans.start.profile',
+      contratacoesMes: 'até 10',
+      documentosMes: 'até 100',
+      preco: 'R$ 249,00',
+      excedenteDoc: 'R$ 0,50',
+      popular: false,
+      features: [
+        'plans.features.basicProcessing',
+        'plans.features.emailSupport',
+        'plans.features.simpleDashboard',
+        'plans.features.upTo2Users'
+      ]
+    },
+    {
+      nome: 'plans.essencial.name',
+      perfil: 'plans.essencial.profile',
+      contratacoesMes: 'até 30',
+      documentosMes: 'até 400',
+      preco: 'R$ 599,00',
+      excedenteDoc: 'R$ 0,40',
+      popular: true,
+      features: [
+        'plans.features.advancedProcessing',
+        'plans.features.prioritySupport',
+        'plans.features.completeDashboard',
+        'plans.features.upTo5Users',
+        'plans.features.basicReports'
+      ]
+    },
+    {
+      nome: 'plans.pro.name',
+      perfil: 'plans.pro.profile',
+      contratacoesMes: 'até 100',
+      documentosMes: 'até 1.500',
+      preco: 'R$ 1.290,00',
+      excedenteDoc: 'R$ 0,30',
+      popular: false,
+      features: [
+        'plans.features.advancedAI',
+        'plans.features.phoneSupport',
+        'plans.features.customDashboard',
+        'plans.features.unlimitedUsers',
+        'plans.features.advancedReports',
+        'plans.features.apiIntegrations'
+      ]
+    },
+    {
+      nome: 'plans.enterprise.name',
+      perfil: 'plans.enterprise.profile',
+      contratacoesMes: 'ilimitado',
+      documentosMes: 'até 5.000',
+      preco: 'R$ 2.990,00',
+      excedenteDoc: 'R$ 0,20',
+      popular: false,
+      features: [
+        'plans.features.customSolution',
+        'plans.features.support24x7',
+        'plans.features.enterpriseDashboard',
+        'plans.features.unlimitedUsers',
+        'plans.features.customReports',
+        'plans.features.slaGuaranteed'
+      ]
+    }
+  ];
 
   enviarContato() {
     this.messageService.add({
@@ -78,8 +151,39 @@ export class HomeComponent implements OnInit {
       summary: 'Contato enviado',
       detail: 'Sua mensagem foi enviada com sucesso! Em breve entraremos em contato.'
     });
-    this.showContactDialog = false;
-    this.contato = { nome: '', email: '', empresa: '', mensagem: '' };
+    
+    // Reset do formulário
+    this.resetForm();
+  }
+
+  resetForm() {
+    this.contato = { nome: '', email: '', empresa: '', plano: '', mensagem: '' };
+  }
+
+  selecionarPlano(plano: any) {
+    // Pré-selecionar o plano no formulário de contato
+    this.contato.plano = plano.nome;
+    
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Plano selecionado',
+      detail: `Você selecionou o plano ${this.translationService.translate(plano.nome)}. Role para baixo para entrar em contato.`
+    });
+    
+    // Rolar para a seção de contato
+    setTimeout(() => {
+      const contactSection = document.querySelector('.contact-section');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }
+
+  get planosOptions() {
+    return this.planos.map(plano => ({
+      label: `${this.translationService.translate(plano.nome)} - ${plano.preco}`,
+      value: plano.nome
+    }));
   }
   
   isDarkMode = false;

@@ -22,91 +22,76 @@
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="features-section">
+  <!-- Plans Section -->
+  <section class="plans-section">
     <div class="section-container">
-      <h2 class="section-title">{{ "home.features.title" | translate }}</h2>
+      <h2 class="section-title">{{ "home.plans.title" | translate }}</h2>
       <p class="section-subtitle">
-        {{ "home.features.description" | translate }}
+        {{ "home.plans.description" | translate }}
       </p>
 
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-bolt"></i>
+      <div class="plans-grid">
+        <div class="plan-card" *ngFor="let plano of planos" [class.popular]="plano.popular">
+          <div class="plan-header" [class.popular-header]="plano.popular">
+            <div class="popular-badge" *ngIf="plano.popular">
+              <i class="pi pi-star"></i>
+              <span>{{ "plans.labels.popularBadge" | translate }}</span>
+            </div>
+            <h3 class="plan-name">{{ plano.nome | translate }}</h3>
+            <div class="plan-price">
+              <span class="price-value">{{ plano.preco }}</span>
+              <span class="price-period">{{ "plans.labels.monthPeriod" | translate }}</span>
+            </div>
+            <p class="plan-profile">{{ plano.perfil | translate }}</p>
           </div>
-          <h3>{{ "home.features.architecture.fastProcessing.title" | translate }}</h3>
-          <p>{{ "home.features.architecture.fastProcessing.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>{{ "home.features.architecture.fastProcessing" | translate }}</li>
-            <li>{{ "home.features.architecture.notifications" | translate }}</li>
-            <li>{{ "home.features.architecture.fastProcessing.dash" | translate }}</li>
-          </ul>
-        </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-cog"></i>
-          </div>
-          <h3>{{ "home.features.lgpd.title" | translate }}</h3>
-          <p>{{ "home.features.lgpd.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>{{ "home.features.lgpd.confiabilite" | translate }}</li>
-            <li>{{ "home.features.lgpd.transparency" | translate }}</li>
-            <li>{{ "home.features.lgpd.userControl" | translate }}</li>
-          </ul>
-        </div>
+          <div class="plan-details">
+            <div class="plan-stats">
+              <div class="stat-item">
+                <i class="pi pi-users"></i>
+                <div class="stat-content">
+                  <span class="stat-label">{{ "plans.labels.contractionsMonth" | translate }}</span>
+                  <span class="stat-value">{{ plano.contratacoesMes }}</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <i class="pi pi-file"></i>
+                <div class="stat-content">
+                  <span class="stat-label">{{ "plans.labels.documentsMonth" | translate }}</span>
+                  <span class="stat-value">{{ plano.documentosMes }}</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <i class="pi pi-dollar"></i>
+                <div class="stat-content">
+                  <span class="stat-label">{{ "plans.labels.exceedingPrice" | translate }}</span>
+                  <span class="stat-value">{{ plano.excedenteDoc }}/doc</span>
+                </div>
+              </div>
+            </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-shield"></i>
+            <div class="plan-features">
+              <h4>{{ "plans.labels.includedFeatures" | translate }}</h4>
+              <ul class="features-list">
+                <li *ngFor="let feature of plano.features">
+                  <i class="pi pi-check"></i>
+                  <span>{{ feature | translate }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
-          <h3>{{ "home.features.authentication.title" | translate }}</h3>
-          <p>{{ "home.features.authentication.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>Simples e confiavel</li>
-            <li>Controle de acessos e rapidez</li>
-            <li>{{ "home.features.authentication.security" | translate }}</li>
-          </ul>
-        </div>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-globe"></i>
+          <div class="plan-footer">
+            <button 
+              pButton 
+              type="button" 
+              [label]="(plano.popular ? 'plans.labels.choosePlan' : 'plans.labels.selectPlan') | translate" 
+              [class]="plano.popular ? 'p-button-success' : 'p-button-outlined'"
+              icon="pi pi-arrow-right"
+              class="plan-button"
+              (click)="selecionarPlano(plano)">
+            </button>
           </div>
-          <h3>{{ "home.features.i18n.title" | translate }}</h3>
-          <p>{{ "home.features.i18n.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>{{ "home.features.i18n.multiLanguage" | translate }}</li>
-            <li>{{ "home.features.i18n.dynamic" | translate }}</li>
-            <li>{{ "home.features.i18n.languages" | translate }}</li>
-          </ul>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-mobile"></i>
-          </div>
-          <h3>{{ "home.features.responsive.title" | translate }}</h3>
-          <p>{{ "home.features.responsive.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>{{ "home.features.responsive.mobile" | translate }}</li>
-            <li>{{ "home.features.responsive.tablet" | translate }}</li>
-            <li>{{ "home.features.responsive.desktop" | translate }}</li>
-          </ul>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-cog"></i>
-          </div>
-          <h3>{{ "home.features.architecture.title" | translate }}</h3>
-          <p>{{ "home.features.architecture.description" | translate }}</p>
-          <ul class="feature-list">
-            <li>{{ "home.features.architecture.modular" | translate }}</li>
-            <li>{{ "home.features.architecture.services" | translate }}</li>
-            <li>{{ "home.features.architecture.guards" | translate }}</li>
-          </ul>
         </div>
       </div>
     </div>
@@ -115,29 +100,42 @@
 <!-- Seção de contato para fechar contrato -->
 <section class="contact-section">
   <div class="section-container">
-    <h2 class="section-title">Entre em contato</h2>
-    <p class="section-subtitle">Fale com nossa equipe para obter acesso à plataforma.</p>
+    <h2 class="section-title">{{ "contact.title" | translate }}</h2>
+    <p class="section-subtitle">{{ "contact.subtitle" | translate }}</p>
     <form class="contact-form" (ngSubmit)="enviarContato()" #contactForm="ngForm">
       <div class="dialog-content">
         <div class="field">
-          <label for="nome">Nome</label>
-          <input id="nome" type="text" pInputText name="nome" [(ngModel)]="contato.nome" required class="w-full" placeholder="Digite seu nome" />
+          <label for="nome">{{ "contact.name" | translate }}</label>
+          <input id="nome" type="text" pInputText name="nome" [(ngModel)]="contato.nome" required class="w-full" [placeholder]="'contact.namePlaceholder' | translate" />
         </div>
         <div class="field">
-          <label for="email">E-mail</label>
-          <input id="email" type="email" pInputText name="email" [(ngModel)]="contato.email" required email class="w-full" placeholder="Digite seu e-mail" />
+          <label for="email">{{ "contact.email" | translate }}</label>
+          <input id="email" type="email" pInputText name="email" [(ngModel)]="contato.email" required email class="w-full" [placeholder]="'contact.emailPlaceholder' | translate" />
         </div>
         <div class="field">
-          <label for="empresa">Empresa</label>
-          <input id="empresa" type="text" pInputText name="empresa" [(ngModel)]="contato.empresa" required class="w-full" placeholder="Digite o nome da empresa" />
+          <label for="empresa">{{ "contact.company" | translate }}</label>
+          <input id="empresa" type="text" pInputText name="empresa" [(ngModel)]="contato.empresa" required class="w-full" [placeholder]="'contact.companyPlaceholder' | translate" />
         </div>
         <div class="field">
-          <label for="mensagem">Mensagem</label>
-          <textarea id="mensagem" pInputTextarea name="mensagem" [(ngModel)]="contato.mensagem" rows="3" required class="w-full" placeholder="Digite sua mensagem"></textarea>
+          <label for="plano">{{ "contact.plan" | translate }}</label>
+          <p-dropdown 
+            id="plano" 
+            name="plano" 
+            [(ngModel)]="contato.plano" 
+            [options]="planosOptions" 
+            [placeholder]="'contact.planPlaceholder' | translate"
+            optionLabel="label" 
+            optionValue="value"
+            class="w-full">
+          </p-dropdown>
+        </div>
+        <div class="field">
+          <label for="mensagem">{{ "contact.message" | translate }}</label>
+          <textarea id="mensagem" pInputTextarea name="mensagem" [(ngModel)]="contato.mensagem" rows="3" required class="w-full" [placeholder]="'contact.messagePlaceholder' | translate"></textarea>
         </div>
       </div>
       <div class="dialog-actions">
-        <button pButton type="submit" label="Enviar" icon="pi pi-check" [disabled]="!contactForm.form.valid"></button>
+        <button pButton type="submit" [label]="'contact.send' | translate" icon="pi pi-check" [disabled]="!contactForm.form.valid"></button>
       </div>
     </form>
   </div>
