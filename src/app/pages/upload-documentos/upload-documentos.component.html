@@ -6,7 +6,7 @@
         <p class="card-subtitle">{{ 'upload.subtitle' | translate }}</p>
       </div>
     </ng-template>
-    <form class="upload-form" autocomplete="off">
+    <form class="upload-form" autocomplete="off" (ngSubmit)="enviar($event)" (submit)="enviar($event)">
       <div class="form-field">
         <label for="rg"><i class="pi pi-id-card"></i> {{ 'upload.rg' | translate }}</label>
         <input type="file" id="rg" name="rg" (change)="onFileChange($event, 'rg')" [attr.title]="'upload.chooseFile' | translate" />

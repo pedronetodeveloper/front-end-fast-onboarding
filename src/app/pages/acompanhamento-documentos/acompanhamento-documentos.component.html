@@ -8,25 +8,16 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>{{ 'upload.rg' | translate }}</td>
-        <td><span class="status-aprovado">{{ 'acompanhamento.status.approved' | translate }}</span></td>
+      <tr *ngFor="let doc of documentos">
+        <td>{{ doc.nome }}</td>
+        <td>
+          <span *ngIf="doc.status === 'valido'" class="status-aprovado">Válido</span>
+          <span *ngIf="doc.status === 'invalido'" class="status-rejeitado">Inválido</span>
+          <span *ngIf="doc.status === 'pendente'" class="status-pendente">Pendente</span>
+        </td>
       </tr>
-      <tr>
-        <td>{{ 'upload.cpf' | translate }}</td>
-        <td><span class="status-aprovado">{{ 'acompanhamento.status.approved' | translate }}</span></td>
-      </tr>
-      <tr>
-        <td>{{ 'upload.titulo' | translate }}</td>
-        <td><span class="status-pendente">{{ 'acompanhamento.status.pending' | translate }}</span></td>
-      </tr>
-      <tr>
-        <td>{{ 'upload.ctps' | translate }}</td>
-        <td><span class="status-pendente">{{ 'acompanhamento.status.pending' | translate }}</span></td>
-      </tr>
-      <tr>
-        <td>{{ 'upload.comprovante' | translate }}</td>
-        <td><span class="status-rejeitado">{{ 'acompanhamento.status.rejected' | translate }}</span></td>
+      <tr *ngIf="documentos.length === 0">
+        <td colspan="2">Nenhum documento enviado.</td>
       </tr>
     </tbody>
   </table>

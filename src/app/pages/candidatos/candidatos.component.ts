@@ -95,31 +95,9 @@ export class UsuarioComponent implements OnInit {
   ];
 
   // Adiciona mock de documentos por usuário
-  documentosPorUsuario: Record<string, { nome: string; status: 'enviado' | 'pendente' }[]> = {
-    'joao.silva@email.com': [
-      { nome: 'RG', status: 'enviado' },
-      { nome: 'CPF', status: 'enviado' },
-      { nome: 'Título de Eleitor', status: 'pendente' },
-      { nome: 'Carteira de Trabalho', status: 'enviado' },
-      { nome: 'Comprovante de Endereço', status: 'pendente' }
-    ],
-    'maria.souza@email.com': [
-      { nome: 'RG', status: 'enviado' },
-      { nome: 'CPF', status: 'enviado' },
-      { nome: 'Título de Eleitor', status: 'enviado' },
-      { nome: 'Carteira de Trabalho', status: 'enviado' },
-      { nome: 'Comprovante de Endereço', status: 'enviado' }
-    ],
-    'carlos.pereira@email.com': [
-      { nome: 'RG', status: 'pendente' },
-      { nome: 'CPF', status: 'enviado' },
-      { nome: 'Título de Eleitor', status: 'pendente' },
-      { nome: 'Carteira de Trabalho', status: 'pendente' },
-      { nome: 'Comprovante de Endereço', status: 'enviado' }
-    ]
-  };
+  // documentosPorUsuario removido, agora usa campo documentos do candidato
   showDocumentosDialog = false;
-  documentosSelecionados: { nome: string; status: 'enviado' | 'pendente' }[] = [];
+  documentosSelecionados: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }[] = [];
   candidatoSelecionado: Usuario | null = null;
 
   ngOnInit(): void {
@@ -192,7 +170,7 @@ export class UsuarioComponent implements OnInit {
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
-        detail: 'Usuário atualizado com sucesso'
+        detail: 'Candidato atualizado com sucesso'
       });
       this.fecharDialog();
       this.carregarUsuarios();
@@ -201,13 +179,14 @@ export class UsuarioComponent implements OnInit {
       // Criar novo usuário local
       const novoUsuario = {
         ...this.usuarioForm,
-        id: this.usuarioForm.email
+        id: this.usuarioForm.email,
+        senha: 'candidato123'
       } as Usuario & { id: string };
       this.localStorageService.addItem('candidatos', novoUsuario);
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
-        detail: 'Usuário criado com sucesso'
+        detail: 'Candidato criado com sucesso'
       });
       this.fecharDialog();
       this.carregarUsuarios();
@@ -304,7 +283,7 @@ export class UsuarioComponent implements OnInit {
    */
   abrirDocumentos(usuario: Usuario) {
     this.candidatoSelecionado = usuario;
-    this.documentosSelecionados = this.documentosPorUsuario[usuario.email || ''] || [];
+    this.documentosSelecionados = usuario.documentos || [];
     this.showDocumentosDialog = true;
   }
 

@@ -271,8 +271,8 @@
           <li *ngFor="let doc of documentosSelecionados">
             <span class="doc-name">{{ doc.nome }}</span>
             <p-tag 
-              [value]="doc.status === 'enviado' ? 'Enviado' : 'Pendente'" 
-              [severity]="doc.status === 'enviado' ? 'success' : 'danger'"
+              [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : 'Pendente')" 
+              [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : 'warning')"
               class="doc-status-tag">
             </p-tag>
           </li>

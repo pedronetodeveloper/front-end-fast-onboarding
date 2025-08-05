@@ -3,7 +3,13 @@ export interface Usuario {
   matricula?: string;
   nome?: string;
   email?: string;
+  senha?: string;
   idiomaPreferencia?: string;
+  documentos?: Array<{
+    nome: string;
+    tipo: string;
+    status: 'valido' | 'invalido' | 'pendente';
+  }>;
   createdAt?: string;
   updatedAt?: string;
   createdBy?: string;

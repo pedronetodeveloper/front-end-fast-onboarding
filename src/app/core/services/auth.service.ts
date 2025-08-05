@@ -59,6 +59,18 @@ export class AuthService {
           role: 'candidato',
           token: 'mocked-token-candidato'
         };
+      } else {
+        // Verifica candidatos cadastrados no localStorage
+        const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
+        const candidato = candidatos.find((u: any) => u.email === emailNorm && u.senha === senhaNorm);
+        if (candidato) {
+          user = {
+            name: candidato.nome,
+            email: candidato.email,
+            role: 'candidato',
+            token: 'mocked-token-candidato'
+          };
+        }
       }
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
