@@ -3,9 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-// MSAL imports
-import { MsalService } from '@azure/msal-angular';
-import { SilentRequest } from '@azure/msal-browser';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +11,6 @@ export class GraphService {
   private readonly graphEndpoint = 'https://graph.microsoft.com/v1.0';
   
   private http = inject(HttpClient);
-  private msalService = inject(MsalService);
 
   /**
    * Get user profile information from Microsoft Graph
@@ -74,48 +70,16 @@ export class GraphService {
    * Get authentication headers with access token
    */
   private getAuthHeaders(): HttpHeaders {
-    const accounts = this.msalService.instance.getAllAccounts();
-    
-    if (accounts.length === 0) {
-      throw new Error('No active account found');
-    }
-
-    // Note: In a real implementation, you would get the access token here
-    // This is a simplified version for demonstration
+    // MSAL removido: Retorna apenas Content-Type
     return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer {ACCESS_TOKEN}` // This would be replaced with actual token
+      'Content-Type': 'application/json'
     });
   }
 
   /**
    * Acquire access token silently for Microsoft Graph
    */
-  getAccessToken(): Observable<string> {
-    const accounts = this.msalService.instance.getAllAccounts();
-    
-    if (accounts.length === 0) {
-      return throwError(() => new Error('No active account found'));
-    }
-
-    const silentRequest: SilentRequest = {
-      scopes: ['User.Read', 'User.ReadBasic.All', 'Calendars.Read'],
-      account: accounts[0]
-    };
-
-    return new Observable(observer => {
-      this.msalService.acquireTokenSilent(silentRequest)
-        .subscribe({
-          next: (response) => {
-            observer.next(response.accessToken);
-            observer.complete();
-          },
-          error: (error) => {
-            observer.error(error);
-          }
-        });
-    });
-  }
+  // getAccessToken removido (MSAL)
 
   /**
    * Handle HTTP errors

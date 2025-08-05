@@ -3,9 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { Subject, filter, takeUntil } from 'rxjs';
 
-// MSAL imports
-import { MsalBroadcastService } from '@azure/msal-angular';
-import { InteractionStatus } from '@azure/msal-browser';
 
 // PrimeNG imports
 import { ToastModule } from 'primeng/toast';
@@ -42,7 +39,6 @@ export class AppComponent implements OnInit, OnDestroy {
   isSidebarVisible = false;
 
   private readonly destroy$ = new Subject<void>();
-  private msalBroadcastService = inject(MsalBroadcastService);
   private router = inject(Router);
   private authService = inject(AuthService);
   private primeNGConfig = inject(PrimeNG);
@@ -96,19 +92,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.updateNavigationVisibility(this.router.url);
       });
 
-    // Listen to MSAL authentication state changes
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter((status: InteractionStatus) => status === InteractionStatus.None),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        // Verificar estado de autenticação quando MSAL termina interação
-        this.checkAuthenticationForCurrentRoute();
-        
-        // Atualizar visibilidade da navegação após mudanças do MSAL
-        this.updateNavigationVisibility(this.router.url);
-      });
   }
 
   private checkAuthenticationForRoute(url: string): void {

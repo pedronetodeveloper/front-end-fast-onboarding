@@ -3,9 +3,6 @@ import { CommonModule } from "@angular/common";
 import { Router } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
 
-// MSAL imports
-import { MsalService, MsalBroadcastService } from "@azure/msal-angular";
-import { InteractionStatus, PopupRequest } from "@azure/msal-browser";
 
 // PrimeNG imports
 import { ButtonModule } from "primeng/button";
@@ -62,8 +59,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   };
 
   private readonly destroy$ = new Subject<void>();
-  private msalService = inject(MsalService);
-  private msalBroadcastService = inject(MsalBroadcastService);
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
   private authService = inject(AuthService);
@@ -77,7 +72,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.updateSidebarState();
     });
     this.updateSidebarState();
-    this.setupAuthListener();
+    // this.setupAuthListener(); // MSAL removido
     this.initializeUserMenu();
     this.setupLanguageListener();
     this.setupClickOutsideListener();
@@ -136,18 +131,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  private setupAuthListener(): void {
-    this.msalBroadcastService.inProgress$
-      .pipe(
-        filter(
-          (status: InteractionStatus) => status === InteractionStatus.None
-        ),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(() => {
-        this.setLoginDisplay();
-      });
-  }
+  // MSAL listener removido
 
   private initializeUserMenu(): void {
     this.userMenuItems = [
