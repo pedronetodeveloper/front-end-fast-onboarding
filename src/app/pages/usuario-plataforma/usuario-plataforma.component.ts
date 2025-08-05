@@ -56,7 +56,7 @@ import { InputIconModule } from 'primeng/inputicon';
   providers: [ConfirmationService, MessageService],
   templateUrl: './usuario-plataforma.component.html',
   styleUrl: './usuario-plataforma.component.scss',
-  animations: [pageEnterAnimation]
+  // animations: [pageEnterAnimation]
 })
 export class UsuarioPlataformComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
@@ -94,16 +94,19 @@ export class UsuarioPlataformComponent implements OnInit {
     { label: 'Español', value: 'es' }
   ];
 
-  empresaOptions = [
-    { label: 'Tivit', value: 'pt' },
-    { label: 'DevApi', value: 'pt' },
-    { label: 'StoneAge', value: 'pt' }
-  ];
+  empresaOptions: { label: string; value: string }[] = [];
 
   candidatoSelecionado: Usuario | null = null;
 
   ngOnInit(): void {
     this.carregarUsuarios();
+    this.carregarEmpresas();
+  }
+
+  carregarEmpresas(): void {
+    // Busca empresas do localStorage (chave 'empresas')
+    const empresas = this.localStorageService.getItem<any>('empresas');
+    this.empresaOptions = empresas.map((e: any) => ({ label: e.nome, value: e.nome }));
   }
 
   /**
@@ -115,8 +118,14 @@ export class UsuarioPlataformComponent implements OnInit {
     this.loading = false;
   }
 
+
   abrirModal():void{
     this.displayDialogInfo = true;
+  }
+
+  abrirDialogUsuario(): void {
+    this.carregarEmpresas(); // Atualiza empresas antes de abrir o dialog
+    this.displayDialog = true;
   }
 
   /**
@@ -130,7 +139,7 @@ export class UsuarioPlataformComponent implements OnInit {
       idiomaPreferencia: 'pt'
     };
     this.isEditing = false;
-    this.displayDialog = true;
+    this.abrirDialogUsuario();
   }
 
   /**
@@ -145,7 +154,7 @@ export class UsuarioPlataformComponent implements OnInit {
     };
     this.selectedUsuario = usuario;
     this.isEditing = true;
-    this.displayDialog = true;
+    this.abrirDialogUsuario();
   }
 
   /**

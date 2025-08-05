@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
@@ -13,6 +13,9 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { LocalStorageService } from '../../core/services/local-storage.service';
+import { InputTextModule } from 'primeng/inputtext';
 
 interface Empresa {
   nome: string;
@@ -23,8 +26,6 @@ interface Empresa {
   limiteUsuarios: number;
 }
 
-import { ConfirmationService } from 'primeng/api';
-import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-empresa',
   templateUrl: './empresa.component.html',
@@ -50,6 +51,8 @@ import { InputTextModule } from 'primeng/inputtext';
   providers: [ConfirmationService]
 })
 export class EmpresaComponent {
+  private messageService = inject(MessageService);
+  private localStorageService = inject(LocalStorageService);
   empresas: Empresa[] = [
     { nome: 'Empresa Exemplo', plano: 'Básico', responsavel: 'João Silva', cnpj: '12.345.678/0001-99', usuarios: 5, limiteUsuarios: 10 },
     { nome: 'Tech Solutions', plano: 'Premium', responsavel: 'Maria Souza', cnpj: '98.765.432/0001-11', usuarios: 25, limiteUsuarios: 25 },
@@ -85,16 +88,20 @@ export class EmpresaComponent {
     if (this.isEditing) {
       const idx = this.empresas.findIndex(e => e.nome === this.empresaForm.nome);
       if (idx > -1) this.empresas[idx] = { ...this.empresaForm };
+      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa editada com sucesso!' });
     } else {
       this.empresas.push({ ...this.empresaForm });
+      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa cadastrada com sucesso!' });
     }
     this.filteredEmpresas = [...this.empresas];
+    this.localStorageService.setItem('empresas', this.empresas);
     this.displayDialog = false;
   }
 
   confirmarExclusao(empresa: Empresa) {
     this.empresas = this.empresas.filter(e => e !== empresa);
     this.filteredEmpresas = [...this.empresas];
+    this.localStorageService.setItem('empresas', this.empresas);
   }
 
 
