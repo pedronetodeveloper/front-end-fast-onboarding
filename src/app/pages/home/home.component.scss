@@ -1,45 +1,56 @@
-/* Forçar background do textarea do PrimeNG igual ao dos inputs */
+/* Forçar background do textarea do PrimeNG para todos os temas */
 .contact-form textarea.p-inputtextarea,
-.contact-form .p-inputtextarea textarea {
+.contact-form textarea[pInputTextarea],
+textarea.p-inputtextarea,
+textarea[pInputTextarea] {
   background: var(--surface-d) !important;
   color: var(--text-color) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: 4px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
+
 .contact-form textarea.p-inputtextarea:focus,
-.contact-form .p-inputtextarea textarea:focus {
+.contact-form textarea[pInputTextarea]:focus,
+textarea.p-inputtextarea:focus,
+textarea[pInputTextarea]:focus {
   outline: none;
-  border-color: var(--primary-color) !important;
-  box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
-}
-/* Forçar textarea PrimeNG a ter fundo igual ao dos inputs em todos os temas */
-.contact-form textarea.p-inputtextarea,
-.contact-form .p-inputtextarea {
-  background-color: var(--surface-d) !important;
+  background: var(--surface-d) !important;
   color: var(--text-color) !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: 4px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-.contact-form textarea.p-inputtextarea:focus,
-.contact-form .p-inputtextarea:focus {
-  outline: none;
   border-color: var(--primary-color) !important;
   box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
 }
-/* Garantir textarea igual aos inputs (light e dark) */
-.contact-form textarea.p-inputtextarea {
-  background: var(--surface-d);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+
+/* Placeholder styling */
+.contact-form textarea.p-inputtextarea::placeholder,
+.contact-form textarea[pInputTextarea]::placeholder,
+textarea.p-inputtextarea::placeholder,
+textarea[pInputTextarea]::placeholder {
+  color: var(--text-color-secondary) !important;
+  opacity: 0.7;
 }
-.contact-form textarea.p-inputtextarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px var(--primary-alpha-20);
+
+/* Garantir que o textarea tenha a mesma aparência dos inputs */
+.contact-form .p-inputtextarea {
+  background: var(--surface-d) !important;
+  color: var(--text-color) !important;
+}
+
+/* Forçar placeholder do textarea */
+.contact-form textarea.p-inputtextarea::placeholder {
+  color: var(--text-color-secondary) !important;
+  opacity: 0.7;
+}
+
+/* Especificamente para o tema dark */
+.dark-theme .contact-form textarea.p-inputtextarea {
+  background: var(--surface-d) !important;
+  color: var(--text-color) !important;
+}
+
+.dark-theme .contact-form textarea.p-inputtextarea::placeholder {
+  color: var(--text-color-secondary) !important;
+  opacity: 0.8;
 }
 .dark-theme {
   .contact-section {
@@ -1113,5 +1124,51 @@
 
   .plan-card:hover {
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Contact section adjustments for dark theme */
+  .contact-section {
+    .contact-form {
+      /* Específico para textarea do PrimeNG no tema dark */
+      textarea.p-inputtextarea,
+      textarea[pInputTextarea],
+      #mensagem {
+        background: var(--surface-d) !important;
+        color: var(--text-color) !important;
+        border: 1px solid var(--border-color) !important;
+      }
+      
+      textarea.p-inputtextarea:focus,
+      textarea[pInputTextarea]:focus,
+      #mensagem:focus {
+        background: var(--surface-d) !important;
+        color: var(--text-color) !important;
+        border-color: var(--primary-color) !important;
+        box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
+      }
+
+      /* Placeholder no tema dark */
+      textarea.p-inputtextarea::placeholder,
+      textarea[pInputTextarea]::placeholder,
+      #mensagem::placeholder {
+        color: var(--text-color-secondary) !important;
+        opacity: 0.6;
+      }
+      
+      /* Dropdown adjustments */
+      .p-dropdown {
+        background: var(--surface-d) !important;
+        border: 1px solid var(--border-color) !important;
+        
+        .p-dropdown-label {
+          color: var(--text-color) !important;
+        }
+        
+        &:focus {
+          border-color: var(--primary-color) !important;
+          box-shadow: 0 0 0 2px var(--primary-alpha-20) !important;
+        }
+      }
+    }
   }
 }
