@@ -17,6 +17,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 // Animations
 import { pageEnterAnimation } from '../../shared/animations';
+import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
@@ -38,6 +39,7 @@ import { DialogModule } from 'primeng/dialog';
   animations: [pageEnterAnimation]
 })
 export class HomeComponent implements OnInit {
+  private messageService = inject(MessageService);
   isAtBottom = false;
 
   @HostListener('window:scroll', [])
@@ -71,9 +73,11 @@ export class HomeComponent implements OnInit {
   };
 
   enviarContato() {
-    // Aqui você pode implementar o envio para API ou serviço de email
-    // Exemplo: console.log(this.contato);
-    alert('Mensagem enviada com sucesso!');
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Contato enviado',
+      detail: 'Sua mensagem foi enviada com sucesso! Em breve entraremos em contato.'
+    });
     this.showContactDialog = false;
     this.contato = { nome: '', email: '', empresa: '', mensagem: '' };
   }
