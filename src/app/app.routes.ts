@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard, roleGuard } from './core/guards/auth.guard'; // Added import
 
 export const routes: Routes = [
   {
@@ -27,16 +28,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/usuario-plataforma/usuario-plataforma.component').then(m => m.UsuarioPlataformComponent)
   },
   {
-    path: 'upload-documentos',
-    loadComponent: () => import('./pages/upload-documentos/upload-documentos.component').then(m => m.UploadDocumentosComponent)
-  },
-  {
     path: 'observabilidade',
-    loadComponent: () => import('./pages/observability/observability.component').then(m => m.ObservabilityComponent)
+    loadComponent: () => import('./pages/observability/observability.component').then(m => m.ObservabilityComponent),
   },
   {
     path: 'acompanhamento-documentos',
     loadComponent: () => import('./pages/acompanhamento-documentos/acompanhamento-documentos.component').then(m => m.AcompanhamentoDocumentosComponent)
+  },
+  {
+    path: 'sobre-nos',
+    loadComponent: () => import('./pages/sobrenos/sobre.component').then(m => m.SobreComponent)
   },
   {
     path: '**',

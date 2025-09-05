@@ -269,12 +269,23 @@
         <p class="doc-list-title">Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b>:</p>
         <ul class="doc-list">
           <li *ngFor="let doc of documentosSelecionados">
-            <span class="doc-name">{{ doc.nome }}</span>
-            <p-tag 
-              [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : 'Pendente')" 
-              [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : 'warning')"
-              class="doc-status-tag">
-            </p-tag>
+            <div class="doc-item-content">
+              <span class="doc-name">{{ doc.nome }}</span>
+              <p-tag 
+                [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : 'Pendente')" 
+                [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : 'warning')"
+                class="doc-status-tag">
+              </p-tag>
+            </div>
+            <p-button
+              *ngIf="isCurrentUserHR && doc.status !== 'valido'"
+              icon="pi pi-check"
+              label="Aprovar"
+              severity="success"
+              size="small"
+              (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
+              class="ml-2">
+            </p-button>
           </li>
         </ul>
       </div>

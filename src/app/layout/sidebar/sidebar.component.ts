@@ -54,12 +54,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   // Menu base
   private allMenuItems: SidebarMenuItem[] = [
-    { labelKey: 'nav.upload', icon: 'pi pi-upload', route: '/upload-documentos', requiresAuth: true },
+    { labelKey: 'nav.home', icon: 'pi pi-home', route: '/home', requiresAuth: false }, // Added home route
     { labelKey: 'nav.acompanhamento', icon: 'pi pi-file', route: '/acompanhamento-documentos', requiresAuth: true },
-    { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/candidatos', requiresAuth: true },
-    { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observabilidade', requiresAuth: true },
-    { labelKey: 'nav.empresas', icon: 'pi pi-building', route: '/empresas', requiresAuth: true },
-    { labelKey: 'nav.users-plataform', icon: 'pi pi-users', route: '/controle-acessos', requiresAuth: true },
+    { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/candidatos', requiresAuth: true }, // Cadastro de Candidato
+    { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observability', requiresAuth: false }, // New Observability item - requiresAuth changed to false
+    { labelKey: 'nav.empresas', icon: 'pi pi-building', route: '/empresas', requiresAuth: true }, // Cadastro de Empresa
+    { labelKey: 'nav.users-plataform', icon: 'pi pi-users', route: '/controle-acessos', requiresAuth: true }, // Cadastro de Usuários
   ];
 
   menuItems: SidebarMenuItem[] = [];
@@ -82,14 +82,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
     if (this.isMobile) {
       this.sidebarVisible = false;
       this.hoverExpanded = false;
-    } else {
-      this.sidebarVisible = false;
+    } else { // Added else block to handle desktop case
+      this.sidebarVisible = false; // Ensure sidebar is collapsed on desktop initially
     }
-    this.sidebarService.updateSidebarState({
-      visible: this.sidebarVisible,
-      hoverExpanded: this.hoverExpanded,
-      isMobile: this.isMobile
-    });
+    // The logic for handling wasMobile is in onResize, which is called by the event listener.
+    // This method only sets the initial state.
   }
 
   private setupResizeListener(): void {
@@ -148,19 +145,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
       return;
     }
     if (user.role === 'admin') {
-      // Admin vê controle de empresas e usuários da plataforma
+      // Admin pode ver cadastro de empresa e cadastro de usuarios
       this.menuItems = this.allMenuItems.filter(item =>
-        ['/controle-acessos', '/empresas'].includes(item.route)
+        ['/empresas', '/controle-acessos'].includes(item.route)
       );
     } else if (user.role === 'rh') {
-      // RH vê candidatos e observabilidade
+      // RH pode ver acompanhamento de documento, cadastro de candidato e observabilidade
       this.menuItems = this.allMenuItems.filter(item =>
-        ['/candidatos', '/observabilidade'].includes(item.route)
+        ['/acompanhamento-documentos', '/candidatos', '/observability'].includes(item.route)
       );
     } else if (user.role === 'candidato') {
-      // Candidato vê upload e acompanhamento de documentos
+      // Candidato pode ver somente a home e o acompanhamento de documento
       this.menuItems = this.allMenuItems.filter(item =>
-        ['/upload-documentos', '/acompanhamento-documentos'].includes(item.route)
+        ['/home', '/acompanhamento-documentos'].includes(item.route)
       );
     } else {
       this.menuItems = [];

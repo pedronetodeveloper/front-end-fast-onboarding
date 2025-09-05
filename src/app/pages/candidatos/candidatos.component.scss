@@ -224,3 +224,36 @@
     }
   }
 }
+
+.doc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--surface-d);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .doc-item-content {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem; /* Space between name and tag */
+    }
+
+    .doc-name {
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .doc-status-tag {
+      /* PrimeNG p-tag already has good styling */
+    }
+  }
+}

@@ -18,6 +18,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 // Services
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../core/services/local-storage.service';
+import { AuthService } from '../../core/services/auth.service'; // Add this import
 
 // Interfaces
 import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../shared/interface/usuario.interface';
@@ -62,6 +63,7 @@ export class UsuarioComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
   private localStorageService = inject(LocalStorageService);
+  private authService = inject(AuthService); // Inject AuthService
 
   // Data
   usuarios: Usuario[] = [];
@@ -98,7 +100,44 @@ export class UsuarioComponent implements OnInit {
   // documentosPorUsuario removido, agora usa campo documentos do candidato
   showDocumentosDialog = false;
   documentosSelecionados: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }[] = [];
-  candidatoSelecionado: Usuario | null = null;
+    candidatoSelecionado: Usuario | null = null;
+
+  get isCurrentUserHR(): boolean {
+    // Assuming authService.getCurrentUserRole() returns the role of the logged-in user
+    return this.authService.getRole() === 'rh';
+  }
+
+  /**
+   * Aprova um documento de um candidato.
+   * @param candidato O candidato cujo documento será aprovado.
+   * @param documento O documento a ser aprovado.
+   */
+  aprovarDocumento(candidato: Usuario, documento: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }): void {
+    if (!candidato || !candidato.documentos) {
+      return;
+    }
+
+    const documentoIndex = candidato.documentos.findIndex(d => d.nome === documento.nome && d.tipo === documento.tipo);
+
+    if (documentoIndex > -1) {
+      candidato.documentos[documentoIndex].status = 'valido';
+      this.localStorageService.updateItem('candidatos', candidato as Usuario & { id: string });
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: `Documento '${documento.nome}' do candidato '${candidato.nome}' aprovado com sucesso.`
+      });
+      // Refresh the displayed documents in the dialog
+      this.documentosSelecionados = [...candidato.documentos];
+      this.carregarUsuarios(); // Refresh the main list as well
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: `Documento '${documento.nome}' não encontrado para o candidato '${candidato.nome}'.`
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.carregarUsuarios();
@@ -177,10 +216,12 @@ export class UsuarioComponent implements OnInit {
       this.loading = false;
     } else {
       // Criar novo usuário local
+      // Criar novo usuário local
       const novoUsuario = {
         ...this.usuarioForm,
         id: this.usuarioForm.email,
-        senha: 'candidato123'
+        senha: 'candidato123',
+        role: 'candidato' // Assign default role
       } as Usuario & { id: string };
       this.localStorageService.addItem('candidatos', novoUsuario);
       this.messageService.add({

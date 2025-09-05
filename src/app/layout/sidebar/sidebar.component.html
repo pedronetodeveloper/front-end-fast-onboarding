@@ -5,7 +5,8 @@
     <!-- Sidebar Header -->
     <div class="sidebar-header">
         <div class="sidebar-brand" [class.collapsed]="!sidebarVisible && !hoverExpanded">
-            <span class="brand-text" *ngIf="sidebarVisible || hoverExpanded">{{ 'project.name' | translate }}</span>
+            <img *ngIf="sidebarVisible || hoverExpanded" src="../../../assets/logo1.41.jpg" alt="Tivit Logo" class="brand-logo-full">
+            <img *ngIf="!sidebarVisible && !hoverExpanded" src="../../../assets/logo1.41.jpg" alt="Tivit T Logo" class="brand-logo-collapsed">
         </div>
     </div>
 

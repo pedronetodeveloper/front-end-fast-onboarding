@@ -1,0 +1,38 @@
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
+  <ng-template pTemplate="header">
+    <h3>{{ 'upload.title' | translate }}</h3>
+  </ng-template>
+
+  <div class="p-fluid">
+    <div class="p-field mb-3">
+      <label for="documentType" class="mb-2">{{ 'upload.documentType' | translate }}</label>
+      <p-dropdown 
+        id="documentType" 
+        [options]="documentTypes" 
+        [(ngModel)]="selectedDocumentType" 
+        optionLabel="name" 
+        placeholder="{{ 'upload.selectType' | translate }}" 
+        [filter]="true"
+        [showClear]="true"
+        appendTo="body" 
+        class="w-full">
+      </p-dropdown>
+    </div>
+
+    <div class="p-field mb-3">
+      <label for="fileInput" class="mb-2">{{ 'upload.selectFile' | translate }}</label>
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="p-inputtext w-full">
+      <div class="p-field-description p-text-light mt-2">
+        <div class="p-field-description-content">
+          <div>Extensões de arquivo aceitas: .pdf ou .jpg</div>
+          <div>Em caso de dúvida, enviar e-mail para <a href="mailto:rh&#64;docflow.com.br">rh&#64;docflow.com.br</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <p-button label="{{ 'upload.cancel' | translate }}" icon="pi pi-times" styleClass="p-button-text" (click)="hideDialog()"></p-button>
+    <p-button label="{{ 'upload.upload' | translate }}" icon="pi pi-upload" (click)="onUpload()" [disabled]="!selectedFile || !selectedDocumentType"></p-button>
+  </ng-template>
+</p-dialog>

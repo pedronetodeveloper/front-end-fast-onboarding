@@ -1,0 +1,84 @@
+/* Styles for the Upload Document Modal */
+
+:host ::ng-deep .p-dialog {
+  .p-dialog-header {
+    padding: 1.5rem 2rem; /* Increased padding */
+    border-bottom: 1px solid var(--surface-d);
+    .p-dialog-title {
+      font-size: 1.5rem; /* Larger title */
+      font-weight: 700;
+      color: var(--text-color);
+    }
+  }
+
+  .p-dialog-content {
+    padding: 2rem; /* Increased padding */
+  }
+
+  .p-dialog-footer {
+    padding: 1.5rem 2rem; /* Increased padding */
+    border-top: 1px solid var(--surface-d);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem; /* Increased gap */
+  }
+
+  .p-dropdown {
+    width: 100%;
+    .p-dropdown-label {
+      padding: 0.75rem 1rem; /* Adjust dropdown label padding */
+    }
+  }
+
+  input[type="file"] {
+    width: 100%;
+    padding: 0.75rem; /* Consistent padding */
+    border: 1px solid var(--border-color); /* Use CSS variable for border */
+    border-radius: var(--border-radius); /* Use CSS variable for border-radius */
+    background-color: var(--surface-a); /* Use CSS variable for background */
+    color: var(--text-color); /* Use CSS variable for text color */
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem var(--primary-alpha-20);
+    }
+  }
+}
+
+.p-field label {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem; /* Add margin below label */
+}
+
+.p-field-description {
+  background-color: var(--surface-b); /* A slightly darker background than the dialog content */
+  border: 1px solid var(--surface-d); /* A subtle border */
+  border-radius: var(--border-radius); /* Consistent border-radius */
+  padding: 0.75rem 1rem; /* Padding inside the box */
+  display: flex;
+  align-items: flex-start; /* Align icon and text at the top */
+  font-size: 0.875rem; /* Slightly smaller font size */
+  line-height: 1.4; /* Improve readability */
+
+  .pi {
+    margin-top: 0.15rem; /* Adjust icon alignment */
+    color: var(--primary-color); /* Use primary color for the icon */
+  }
+
+  a {
+    color: var(--primary-color); /* Style links within the description */
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.p-field-description-content {
+  display: flex;
+  flex-direction: column;
+}

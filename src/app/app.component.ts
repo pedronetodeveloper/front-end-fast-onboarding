@@ -34,7 +34,7 @@ import { TranslationService } from './core/services/translation.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'Fast Onboarding';
+  title = 'DocFlow';
   showNavigation = false;
   isSidebarVisible = false;
 

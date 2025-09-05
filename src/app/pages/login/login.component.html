@@ -6,9 +6,11 @@
     </div>
     <!-- Card Principal de Login -->
     <div class="auth-card">
-      <div class="auth-header">
+            <div class="auth-header">
         <div class="brand-section">
-          <h5 class="brand-title">{{ 'project.name' | translate }}</h5>
+          <div class="logo-container">
+            <img src="assets/logodocflow.jpg" alt="Logo DocFlow" class="brand-logo">
+          </div>
           <p class="brand-subtitle">{{ 'project.description' | translate }}</p>
         </div>
       </div>
@@ -17,15 +19,15 @@
         <div class="welcome-section">
           <h5 class="welcome-title">{{ 'login.welcome' | translate }}</h5>
         </div>
-        <form (ngSubmit)="login()" autocomplete="off">
+                <form (ngSubmit)="login()" autocomplete="off">
           <div class="p-fluid">
             <div class="p-field mb-2">
-              <label for="email">E-mail</label>
-              <input id="email" pInputText  type="email" [(ngModel)]="email" name="email" required autocomplete="username">
+              <label for="email" class="flex align-items-center"><i class="pi pi-envelope mr-2"></i>E-mail</label>
+              <input id="email" pInputText  type="email" [(ngModel)]="email" name="email" required autocomplete="username" placeholder="seu@email.com">
             </div>
             <div class="p-field mb-3">
-              <label for="senha">Senha</label>
-              <input id="senha" pInputText type="password" [(ngModel)]="senha" name="senha" autocomplete="username"  required>
+              <label for="senha" class="flex align-items-center"><i class="pi pi-lock mr-2"></i>Senha</label>
+              <input id="senha" pInputText type="password" [(ngModel)]="senha" name="senha" autocomplete="username"  required placeholder="Sua senha">
             </div>
             <div class="login-actions">
               <p-button 

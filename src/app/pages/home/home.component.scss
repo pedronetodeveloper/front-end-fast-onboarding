@@ -274,6 +274,13 @@ textarea[pInputTextarea]::placeholder {
         0 20px 40px var(--primary-alpha-20),
         0 8px 16px var(--primary-alpha-15);
       animation: float 6s ease-in-out infinite;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
       .hero-icon {
         font-size: 8rem;

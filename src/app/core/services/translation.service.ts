@@ -16,9 +16,14 @@ export class TranslationService {
 
     private translations: { [key: string]: { [key: string]: string } } = {
         pt: {
-            "upload.chooseFile": "Escolher arquivo",
+                        "upload.chooseFile": "Escolher arquivo",
             "upload.noFile": "Nenhum arquivo escolhido",
-            // Upload Documentos
+            "upload.title": "Upload de Documentos",
+            "upload.documentType": "Tipo de Documento",
+            "upload.selectType": "Selecione o tipo",
+            "upload.selectFile": "Selecione o arquivo",
+            "upload.cancel": "Cancelar",
+            "upload.upload": "Upload",
             // Acompanhamento Documentos
             "acompanhamento.title": "Acompanhamento de Documentos",
             "acompanhamento.document": "Documento",
@@ -26,7 +31,6 @@ export class TranslationService {
             "acompanhamento.status.approved": "Aprovado",
             "acompanhamento.status.pending": "Pendente",
             "acompanhamento.status.rejected": "Rejeitado",
-            "upload.title": "Upload de Documentos",
             "upload.subtitle": "Envie os documentos obrigatórios para cadastro",
             "upload.rg": "RG",
             "upload.cpf": "CPF",
@@ -72,8 +76,9 @@ export class TranslationService {
             "observability.docsPerDay": "Documentos Processados por Dia",
             "observability.infoDialog": "Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para envio de documentos.",
             // Title
-            "project.name": "Fast Onboarding",
-            "project.description": "Aplicativo de Verificação de Documentos.",
+            "project.name": "DocFlow",
+            "project.description": "Impulsionando a Transformação Digital no RH.",
+            "project.description2": "Otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
 
             // Navigation
             "nav.menu": "Menu",
@@ -195,7 +200,7 @@ export class TranslationService {
             
             // Contact Form
             "contact.title": "Entre em contato",
-            "contact.subtitle": "Fale com nossa equipe para obter acesso à plataforma.",
+            "contact.subtitle": "Fale com nossa equipe e conheça o plano certo para a sua empresa.",
             "contact.name": "Nome",
             "contact.email": "E-mail",
             "contact.company": "Empresa",
@@ -484,7 +489,7 @@ export class TranslationService {
             // footer
             // "footer.allRights" já está definido abaixo, removido duplicata
             // Title
-            "project.name": "Fast Onboarding",
+            "project.name": "DocFlow",
             "project.description": "Document Verification Application.",
 
             // Navigation
@@ -876,7 +881,7 @@ export class TranslationService {
             // footer
             // "footer.allRights" já está definido abaixo, removido duplicata
             // Title
-            "project.name": "Fast Onboarding",
+            "project.name": "DocFlow",
             "project.description": "Solicitud de verificación de documentos",
 
             // Navigation

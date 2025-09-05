@@ -1,6 +1,6 @@
-# Fast Onboarding
+# DocFlow
 
-Fast Onboarding é uma aplicação web moderna para verificação e gestão de documentos, com autenticação via Microsoft Azure Entra ID, suporte multilíngue (Português, Inglês e Espanhol) e temas claro/escuro.
+DocFlow é uma aplicação web moderna para verificação e gestão de documentos, com autenticação via Microsoft Azure Entra ID, suporte multilíngue (Português, Inglês e Espanhol) e temas claro/escuro.
 
 ## Funcionalidades Principais
 - **Reconhecimento e validação rápida de documentos**

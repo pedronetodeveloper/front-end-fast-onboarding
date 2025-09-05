@@ -1,35 +1,183 @@
-.document-tracking-container {
-  max-width: 600px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+/* General Page Styling */
+.document-status-page {
   padding: 2rem;
+  background-color: #f9f9f9; // Light gray background for a clean look
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Header Section */
+.page-header {
+  margin-bottom: 3rem;
+  .title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+  }
+  .subtitle {
+    font-size: 1.1rem;
+    color: #666;
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+  }
 }
 
-.docs-table {
-  width: 100%;
-  border-collapse: collapse;
+/* Summary KPI Section */
+.summary-kpi-section {
+  margin-bottom: 3rem;
+  .summary-kpi-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-around; /* Distribute items evenly */
+    align-items: center;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+
+    .kpi-item {
+      text-align: center;
+      padding: 0.5rem 1rem;
+      flex: 1; /* Distribute space equally */
+      min-width: 150px; /* Minimum width for each KPI item */
+
+      .kpi-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: var(--primary-color); /* Primary color for icons */
+      }
+      .kpi-label {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.2rem;
+      }
+      .kpi-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #333;
+        margin: 0;
+      }
+    }
+
+    /* Add a subtle separator between KPI items */
+    .kpi-item:not(:last-child) {
+      border-right: 1px solid #eee;
+    }
+
+    /* Adjust for smaller screens */
+    @media (max-width: 768px) {
+      .kpi-item {
+        flex-basis: 100%; /* Stack items vertically on small screens */
+        border-right: none; /* Remove vertical separator */
+        border-bottom: 1px solid #eee; /* Add horizontal separator */
+      }
+      .kpi-item:last-child {
+        border-bottom: none;
+      }
+    }
+  }
 }
-.docs-table th, .docs-table td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #eee;
-  text-align: left;
+
+/* Document Cards Section */
+.document-card {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-body {
+    padding: 1.5rem;
+    .document-icon {
+      font-size: 2rem;
+      color: var(--primary-color); // Primary color
+    }
+    .card-title {
+      font-weight: 600;
+    }
+    .card-text {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.4em 0.8em;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 50px; // Pill-shaped badges
+    color: #fff;
+
+    &.status-valido {
+      background-color: #28a745; // Green
+    }
+    &.status-invalido {
+      background-color: #dc3545; // Red
+    }
+    &.status-pendente {
+      background-color: #ffc107; // Yellow
+    }
+  }
+
+  .card-footer {
+    background-color: transparent;
+    border-top: none;
+    padding: 0 1.5rem 1.5rem;
+  }
 }
-.status-pendente {
-  color: #ff9800;
+
+/* Global Button Styles (matching login button) */
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-light));
+  border: none;
+  font-size: 1.1rem;
   font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 
+    0 4px 12px var(--primary-alpha-25),
+    0 2px 4px var(--primary-alpha-15);
+  transition: all 0.3s ease;
+  color: var(--primary-color-text); /* Ensure text color is white */
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 8px 20px var(--primary-alpha-35),
+      0 4px 8px var(--primary-alpha-25);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }
-.status-aprovado {
-  color: #4caf50;
-  font-weight: 600;
+
+/* No Documents Template */
+.no-documents-message {
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  .empty-icon {
+    font-size: 4rem;
+    color: #ced4da;
+    margin-bottom: 1.5rem;
+  }
+  h3 {
+    font-weight: 600;
+  }
+  p {
+    color: #6c757d;
+  }
 }
-.status-rejeitado {
-  color: #f44336;
-  font-weight: 600;
-}
+

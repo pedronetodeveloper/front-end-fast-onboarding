@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, RouterModule, NavigationEnd } from "@angular/router";
 import { Subject, filter, takeUntil } from "rxjs";
 
 
@@ -26,7 +26,7 @@ import { TranslatePipe } from "../../shared/pipes/translate.pipe";
 @Component({
   selector: "app-navbar",
   standalone: true,
-  imports: [
+    imports: [
     CommonModule,
     ButtonModule,
     AvatarModule,
@@ -35,6 +35,7 @@ import { TranslatePipe } from "../../shared/pipes/translate.pipe";
     ThemeToggleComponent,
     LanguageSelectorComponent,
     TranslatePipe,
+    RouterModule,
   ],
   templateUrl: "./navbar.component.html",
   styleUrls: ["./navbar.component.scss"],
@@ -50,6 +51,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userMenuItems: MenuItem[] = [];
   isMenuOpen = false;
   isLanguageSubmenuOpen = false;
+  isSobreNosPage = false;
 
   // Mapa das flags dos idiomas
   languageFlags: { [key: string]: string } = {
@@ -77,6 +79,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.setupLanguageListener();
     this.setupClickOutsideListener();
     this.checkMobile();
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
+    ).subscribe((event: any) => {
+      this.isSobreNosPage = event.urlAfterRedirects === '/sobre-nos';
+    });
     window.addEventListener("resize", () => this.checkMobile());
   }
 

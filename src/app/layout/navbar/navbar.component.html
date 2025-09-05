@@ -5,9 +5,9 @@
             <i class="pi pi-bars"></i>
         </button>
 
-        <div class="navbar-brand">
-            <span class="font-bold text-xl">{{ 'project.name' | translate }}</span>
-        </div>
+        <a routerLink="/home" class="navbar-brand">
+            <img src="assets/logodocflow.jpg" alt="Logo DocFlow" class="brand-logo">
+        </a>
     </div>
 
     <div class="navbar-end">
@@ -73,6 +73,13 @@
 
         <!-- User is not logged in -->
         <ng-container *ngIf="!isLoggedIn">
+            <!-- Sobre Nós / Home Button -->
+            <p-button 
+              [label]="isSobreNosPage ? 'Home' : 'Sobre Nós'" 
+              styleClass="p-button-secondary p-button-raised mr-3" 
+              [routerLink]="isSobreNosPage ? '/home' : '/sobre-nos'">
+            </p-button>
+
             <!-- Language Selector -->
             <app-language-selector class="mr-3"></app-language-selector>
 

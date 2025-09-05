@@ -32,10 +32,11 @@
   color: var(--text-color);
   
   .brand-logo {
-    height: 28px;
+    height: 40px;
     width: auto;
     margin-right: 0.75rem;
     object-fit: contain;
+    border-radius: 0.5rem;
   }
   
   span {

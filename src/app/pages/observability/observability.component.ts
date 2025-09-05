@@ -32,7 +32,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 
 @Component({
-  selector: 'app-usuario',
+  selector: 'app-observability',
   standalone: true,
   imports: [
     CommonModule,
@@ -132,6 +132,14 @@ export class ObservabilityComponent implements OnInit {
           legend: {
             labels: {
               color: textColor
+            }
+          },
+          title: {
+            display: true,
+            text: 'Documentos Processados por Dia',
+            color: textColor,
+            font: {
+              size: 16
             }
           }
         },

@@ -5,6 +5,7 @@ export interface Usuario {
   email?: string;
   senha?: string;
   idiomaPreferencia?: string;
+  role?: 'candidato' | 'rh'; // Added role property
   documentos?: Array<{
     nome: string;
     tipo: string;

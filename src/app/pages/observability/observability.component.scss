@@ -1,4 +1,4 @@
-.usuario-container {
+.observability-container {
   padding: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -160,24 +160,24 @@
   }
 
   // Garante que os ícones dos botões de ação herdem a cor do severity do PrimeNG
-  .usuario-container .action-buttons ::ng-deep .p-button .pi {
+  .observability-container .action-buttons ::ng-deep .p-button .pi {
     color: inherit !important;
   }
   // Cores específicas para cada severity (ajuste conforme o tema do PrimeNG)
-  .usuario-container .action-buttons ::ng-deep .p-button.p-button-info .pi {
+  .observability-container .action-buttons ::ng-deep .p-button.p-button-info .pi {
     color: var(--blue-500, #2196f3) !important;
   }
-  .usuario-container .action-buttons ::ng-deep .p-button.p-button-help .pi {
+  .observability-container .action-buttons ::ng-deep .p-button.p-button-help .pi {
     color: var(--yellow-600, #fbc02d) !important;
   }
-  .usuario-container .action-buttons ::ng-deep .p-button.p-button-danger .pi {
+  .observability-container .action-buttons ::ng-deep .p-button.p-button-danger .pi {
     color: var(--red-500, #f44336) !important;
   }
 }
 
 // Responsive
 @media (max-width: 768px) {
-  .usuario-container {
+  .observability-container {
     padding: 1rem;
 
     .search-container {
@@ -217,10 +217,64 @@
 
 // Dark theme específico
 ::ng-deep .dark-theme {
-  .usuario-container {
+  .observability-container {
     .card-header {
       background: var(--surface-c);
       border-color: var(--border-color);
     }
   }
 }
+
+  .kpi-card {
+    .p-card-body {
+      padding: 0 !important; // Remove default padding to allow full control
+    }
+
+    .kpi-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      height: 100%;
+      padding: 1rem; // Add desired padding here
+    }
+
+    .kpi-icon-wrapper {
+      width: 3rem; // Larger icon area
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: var(--surface-a); // A subtle background for the icon
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Soft shadow for depth
+    }
+
+    .kpi-icon {
+      font-size: 1.5rem; // Larger icon size
+    }
+
+    .kpi-details {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .kpi-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-color-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kpi-value {
+      font-weight: 700;
+      font-size: 1.8rem; // Larger value font size
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
