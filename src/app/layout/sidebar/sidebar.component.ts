@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     { labelKey: 'nav.home', icon: 'pi pi-home', route: '/home', requiresAuth: false }, // Added home route
     { labelKey: 'nav.acompanhamento', icon: 'pi pi-file', route: '/acompanhamento-documentos', requiresAuth: true },
     { labelKey: 'nav.usuarios', icon: 'pi pi-users', route: '/candidatos', requiresAuth: true }, // Cadastro de Candidato
-    { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observability', requiresAuth: false }, // New Observability item - requiresAuth changed to false
+    { labelKey: 'nav.observability', icon: 'pi pi-chart-bar', route: '/observabilidade', requiresAuth: false }, // New Observability item - requiresAuth changed to false
     { labelKey: 'nav.empresas', icon: 'pi pi-building', route: '/empresas', requiresAuth: true }, // Cadastro de Empresa
     { labelKey: 'nav.users-plataform', icon: 'pi pi-users', route: '/controle-acessos', requiresAuth: true }, // Cadastro de Usuários
   ];
@@ -140,28 +140,46 @@ export class SidebarComponent implements OnInit, OnDestroy {
     const user = this.authService.getUser();
     this.isLoggedIn = !!user;
     this.displayName = user?.name || '';
+
+    // Make a deep copy to avoid modifying the original array
+    let menuItems = JSON.parse(JSON.stringify(this.allMenuItems));
+
+    if (user && user.role === 'rh') {
+      const homeItem = menuItems.find((item: SidebarMenuItem) => item.route === '/home');
+      if (homeItem) {
+        homeItem.route = '/sobre-nos';
+      }
+    }
+
+    // Start with public routes
+    const publicRoutes = menuItems.filter((item: SidebarMenuItem) => !item.requiresAuth);
+
     if (!user) {
-      this.menuItems = [];
+      this.menuItems = publicRoutes;
       return;
     }
+
+    let roleBasedRoutes: SidebarMenuItem[] = [];
     if (user.role === 'admin') {
-      // Admin pode ver cadastro de empresa e cadastro de usuarios
-      this.menuItems = this.allMenuItems.filter(item =>
+      // Admin can see company and user registration
+      roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
         ['/empresas', '/controle-acessos'].includes(item.route)
       );
     } else if (user.role === 'rh') {
-      // RH pode ver acompanhamento de documento, cadastro de candidato e observabilidade
-      this.menuItems = this.allMenuItems.filter(item =>
-        ['/acompanhamento-documentos', '/candidatos', '/observability'].includes(item.route)
+      // HR can see document tracking, candidate registration and observability
+      roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
+        ['/acompanhamento-documentos', '/candidatos', '/observabilidade'].includes(item.route)
       );
     } else if (user.role === 'candidato') {
-      // Candidato pode ver somente a home e o acompanhamento de documento
-      this.menuItems = this.allMenuItems.filter(item =>
+      // Candidate can only see home and document tracking
+      roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
         ['/home', '/acompanhamento-documentos'].includes(item.route)
       );
-    } else {
-      this.menuItems = [];
     }
+
+    // Combine public and role-based routes, removing duplicates
+    const allRoutes = [...publicRoutes, ...roleBasedRoutes];
+    this.menuItems = allRoutes.filter((item, index) => allRoutes.findIndex(i => i.route === item.route) === index);
   }
 
   toggleSidebar(): void {

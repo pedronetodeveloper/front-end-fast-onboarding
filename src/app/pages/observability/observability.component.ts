@@ -64,12 +64,13 @@ export class ObservabilityComponent implements OnInit {
   private messageService = inject(MessageService);
   displayDialogInfo = false;
 
-  tempoMedioDocs = [
-    { label: 'observability.rg', value: 120, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
-    { label: 'observability.cpf', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
-    { label: 'observability.comprovanteResidencia', value: 110, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
-    { label: 'observability.comprovanteEndereco', value: 105, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
+  docsProcessados = [
+    { label: 'observability.rg', count: 120, icon: 'pi pi-id-card', color1: '#4ade80', color2: '#22c55e' },
+    { label: 'observability.cpf', count: 98, icon: 'pi pi-user', color1: '#60a5fa', color2: '#3b82f6' },
+    { label: 'observability.carteiraIdentidade', count: 110, icon: 'pi pi-home', color1: '#fbbf24', color2: '#f59e0b' },
+    { label: 'observability.comprovanteEndereco', count: 105, icon: 'pi pi-map-marker', color1: '#a78bfa', color2: '#8b5cf6' }
   ];
+  economiaDeTempoDocs: any[] = [];
 
   acuraciaDocs = [
     { label: 'observability.rg', value: 95, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
@@ -89,6 +90,22 @@ export class ObservabilityComponent implements OnInit {
 
   ngOnInit() {
     this.initChart();
+    this.calculateTimeSaved();
+  }
+
+  calculateTimeSaved() {
+    const humanTimePerDoc = 2 * 60; // 2 hours in minutes
+    const systemTimePerDoc = 1; // 1 minute
+    const timeSavedPerDoc = humanTimePerDoc - systemTimePerDoc;
+
+    this.economiaDeTempoDocs = this.docsProcessados.map(doc => {
+      const totalTimeSaved = doc.count * timeSavedPerDoc;
+      return {
+        ...doc,
+        value: totalTimeSaved,
+        unit: 'min'
+      };
+    });
   }
 
   initChart() {
@@ -112,7 +129,7 @@ export class ObservabilityComponent implements OnInit {
             data: [60, 65, 70, 85, 90, 50, 35]
           },
           {
-            label: 'Comprovante Residência',
+            label: 'Carteira de Trabalho',
             backgroundColor: '#fbbf24',
             data: [30, 50, 45, 60, 55, 25, 20]
           },

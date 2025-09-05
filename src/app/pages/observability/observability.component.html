@@ -1,49 +1,27 @@
 <div class="observability-container" [@pageAnimation]>
 
-  <!-- Tempo Médio de Processamento -->
   <p-card>
-    <ng-template pTemplate="header">
-      <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">{{ 'observability.avgProcessingTime' | translate }}</span>
-      </div>
-    </ng-template>
-    <div class="flex flex-wrap gap-6 justify-center py-4">
-      <p-card *ngFor="let doc of tempoMedioDocs" class="kpi-card flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
-        <div class="kpi-content">
-          <span class="kpi-icon-wrapper">
-            <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
-          </span>
-          <div class="kpi-details">
-            <span class="kpi-label">{{ doc.label | translate }}</span>
-            <span class="kpi-value">{{ doc.value }}ms</span>
+    <ng-template pTemplate="content">
+      <div class="flex flex-row justify-center gap-4">
+        <div>
+          <h2 class="text-lg font-semibold mb-2">{{ 'observability.timeSaved' | translate }}</h2>
+          <p class="text-sm text-gray-600 mb-4">{{ 'observability.timeSavedCardDescription' | translate }}</p>
+          <div class="flex flex-wrap gap-6 justify-center py-4">
+            <p-card *ngFor="let doc of economiaDeTempoDocs" class="kpi-card flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
+              <div class="kpi-content">
+                <span class="kpi-icon-wrapper">
+                  <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
+                </span>
+                <div class="kpi-details">
+                  <span class="kpi-label">{{ doc.label | translate }}</span>
+                  <span class="kpi-value">{{ doc.value | number }} {{ 'common.minutes' | translate }}</span>
+                </div>
+              </div>
+            </p-card>
           </div>
         </div>
-      </p-card>
-    </div>
-  </p-card>
-
-  <br>
-  <!-- Acurácia por Documento -->
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">{{ 'observability.accuracyTitle' | translate }}</span>
       </div>
     </ng-template>
-
-    <div class="flex flex-wrap gap-6 justify-center py-4">
-      <p-card *ngFor="let doc of acuraciaDocs" class="kpi-card flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
-        <div class="kpi-content">
-          <span class="kpi-icon-wrapper">
-            <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
-          </span>
-          <div class="kpi-details">
-            <span class="kpi-label">{{ doc.label | translate }}</span>
-            <span class="kpi-value">{{ doc.value }}%</span>
-          </div>
-        </div>
-      </p-card>
-    </div>
   </p-card>
 
   <br>

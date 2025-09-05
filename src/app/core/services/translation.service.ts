@@ -61,10 +61,15 @@ export class TranslationService {
             "empresa.validation.usersLimit": "O número de usuários excede o limite do plano.",
             "empresa.success.save": "Empresa salva com sucesso!",
             "empresa.success.delete": "Empresa excluída com sucesso!",
+            "observability.carteiraIdentidade":"Carteira de Trabalho",
             "empresa.error": "Ocorreu um erro ao processar a empresa.",
+            
             // Observability
             "observability.avgProcessingTime": "Tempo Médio de Processamento (ms)",
+            "observability.timeSavedCardDescription":" Essa kpis mostram quando tempo você ganhou em usar a plataforma",
+            "observability.accuracyCardDescription":" Essa kpis mostram a % de acerto de leitura de cada documento",
             "observability.rg": "RG",
+            "observability.timeSaved": "Ganho em Horas de Trabalho",
             "observability.cpf": "CPF",
             "observability.comprovanteResidencia": "Comprovante de Residência",
             "observability.comprovanteEndereco": "Comprovante de Endereço",
@@ -236,6 +241,11 @@ export class TranslationService {
             "common.refresh": "Atualizar",
             "common.notInformed": "Não informado",
             "common.search": "Buscar...",
+            "common.minutes": "minutos",
+            "common.hours": "horas",
+            "common.days": "dias",
+            "common.months": "meses",
+           " common.years": "anos",
             "common.clearSearch": "Limpar busca",
 
             // Navigation
