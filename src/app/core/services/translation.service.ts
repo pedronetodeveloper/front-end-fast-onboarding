@@ -16,9 +16,11 @@ export class TranslationService {
 
     private translations: { [key: string]: { [key: string]: string } } = {
         pt: {
-                        "upload.chooseFile": "Escolher arquivo",
+            "upload.chooseFile": "Escolher arquivo",
             "upload.noFile": "Nenhum arquivo escolhido",
             "upload.title": "Upload de Documentos",
+            "usuario-plataform.role": "Perfil",
+            "usuario-plataform.rolePlaceholder": "Selecione o perfil",
             "upload.documentType": "Tipo de Documento",
             "upload.selectType": "Selecione o tipo",
             "upload.selectFile": "Selecione o arquivo",
@@ -48,6 +50,8 @@ export class TranslationService {
             "empresa.responsavelPlaceholder": "Digite o nome do responsável",
             "empresa.cnpj": "CNPJ",
             "empresa.plan": "Plano",
+            "empresa.telefone_responsavel": "Telefone",
+            "empresa.phonePlaceholder":"Digite o telefone do responsável",
             "empresa.usersLimit": "Limite de Usuários",
             "empresa.actions": "Ações",
             "empresa.empty": "Nenhuma empresa encontrada",
@@ -60,6 +64,9 @@ export class TranslationService {
             "empresa.confirmDelete": "Tem certeza que deseja excluir esta empresa?",
             "empresa.validation.usersLimit": "O número de usuários excede o limite do plano.",
             "empresa.success.save": "Empresa salva com sucesso!",
+            "empresa.phone": "Telefone",
+            "empresa.email_responsavel": "Email",
+            "empresa.emailPlaceholder": "Digite o email do responsável",
             "empresa.success.delete": "Empresa excluída com sucesso!",
             "observability.carteiraIdentidade":"Carteira de Trabalho",
             "empresa.error": "Ocorreu um erro ao processar a empresa.",

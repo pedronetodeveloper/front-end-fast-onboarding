@@ -1,11 +1,11 @@
 export interface Usuario {
-  id?: string;
+  id?: number | string;
   matricula?: string;
   nome?: string;
   email?: string;
   senha?: string;
   idiomaPreferencia?: string;
-  role?: 'candidato' | 'rh'; // Added role property
+  role?: string;
   documentos?: Array<{
     nome: string;
     tipo: string;

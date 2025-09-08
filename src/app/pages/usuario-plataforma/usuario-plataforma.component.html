@@ -47,10 +47,6 @@
       
       <ng-template pTemplate="header">
         <tr>
-           <th pSortableColumn="empresa">
-            {{ 'usuario-plataform.empresa' | translate }}
-            <p-sortIcon field="empresa"></p-sortIcon>
-          </th>
           <th pSortableColumn="nome">
             {{ 'usuario-plataform.name' | translate }}
             <p-sortIcon field="nome"></p-sortIcon>
@@ -59,9 +55,9 @@
             {{ 'usuario-plataform.email' | translate }}
             <p-sortIcon field="email"></p-sortIcon>
           </th>
-          <th pSortableColumn="idiomaPreferencia">
-            {{ 'usuario-plataform.language' | translate }}
-            <p-sortIcon field="idiomaPreferencia"></p-sortIcon>
+           <th pSortableColumn="empresa">
+            {{ 'usuario-plataform.empresa' | translate }}
+            <p-sortIcon field="empresa"></p-sortIcon>
           </th>
           <th style="width: 200px">{{ 'common.actions' | translate }}</th>
         </tr>
@@ -69,6 +65,14 @@
       
       <ng-template pTemplate="body" let-usuario>
         <tr>
+          
+          <td>
+            <div class="user-info">
+              <i class="pi pi-user user-icon"></i>
+              <span class="user-name">{{ usuario.nome }}</span>
+            </div>
+          </td>
+          <td>{{ usuario.email }}</td>
           <td>
             <i class="pi pi-building"></i>
             <p-tag 
@@ -79,19 +83,6 @@
             <ng-template #noEmpresa>
               <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
             </ng-template>
-          </td>
-          <td>
-            <div class="user-info">
-              <i class="pi pi-user user-icon"></i>
-              <span class="user-name">{{ usuario.nome }}</span>
-            </div>
-          </td>
-          <td>{{ usuario.email }}</td>
-          <td>
-            <p-tag 
-              [value]="getIdiomaTag(usuario.idiomaPreferencia || 'pt')"
-              severity="secondary">
-            </p-tag>
           </td>
           <td>
             <div class="action-buttons">
@@ -183,21 +174,24 @@
     
     <div class="dialog-content">
       <div class="field">
-
-      <div class="field">
-        <label for="nome">{{ 'usuario-plataform.empresa' | translate }} *</label>
-        <p-dropdown 
-          id="idioma"
-          [(ngModel)]="usuarioForm.empresa"
-          [options]="empresaOptions"
-          optionLabel="label"
-          optionValue="value"
-          appendTo="body"
-          class="w-full"
-          [placeholder]="'usuario-plataform.empresaPlaceholder' | translate">
-        </p-dropdown>
+        <label for="empresa">{{ 'usuario-plataform.empresa' | translate }} *</label>
+        <ng-container *ngIf="!isEditing; else empresaTexto">
+          <p-dropdown 
+            id="empresa"
+            [(ngModel)]="usuarioForm.empresa"
+            [options]="empresaOptions"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            class="w-full"
+            [placeholder]="'usuario-plataform.empresaPlaceholder' | translate">
+          </p-dropdown>
+        </ng-container>
+        <ng-template #empresaTexto>
+          <p-tag [value]="usuarioForm.empresa" severity="info"></p-tag>
+        </ng-template>
       </div>
-
+      <div class="field">
         <label for="nome">{{ 'usuario-plataform.name' | translate }} *</label>
         <input 
           id="nome"
@@ -218,20 +212,31 @@
           class="w-full"
           [placeholder]="'usuario-plataform.emailPlaceholder' | translate" />
       </div>
-
       <div class="field">
-        <label for="idioma">{{ 'usuario-plataform.language' | translate }}</label>
-        <p-dropdown 
-          id="idioma"
-          [(ngModel)]="usuarioForm.idiomaPreferencia"
-          [options]="idiomaOptions"
-          optionLabel="label"
-          optionValue="value"
-          appendTo="body"
-          class="w-full"
-          [placeholder]="'usuario-plataform.languagePlaceholder' | translate">
-        </p-dropdown>
+        <label for="role">{{ 'usuario-plataform.role' | translate }}</label>
+          <ng-container *ngIf="!isEditing; else roleTexto">
+            <p-dropdown
+              id="role"
+              [(ngModel)]="usuarioForm.role"
+              [options]="[
+                { label: 'Administrador', value: 'admin' },
+                { label: 'Responsável', value: 'user' },
+                { label: 'Candidato', value: 'candidate' },
+                { label: 'RH', value: 'rh' }
+              ]"
+              optionLabel="label"
+              optionValue="value"
+              appendTo="body"
+              class="w-full"
+              [placeholder]="'usuario-plataform.rolePlaceholder' | translate">
+            </p-dropdown>
+          </ng-container>
+          <ng-template #roleTexto>
+            <p-tag [value]="usuarioForm.role" severity="info"></p-tag>
+          </ng-template>
       </div>
+
+  <!-- campo de idioma removido do formulário -->
     </div>
 
     <ng-template pTemplate="footer">

@@ -1,15 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../../shared/interface/usuario.interface';
+
+export interface Usuario {
+  id?: number | string;
+  nome: string;
+  email: string;
+  role: string;
+  empresa: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.api.url}/usuarios`;
+  private apiUrl = 'https://robhy88jri.execute-api.us-east-1.amazonaws.com/usuarios';
 
   /**
    * Listar todos os usuários
@@ -28,39 +34,21 @@ export class UsuarioService {
   /**
    * Criar novo usuário
    */
-  criarUsuario(usuario: CreateUsuarioRequest): Observable<Usuario> {
+  criarUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(this.apiUrl, usuario);
   }
 
   /**
    * Atualizar usuário existente
    */
-  atualizarUsuario(id: string, usuario: UpdateUsuarioRequest): Observable<Usuario> {
-    return this.http.put<Usuario>(`${this.apiUrl}/${id}`, usuario);
+  atualizarUsuario(usuario: Partial<Usuario>): Observable<Usuario> {
+    return this.http.put<Usuario>(`${this.apiUrl}`, usuario);
   }
 
   /**
    * Deletar usuário
    */
-  deletarUsuario(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
-  }
-
-  /**
-   * Buscar usuários por email
-   */
-  buscarPorEmail(email: string): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar`, {
-      params: { email }
-    });
-  }
-
-  /**
-   * Buscar usuários por matrícula
-   */
-  buscarPorMatricula(matricula: string): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/buscar`, {
-      params: { matricula }
-    });
+  deletarUsuario(id: number | string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}`, { body: { id } });
   }
 }

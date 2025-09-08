@@ -45,23 +45,24 @@
       (onSort)="onSort($event)">
       <ng-template pTemplate="header">
         <tr>
-          <th pSortableColumn="nome">
+          <th pSortableColumn="nome" style="width: 22%">
             {{ 'empresa.name' | translate }}
             <p-sortIcon field="nome"></p-sortIcon>
           </th>
-          <th pSortableColumn="plano">
+          <th pSortableColumn="plano" style="width: 18%">
             {{ 'empresa.plan' | translate }}
             <p-sortIcon field="plano"></p-sortIcon>
           </th>
-          <th pSortableColumn="responsavel">
-            {{ 'empresa.responsavel' | translate }}
-            <p-sortIcon field="responsavel"></p-sortIcon>
+          <th pSortableColumn="email_responsavel" style="width: 18%">
+            {{ 'empresa.email_responsavel' | translate }}
           </th>
-          <th pSortableColumn="cnpj">
+          <th pSortableColumn="telefone_responsavel" style="width: 18%">
+            {{ 'empresa.telefone_responsavel' | translate }}
+          </th>
+          <th pSortableColumn="cnpj" style="width: 18%">
             {{ 'empresa.cnpj' | translate }}
-            <p-sortIcon field="cnpj"></p-sortIcon>
           </th>
-          <th style="width: 200px">{{ 'common.actions' | translate }}</th>
+          <th style="width: 6%">{{ 'common.actions' | translate }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-empresa>
@@ -73,10 +74,20 @@
             </div>
           </td>
           <td>
-            <p-tag [value]="empresa.plano | translate" severity="info"></p-tag>
+            <p-tag [value]="empresa.planos | translate" severity="info"></p-tag>
             <span *ngIf="empresa.usuarios > empresa.limiteUsuarios" class="text-danger ml-2">{{ 'empresa.planLimitExceeded' | translate }}</span>
           </td>
-          <td>{{ empresa.responsavel }}</td>
+          <td>{{ empresa.email_responsavel }}</td>
+          <td>
+            <ng-container *ngIf="empresa.telefone_responsavel; else noPhone">
+              {{ empresa.telefone_responsavel }}
+            </ng-container>
+            <ng-template #noPhone>
+              <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
+                <i class="pi pi-ban text-muted" title="Sem telefone"></i>
+              </div>
+            </ng-template>
+          </td>
           <td>{{ empresa.cnpj }}</td>
           <td>
             <div class="action-buttons">
@@ -153,7 +164,7 @@
         <label for="plano">{{ 'empresa.plan' | translate }} *</label>
         <p-dropdown 
           id="plano"
-          [(ngModel)]="empresaForm.plano"
+          [(ngModel)]="empresaForm.planos"
           [options]="planoOptions"
           optionLabel="label"
           optionValue="value"
@@ -162,17 +173,26 @@
           (onChange)="onPlanoChange()"
           [placeholder]="'empresa.planPlaceholder' | translate">
         </p-dropdown>
-        <small *ngIf="empresaForm.usuarios > empresaForm.limiteUsuarios" class="text-danger">{{ 'empresa.planLimitExceeded' | translate }}</small>
       </div>
       <div class="field">
-        <label for="responsavel">{{ 'empresa.responsavel' | translate }} *</label>
+        <label for="nome">{{ 'empresa.phone' | translate }} *</label>
+        <input 
+          id="nome"
+          type="text" 
+          pInputText 
+          [(ngModel)]="empresaForm.telefone_responsavel"
+          class="w-full"
+          [placeholder]="'empresa.phonePlaceholder' | translate" />
+      </div>
+      <div class="field">
+        <label for="responsavel">{{ 'empresa.email_responsavel' | translate }} *</label>
         <input 
           id="responsavel"
           type="text" 
           pInputText 
-          [(ngModel)]="empresaForm.responsavel"
+          [(ngModel)]="empresaForm.email_responsavel"
           class="w-full"
-          [placeholder]="'empresa.responsavelPlaceholder' | translate" />
+          [placeholder]="'empresa.email_responsavel' | translate" />
       </div>
       <div class="field">
         <label for="cnpj">{{ 'empresa.cnpj' | translate }} *</label>

@@ -16,11 +16,12 @@ import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 
 // Services
-import { LocalStorageService } from '../../core/services/local-storage.service';
+import { UsuarioService } from '../../core/services/api/usuario.service';
+import { EmpresaService, Empresa } from '../../core/services/api/empresa.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 // Interfaces
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest, CreateUsuarioPlataformaRequest, UpdateUsuarioPlataformaRequest, UsuarioPlataforma } from '../../shared/interface/usuario.interface';
+import { CreateUsuarioRequest, UpdateUsuarioRequest, CreateUsuarioPlataformaRequest, UpdateUsuarioPlataformaRequest, UsuarioPlataforma } from '../../shared/interface/usuario.interface';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -31,6 +32,14 @@ import { pageEnterAnimation } from '../../shared/animations';
 // Icon field
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+
+export interface Usuario {
+  id?: number | string;
+  nome: string;
+  email: string;
+  role: string;
+  empresa: string;
+}
 
 @Component({
   selector: 'app-usuario',
@@ -61,12 +70,13 @@ import { InputIconModule } from 'primeng/inputicon';
 export class UsuarioPlataformComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
-  private localStorageService = inject(LocalStorageService);
+  private usuarioService = inject(UsuarioService);
+  private empresaService = inject(EmpresaService);
 
   // Data
-  usuarios: UsuarioPlataforma[] = [];
-  filteredUsuarios: UsuarioPlataforma[] = [];
-  selectedUsuario: UsuarioPlataforma | null = null;
+  usuarios: Usuario[] = [];
+  filteredUsuarios: Usuario[] = [];
+  selectedUsuario: Usuario | null = null;
   loading = false;
 
   // Search and filter
@@ -80,19 +90,13 @@ export class UsuarioPlataformComponent implements OnInit {
   isEditing = false;
 
   // Form data
-  usuarioForm: CreateUsuarioPlataformaRequest | UpdateUsuarioPlataformaRequest = {
+  usuarioForm: Usuario= {
     empresa: '',
     nome: '',
     email: '',
-    idiomaPreferencia: 'pt'
+    role:''
   };
 
-  // Dropdown options
-  idiomaOptions = [
-    { label: 'Português', value: 'pt' },
-    { label: 'English', value: 'en' },
-    { label: 'Español', value: 'es' }
-  ];
 
   empresaOptions: { label: string; value: string }[] = [];
 
@@ -103,20 +107,36 @@ export class UsuarioPlataformComponent implements OnInit {
     this.carregarEmpresas();
   }
 
-  carregarEmpresas(): void {
-    // Busca empresas do localStorage (chave 'empresas')
-    const empresas = this.localStorageService.getItem<any>('empresas');
-    this.empresaOptions = empresas.map((e: any) => ({ label: e.nome, value: e.nome }));
-  }
+    carregarEmpresas(): void {
+      this.empresaService.listarEmpresas().subscribe({
+        next: (empresas) => {
+          this.empresaOptions = empresas.map((e: Empresa) => ({ label: e.nome, value: e.nome }));
+        },
+        error: () => {
+          this.empresaOptions = [];
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar empresas.' });
+        }
+      });
+    }
 
   /**
    * Carregar lista de usuários
    */
   carregarUsuarios(): void {
-    this.usuarios = this.localStorageService.getItem<UsuarioPlataforma>('usuarios-plataforma');
-    this.filteredUsuarios = [...this.usuarios];
-    this.loading = false;
-  }
+  this.loading = true;
+  this.usuarioService.listarUsuarios().subscribe({
+    next: (usuarios) => {
+      console.log('Usuários recebidos:', usuarios); // Adicione este log
+      this.usuarios = usuarios;
+      this.filteredUsuarios = [...usuarios];
+      this.loading = false;
+    },
+    error: () => {
+      this.loading = false;
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar usuários.' });
+    }
+  });
+}
 
 
   abrirModal():void{
@@ -136,7 +156,7 @@ export class UsuarioPlataformComponent implements OnInit {
       empresa: '',
       nome: '',
       email: '',
-      idiomaPreferencia: 'pt'
+      role:''
     };
     this.isEditing = false;
     this.abrirDialogUsuario();
@@ -145,12 +165,12 @@ export class UsuarioPlataformComponent implements OnInit {
   /**
    * Abrir dialog para editar usuário
    */
-  editarUsuario(usuario: UsuarioPlataforma): void {
+  editarUsuario(usuario: Usuario): void {
     this.usuarioForm = {
       empresa: usuario.empresa || '',
       nome: usuario.nome || '',
       email: usuario.email || '',
-      idiomaPreferencia: usuario.idiomaPreferencia || 'pt'
+      role: usuario.role || ''
     };
     this.selectedUsuario = usuario;
     this.isEditing = true;
@@ -171,36 +191,57 @@ export class UsuarioPlataformComponent implements OnInit {
     }
     this.loading = true;
     if (this.isEditing && this.selectedUsuario) {
-      // Atualizar usuário local
+      // Atualizar usuário via service
       const usuarioAtualizado = {
         ...this.selectedUsuario,
         ...this.usuarioForm,
-        id: this.selectedUsuario.id || this.selectedUsuario.email || this.usuarioForm.email // sempre garante id
-      } as UsuarioPlataforma & { id: string };
-      this.localStorageService.updateItem('usuarios-plataforma', usuarioAtualizado);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Usuário atualizado com sucesso'
+        id: this.selectedUsuario.id
+      } as Usuario & { id: string };
+      this.usuarioService.atualizarUsuario(usuarioAtualizado).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Usuário atualizado com sucesso'
+          });
+          this.fecharDialog();
+          this.carregarUsuarios();
+          this.loading = false;
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao atualizar usuário.'
+          });
+          this.loading = false;
+        }
       });
-      this.fecharDialog();
-      this.carregarUsuarios();
-      this.loading = false;
     } else {
-      // Criar novo usuário local
+      // Criar novo usuário via service
       const novoUsuario = {
         ...this.usuarioForm,
-        id: this.usuarioForm.email // usa o email como id único
-      } as UsuarioPlataforma & { id: string };
-      this.localStorageService.addItem('usuarios-plataforma', novoUsuario);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Usuário criado com sucesso'
+      }
+      this.usuarioService.criarUsuario(novoUsuario).subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Usuário criado com sucesso'
+          });
+          this.fecharDialog();
+          this.carregarUsuarios();
+          this.loading = false;
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao criar usuário.'
+          });
+          this.loading = false;
+        }
       });
-      this.fecharDialog();
-      this.carregarUsuarios();
-      this.loading = false;
     }
   }
 
@@ -224,12 +265,33 @@ export class UsuarioPlataformComponent implements OnInit {
    * Excluir usuário
    */
   private excluirUsuario(usuario: Usuario): void {
-    this.localStorageService.removeItem<{ id: any }>('usuarios-plataforma', usuario.id || usuario.email);
-    this.carregarUsuarios();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Sucesso',
-      detail: 'Usuário excluído com sucesso'
+    if (!usuario.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'ID do usuário não encontrado.'
+      });
+      return;
+    }
+    this.loading = true;
+    this.usuarioService.deletarUsuario(usuario.id).subscribe({
+      next: () => {
+        this.carregarUsuarios();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Usuário excluído com sucesso'
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao excluir usuário.'
+        });
+        this.loading = false;
+      }
     });
   }
 
@@ -243,17 +305,11 @@ export class UsuarioPlataformComponent implements OnInit {
       nome: '',
       email: '',
       empresa: '',
-      idiomaPreferencia: 'pt'
+      role: ''
     };
   }
 
-  /**
-   * Obter tag de idioma
-   */
-  getIdiomaTag(idioma: string): string {
-    const opcao = this.idiomaOptions.find(opt => opt.value === idioma);
-    return opcao?.label || idioma;
-  }
+  // ...existing code...
 
   /**
    * Filtrar usuários com base no termo de busca

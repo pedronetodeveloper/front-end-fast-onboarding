@@ -69,6 +69,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.setupResizeListener();
     this.setupSidebarStateListener();
     this.updateMenuByRole();
+    // Atualiza menu quando status de autenticação muda
+    this.authService.isAuthenticated$.subscribe(() => {
+      this.updateMenuByRole();
+    });
   }
 
   ngOnDestroy(): void {
@@ -161,7 +165,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
     let roleBasedRoutes: SidebarMenuItem[] = [];
     if (user.role === 'admin') {
-      // Admin can see company and user registration
+      // Admin can see company and user registration (sem observabilidade)
       roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
         ['/empresas', '/controle-acessos'].includes(item.route)
       );
@@ -177,9 +181,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
       );
     }
 
-    // Combine public and role-based routes, removing duplicates
-    const allRoutes = [...publicRoutes, ...roleBasedRoutes];
-    this.menuItems = allRoutes.filter((item, index) => allRoutes.findIndex(i => i.route === item.route) === index);
+    // Se logado, mostra apenas rotas do papel; se não, só públicas
+    if (user) {
+      this.menuItems = roleBasedRoutes;
+    } else {
+      this.menuItems = publicRoutes;
+    }
   }
 
   toggleSidebar(): void {

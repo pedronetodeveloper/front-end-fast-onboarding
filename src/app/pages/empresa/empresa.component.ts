@@ -14,17 +14,10 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { LocalStorageService } from '../../core/services/local-storage.service';
+import { EmpresaService, Empresa } from '../../core/services/api/empresa.service';
 import { InputTextModule } from 'primeng/inputtext';
 
-interface Empresa {
-  nome: string;
-  plano: string;
-  responsavel: string;
-  cnpj: string;
-  usuarios: number;
-  limiteUsuarios: number;
-}
+// Interface importada do serviço
 
 @Component({
   selector: 'app-empresa',
@@ -52,30 +45,45 @@ interface Empresa {
 })
 export class EmpresaComponent {
   private messageService = inject(MessageService);
-  private localStorageService = inject(LocalStorageService);
-  empresas: Empresa[] = [
-    { nome: 'Empresa Exemplo', plano: 'plans.start.name', responsavel: 'João Silva', cnpj: '12.345.678/0001-99', usuarios: 5, limiteUsuarios: 10 },
-    { nome: 'Tech Solutions', plano: 'plans.enterprise.name', responsavel: 'Maria Souza', cnpj: '98.765.432/0001-11', usuarios: 25, limiteUsuarios: 25 },
-    { nome: 'Startup XYZ', plano: 'plans.essencial.name', responsavel: 'Carlos Lima', cnpj: '11.222.333/0001-44', usuarios: 12, limiteUsuarios: 15 }
-  ];
-  filteredEmpresas = this.empresas;
+  private empresaService = inject(EmpresaService);
+  empresas: Empresa[] = [];
+  filteredEmpresas: Empresa[] = [];
   loading = false;
   sortField = 'nome';
   sortOrder = 1;
   displayDialog = false;
   displayDialogInfo = false;
   isEditing = false;
-  empresaForm: any = {};
+  empresaForm: Empresa = { nome: '', cnpj: '', planos: '', email_responsavel: '', telefone_responsavel: '' };
   planoOptions = [
-    { label: 'Start (até 10 usuários)', value: 'plans.start.name', limite: 10 },
-    { label: 'Essencial (até 15 usuários)', value: 'plans.essencial.name', limite: 15 },
-    { label: 'Pro (até 25 usuários)', value: 'plans.pro.name', limite: 25 },
-    { label: 'Enterprise (ilimitado)', value: 'plans.enterprise.name', limite: 9999 }
+    { label: 'Start', value: 'Start' },
+    { label: 'Essencial', value: 'Essencial' },
+    { label: 'Pro', value: 'Pro' },
+    { label: 'Enterprise', value: 'Enterprise' }
   ];
+
+  ngOnInit() {
+    this.carregarEmpresas();
+  }
+
+  carregarEmpresas() {
+    this.loading = true;
+    this.empresaService.listarEmpresas().subscribe({
+      next: (empresas) => {
+        this.empresas = empresas;
+        this.filteredEmpresas = [...empresas];
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar empresas.' });
+      }
+    });
+  }
 
   novaEmpresa() {
     this.isEditing = false;
-    this.empresaForm = { nome: '', plano: '', responsavel: '', cnpj: '', usuarios: 0, limiteUsuarios: 0 };
+    this.empresaForm = { nome: '', cnpj: '', planos: '', email_responsavel: '', telefone_responsavel: '' };
     this.displayDialog = true;
   }
 
@@ -86,30 +94,46 @@ export class EmpresaComponent {
   }
 
   salvarEmpresa() {
-    if (this.isEditing) {
-      const idx = this.empresas.findIndex(e => e.nome === this.empresaForm.nome);
-      if (idx > -1) this.empresas[idx] = { ...this.empresaForm };
-      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa editada com sucesso!' });
+    if (this.isEditing && this.empresaForm.id) {
+      this.empresaService.atualizarEmpresa(String(this.empresaForm.id), this.empresaForm).subscribe({
+        next: (empresa) => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa editada com sucesso!' });
+          this.carregarEmpresas();
+          this.displayDialog = false;
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao editar empresa.' });
+        }
+      });
     } else {
-      this.empresas.push({ ...this.empresaForm });
-      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa cadastrada com sucesso!' });
+      this.empresaService.criarEmpresa(this.empresaForm as Empresa).subscribe({
+        next: (empresa) => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa cadastrada com sucesso!' });
+          this.carregarEmpresas();
+          this.displayDialog = false;
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao cadastrar empresa.' });
+        }
+      });
     }
-    this.filteredEmpresas = [...this.empresas];
-    this.localStorageService.setItem('empresas', this.empresas);
-    this.displayDialog = false;
   }
 
   onPlanoChange() {
-    const planoSelecionado = this.planoOptions.find(plano => plano.value === this.empresaForm.plano);
-    if (planoSelecionado) {
-      this.empresaForm.limiteUsuarios = planoSelecionado.limite;
-    }
+    // Nenhuma lógica extra necessária, apenas atualiza o campo planos
   }
 
   confirmarExclusao(empresa: Empresa) {
-    this.empresas = this.empresas.filter(e => e !== empresa);
-    this.filteredEmpresas = [...this.empresas];
-    this.localStorageService.setItem('empresas', this.empresas);
+    if (!empresa.id) return;
+    this.empresaService.deletarEmpresa(String(empresa.id)).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa excluída com sucesso!' });
+        this.carregarEmpresas();
+      },
+      error: () => {
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir empresa.' });
+      }
+    });
   }
 
 

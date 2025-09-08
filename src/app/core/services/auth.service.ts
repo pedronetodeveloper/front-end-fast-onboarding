@@ -34,53 +34,29 @@ export class AuthService {
    * candidato: candidato@teste.com / candidato123@
    */
   login(email: string, senha: string): Observable<AuthUser> {
+    const url = 'https://yyzvaldhm1.execute-api.us-east-1.amazonaws.com/login';
+    const body = { email, password: senha };
     return new Observable<AuthUser>(observer => {
-      let user: AuthUser | null = null;
-      const emailNorm = (email || '').trim().toLowerCase();
-      const senhaNorm = (senha || '').trim();
-      if (emailNorm === 'admin@admin.com' && senhaNorm === 'admin123@') {
-        user = {
-          name: 'Administrador',
-          email: 'admin@admin.com',
-          role: 'admin',
-          token: 'mocked-token-admin'
-        };
-      } else if (emailNorm === 'rh@empresa.com' && senhaNorm === 'rh123@') {
-        user = {
-          name: 'Recursos Humanos',
-          email: 'rh@empresa.com',
-          role: 'rh',
-          token: 'mocked-token-rh'
-        };
-      } else if (emailNorm === 'candidato@teste.com' && senhaNorm === 'candidato123@') {
-        user = {
-          name: 'Candidato Teste',
-          email: 'candidato@teste.com',
-          role: 'candidato',
-          token: 'mocked-token-candidato'
-        };
-      } else {
-        // Verifica candidatos cadastrados no localStorage
-        const candidatos = JSON.parse(localStorage.getItem('candidatos') || '[]');
-        const candidato = candidatos.find((u: any) => u.email === emailNorm && u.senha === senhaNorm);
-        if (candidato) {
-          user = {
-            name: candidato.nome,
-            email: candidato.email,
-            role: 'candidato',
-            token: 'mocked-token-candidato'
+      this.http.post<any>(url, body).subscribe({
+        next: (response) => {
+          // response: { token, user: { id, email, role } }
+          const user: AuthUser = {
+            name: response.user.email, // ou pode ser response.user.id se quiser mostrar o id
+            email: response.user.email,
+            role: response.user.role,
+            token: response.token
           };
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', response.token);
+          this.isAuthenticatedSubject.next(true);
+          observer.next(user);
+          observer.complete();
+        },
+        error: (err) => {
+          this.isAuthenticatedSubject.next(false);
+          observer.error('Usuário ou senha inválidos.');
         }
-      }
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
-        this.isAuthenticatedSubject.next(true);
-        observer.next(user);
-        observer.complete();
-      } else {
-        this.isAuthenticatedSubject.next(false);
-        observer.error('Usuário ou senha inválidos.');
-      }
+      });
     });
   }
 
