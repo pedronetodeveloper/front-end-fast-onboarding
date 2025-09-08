@@ -18,10 +18,8 @@ import { SkeletonModule } from 'primeng/skeleton';
 // Services
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../core/services/local-storage.service';
-import { AuthService } from '../../core/services/auth.service'; // Add this import
-
-// Interfaces
-import { Usuario, CreateUsuarioRequest, UpdateUsuarioRequest } from '../../shared/interface/usuario.interface';
+import { AuthService } from '../../core/services/auth.service';
+import { CandidatoService } from '../../core/services/api/candidato.service';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -32,6 +30,19 @@ import { pageEnterAnimation } from '../../shared/animations';
 // Icon field
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
+
+export interface CandidatoApi {
+  id?: number | undefined;
+  nome: string;
+  email: string;
+  situacao: string;
+  estado: string;
+  cpf?: string;
+  vaga: string;
+  telefone?: string | null;
+  sexo: string;
+  empresa?: string;
+}
 
 @Component({
   selector: 'app-usuario',
@@ -59,16 +70,17 @@ import { InputIconModule } from 'primeng/inputicon';
   styleUrl: './candidatos.component.scss',
   animations: [pageEnterAnimation]
 })
-export class UsuarioComponent implements OnInit {
+
+export class CandidatosComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
-  private localStorageService = inject(LocalStorageService);
-  private authService = inject(AuthService); // Inject AuthService
+  private candidatoService = inject(CandidatoService);
+  private authService = inject(AuthService);
 
   // Data
-  usuarios: Usuario[] = [];
-  filteredUsuarios: Usuario[] = [];
-  selectedUsuario: Usuario | null = null;
+  candidatos: CandidatoApi[] = [];
+  filteredCandidatos: CandidatoApi[] = [];
+  selectedCandidato: CandidatoApi | null = null;
   loading = false;
 
   // Search and filter
@@ -82,74 +94,19 @@ export class UsuarioComponent implements OnInit {
   isEditing = false;
 
   // Form data
-  usuarioForm: CreateUsuarioRequest | UpdateUsuarioRequest = {
+  candidatoForm: CandidatoApi = {
     nome: '',
     email: '',
-    matricula: '',
-    idiomaPreferencia: 'pt'
+    situacao: '',
+    estado: '',
+    vaga: '',
+    telefone: '',
+    sexo: '',
+    empresa: ''
   };
 
-  // Dropdown options
-  idiomaOptions = [
-    { label: 'Português', value: 'pt' },
-    { label: 'English', value: 'en' },
-    { label: 'Español', value: 'es' }
-  ];
-
-  // Adiciona mock de documentos por usuário
-  // documentosPorUsuario removido, agora usa campo documentos do candidato
-  showDocumentosDialog = false;
-  documentosSelecionados: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }[] = [];
-    candidatoSelecionado: Usuario | null = null;
-
-  get isCurrentUserHR(): boolean {
-    // Assuming authService.getCurrentUserRole() returns the role of the logged-in user
-    return this.authService.getRole() === 'rh';
-  }
-
-  /**
-   * Aprova um documento de um candidato.
-   * @param candidato O candidato cujo documento será aprovado.
-   * @param documento O documento a ser aprovado.
-   */
-  aprovarDocumento(candidato: Usuario, documento: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }): void {
-    if (!candidato || !candidato.documentos) {
-      return;
-    }
-
-    const documentoIndex = candidato.documentos.findIndex(d => d.nome === documento.nome && d.tipo === documento.tipo);
-
-    if (documentoIndex > -1) {
-      candidato.documentos[documentoIndex].status = 'valido';
-      this.localStorageService.updateItem('candidatos', candidato as Usuario & { id: string });
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: `Documento '${documento.nome}' do candidato '${candidato.nome}' aprovado com sucesso.`
-      });
-      // Refresh the displayed documents in the dialog
-      this.documentosSelecionados = [...candidato.documentos];
-      this.carregarUsuarios(); // Refresh the main list as well
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: `Documento '${documento.nome}' não encontrado para o candidato '${candidato.nome}'.`
-      });
-    }
-  }
-
   ngOnInit(): void {
-    this.carregarUsuarios();
-  }
-
-  /**
-   * Carregar lista de usuários
-   */
-  carregarUsuarios(): void {
-    this.usuarios = this.localStorageService.getItem<Usuario>('candidatos');
-    this.filteredUsuarios = [...this.usuarios];
-    this.loading = false;
+    this.carregarCandidatos();
   }
 
   abrirModal():void{
@@ -157,39 +114,69 @@ export class UsuarioComponent implements OnInit {
   }
 
   /**
-   * Abrir dialog para criar novo usuário
+   * Carregar lista de candidatos
    */
-  novoUsuario(): void {
-    this.usuarioForm = {
+  carregarCandidatos(): void {
+    this.loading = true;
+    this.candidatoService.listarCandidatos().subscribe({
+      next: (candidatos) => {
+        this.candidatos = candidatos;
+        this.filteredCandidatos = [...candidatos];
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao carregar candidatos.' });
+      }
+    });
+  }
+
+  /**
+   * Abrir dialog para criar novo candidato
+   */
+  novoCandidato(): void {
+    this.candidatoForm = {
       nome: '',
       email: '',
-      matricula: '',
-      idiomaPreferencia: 'pt'
+      situacao: '',
+      estado: '',
+      vaga: '',
+      telefone: '',
+      sexo: '',
+      empresa: ''
     };
     this.isEditing = false;
-    this.displayDialog = true;
+    this.abrirDialogCandidato();
   }
 
   /**
-   * Abrir dialog para editar usuário
+   * Abrir dialog para editar candidato
    */
-  editarUsuario(usuario: Usuario): void {
-    this.usuarioForm = {
-      nome: usuario.nome || '',
-      email: usuario.email || '',
-      matricula: usuario.matricula || '',
-      idiomaPreferencia: usuario.idiomaPreferencia || 'pt'
+  editarCandidato(candidato: CandidatoApi): void {
+    this.candidatoForm = {
+      nome: candidato.nome || '',
+      email: candidato.email || '',
+      situacao: candidato.situacao || '',
+      estado: candidato.estado || '',
+      vaga: candidato.vaga || '',
+      telefone: candidato.telefone || '',
+      sexo: candidato.sexo || '',
+      empresa: candidato.empresa || ''
     };
-    this.selectedUsuario = usuario;
+    this.selectedCandidato = candidato;
     this.isEditing = true;
+    this.abrirDialogCandidato();
+  }
+
+  abrirDialogCandidato(): void {
     this.displayDialog = true;
   }
 
   /**
-   * Salvar usuário (criar ou atualizar)
+   * Salvar candidato (criar ou atualizar)
    */
-  salvarUsuario(): void {
-    if (!this.usuarioForm.nome || !this.usuarioForm.email) {
+  salvarCandidato(): void {
+    if (!this.candidatoForm.nome || !this.candidatoForm.email) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Atenção',
@@ -198,69 +185,94 @@ export class UsuarioComponent implements OnInit {
       return;
     }
     this.loading = true;
-    if (this.isEditing && this.selectedUsuario) {
-      // Atualizar usuário local
-      const usuarioAtualizado = {
-        ...this.selectedUsuario,
-        ...this.usuarioForm,
-        id: this.selectedUsuario.id || this.selectedUsuario.email || this.usuarioForm.email
-      } as Usuario & { id: string };
-      this.localStorageService.updateItem('candidatos', usuarioAtualizado);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Candidato atualizado com sucesso'
+    if (this.isEditing && this.selectedCandidato) {
+      // Atualizar candidato via service
+      const candidatoAtualizado = {
+        ...this.selectedCandidato,
+        ...this.candidatoForm,
+        id: this.selectedCandidato.id
+      } as CandidatoApi & { id: number };
+      this.candidatoService.editarCandidato(candidatoAtualizado).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Candidato atualizado com sucesso' });
+          this.fecharDialog();
+          this.carregarCandidatos();
+          this.loading = false;
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao atualizar candidato.' });
+          this.loading = false;
+        }
       });
-      this.fecharDialog();
-      this.carregarUsuarios();
-      this.loading = false;
     } else {
-      // Criar novo usuário local
-      // Criar novo usuário local
-      const novoUsuario = {
-        ...this.usuarioForm,
-        id: this.usuarioForm.email,
-        senha: 'candidato123',
-        role: 'candidato' // Assign default role
-      } as Usuario & { id: string };
-      this.localStorageService.addItem('candidatos', novoUsuario);
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Candidato criado com sucesso'
+      // Criar novo candidato via service
+      const empresa = this.authService.getEmpresa();
+      const novoCandidato = {
+        ...this.candidatoForm,
+        empresa: empresa || ''
+      };
+      this.candidatoService.salvarCandidato(novoCandidato).subscribe({
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Candidato criado com sucesso' });
+          this.fecharDialog();
+          this.carregarCandidatos();
+          this.loading = false;
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar candidato.' });
+          this.loading = false;
+        }
       });
-      this.fecharDialog();
-      this.carregarUsuarios();
-      this.loading = false;
     }
   }
 
   /**
-   * Confirmar exclusão de usuário
+   * Confirmar exclusão de candidato
    */
-  confirmarExclusao(usuario: Usuario): void {
+  confirmarExclusao(candidato: CandidatoApi): void {
     this.confirmationService.confirm({
-      message: `Tem certeza que deseja excluir o candidato "${usuario.nome}"?`,
+      message: `Tem certeza que deseja excluir o candidato "${candidato.nome}"?`,
       header: 'Confirmar Exclusão',
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
       accept: () => {
-        this.excluirUsuario(usuario);
+        this.excluirCandidato(candidato);
       }
     });
   }
 
   /**
-   * Excluir usuário
+   * Excluir candidato
    */
-  private excluirUsuario(usuario: Usuario): void {
-    this.localStorageService.removeItem('candidatos', usuario.id || usuario.email);
-    this.carregarUsuarios();
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Sucesso',
-      detail: 'Candidato excluído com sucesso'
+  private excluirCandidato(candidato: CandidatoApi): void {
+    if (!candidato.id) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'ID do candidato não encontrado.'
+      });
+      return;
+    }
+    this.loading = true;
+    this.candidatoService.deletarCandidato(candidato.id).subscribe({
+      next: () => {
+        this.carregarCandidatos();
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Candidato excluído com sucesso'
+        });
+        this.loading = false;
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao excluir candidato.'
+        });
+        this.loading = false;
+      }
     });
   }
 
@@ -269,37 +281,32 @@ export class UsuarioComponent implements OnInit {
    */
   fecharDialog(): void {
     this.displayDialog = false;
-    this.selectedUsuario = null;
-    this.usuarioForm = {
+    this.selectedCandidato = null;
+    this.candidatoForm = {
       nome: '',
       email: '',
-      matricula: '',
-      idiomaPreferencia: 'pt'
+      situacao: '',
+      estado: '',
+      vaga: '',
+      telefone: '',
+      sexo: '',
+      empresa: ''
     };
   }
 
   /**
-   * Obter tag de idioma
-   */
-  getIdiomaTag(idioma: string): string {
-    const opcao = this.idiomaOptions.find(opt => opt.value === idioma);
-    return opcao?.label || idioma;
-  }
-
-  /**
-   * Filtrar usuários com base no termo de busca
+   * Filtrar candidatos com base no termo de busca
    */
   onSearch(): void {
     if (!this.searchTerm.trim()) {
-      this.filteredUsuarios = [...this.usuarios];
+      this.filteredCandidatos = [...this.candidatos];
       return;
     }
-
     const searchTermLower = this.searchTerm.toLowerCase().trim();
-    this.filteredUsuarios = this.usuarios.filter(usuario => 
-      (usuario.nome?.toLowerCase().includes(searchTermLower)) ||
-      (usuario.email?.toLowerCase().includes(searchTermLower)) ||
-      (usuario.matricula?.toLowerCase().includes(searchTermLower))
+    this.filteredCandidatos = this.candidatos.filter(candidato =>
+      (candidato.nome?.toLowerCase().includes(searchTermLower)) ||
+      (candidato.email?.toLowerCase().includes(searchTermLower)) ||
+      (candidato.empresa?.toLowerCase().includes(searchTermLower))
     );
   }
 
@@ -308,7 +315,7 @@ export class UsuarioComponent implements OnInit {
    */
   clearSearch(): void {
     this.searchTerm = '';
-    this.filteredUsuarios = [...this.usuarios];
+    this.filteredCandidatos = [...this.candidatos];
   }
 
   /**
@@ -320,20 +327,9 @@ export class UsuarioComponent implements OnInit {
   }
 
   /**
-   * Abrir dialog de documentos do candidato
+   * Verifica se usuário atual é RH
    */
-  abrirDocumentos(usuario: Usuario) {
-    this.candidatoSelecionado = usuario;
-    this.documentosSelecionados = usuario.documentos || [];
-    this.showDocumentosDialog = true;
-  }
-
-  /**
-   * Fechar dialog de documentos
-   */
-  fecharDocumentosDialog() {
-    this.showDocumentosDialog = false;
-    this.documentosSelecionados = [];
-    this.candidatoSelecionado = null;
+  get isCurrentUserHR(): boolean {
+    return this.authService.getRole() === 'rh';
   }
 }

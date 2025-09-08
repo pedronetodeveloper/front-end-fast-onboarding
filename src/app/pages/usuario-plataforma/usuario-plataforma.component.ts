@@ -68,6 +68,18 @@ export interface Usuario {
   // animations: [pageEnterAnimation]
 })
 export class UsuarioPlataformComponent implements OnInit {
+  /**
+   * Retorna o nome amigável do perfil
+   */
+  getRoleLabel(role: string): string {
+    switch (role) {
+      case 'admin': return 'Administrador';
+      case 'user': return 'Responsável';
+      case 'candidate': return 'Candidato';
+      case 'rh': return 'RH';
+      default: return role;
+    }
+  }
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
   private usuarioService = inject(UsuarioService);

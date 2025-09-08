@@ -13,7 +13,7 @@
           severity="success" 
           [label]="'usuario.new' | translate"
           icon="pi pi-plus" 
-          (onClick)="novoUsuario()">
+          (onClick)="novoCandidato()">
         </p-button>
         <p-button
           class="ml-2"
@@ -36,7 +36,7 @@
     </p-toolbar>
 
     <p-table 
-      [value]="filteredUsuarios" 
+      [value]="filteredCandidatos" 
       [loading]="loading"
       [scrollable]="true"
       scrollHeight="400px"
@@ -48,72 +48,61 @@
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="nome">
-            {{ 'usuario.name' | translate }}
+            Nome
             <p-sortIcon field="nome"></p-sortIcon>
           </th>
           <th pSortableColumn="email">
-            {{ 'usuario.email' | translate }}
+            Email
             <p-sortIcon field="email"></p-sortIcon>
           </th>
-          <th pSortableColumn="matricula">
-            {{ 'usuario.matricula' | translate }}
-            <p-sortIcon field="matricula"></p-sortIcon>
+          <th pSortableColumn="estado">
+            Estado
+            <p-sortIcon field="estado"></p-sortIcon>
           </th>
-          <th pSortableColumn="idiomaPreferencia">
-            {{ 'usuario.language' | translate }}
-            <p-sortIcon field="idiomaPreferencia"></p-sortIcon>
+          <th pSortableColumn="vaga">
+            Vaga
+            <p-sortIcon field="vaga"></p-sortIcon>
           </th>
-          <th style="width: 200px">{{ 'common.actions' | translate }}</th>
+          <th pSortableColumn="situacao">
+            Situação
+            <p-sortIcon field="situacao"></p-sortIcon>
+          </th>
+          <th style="width: 200px">Ações</th>
         </tr>
       </ng-template>
       
-      <ng-template pTemplate="body" let-usuario>
+      <ng-template pTemplate="body" let-candidato>
         <tr>
           <td>
             <div class="user-info">
               <i class="pi pi-user user-icon"></i>
-              <span class="user-name">{{ usuario.nome }}</span>
+              <span class="user-name">{{ candidato.nome }}</span>
             </div>
           </td>
-          <td>{{ usuario.email }}</td>
+          <td>{{ candidato.email }}</td>
+          <td>{{ candidato.estado }}</td>
+          <td>{{ candidato.vaga }}</td>
           <td>
             <p-tag 
-              *ngIf="usuario.matricula; else noMatricula"
-              [value]="usuario.matricula"
-              severity="info">
-            </p-tag>
-            <ng-template #noMatricula>
-              <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
-            </ng-template>
-          </td>
-          <td>
-            <p-tag 
-              [value]="getIdiomaTag(usuario.idiomaPreferencia || 'pt')"
-              severity="secondary">
+              [value]="candidato.situacao || 'Pendente'"
+              severity="{{ (candidato.situacao === 'Pendente' || !candidato.situacao) ? 'warning' : (candidato.situacao === 'Processo Finalizado' ? 'success' : 'info') }}">
             </p-tag>
           </td>
           <td>
             <div class="action-buttons">
               <p-button 
-                icon="pi pi-eye" 
-                severity="info" 
-                size="small"
-                [title]="'Visualizar documentos'"
-                (onClick)="abrirDocumentos(usuario)">
-              </p-button>
-              <p-button 
                 icon="pi pi-pencil" 
                 severity="help" 
                 size="small"
-                [title]="'common.edit' | translate"
-                (onClick)="editarUsuario(usuario)">
+                title="Editar"
+                (onClick)="editarCandidato(candidato)">
               </p-button>
               <p-button 
                 icon="pi pi-trash" 
                 severity="danger" 
                 size="small"
-                [title]="'common.delete' | translate"
-                (onClick)="confirmarExclusao(usuario)">
+                title="Excluir"
+                (onClick)="confirmarExclusao(candidato)">
               </p-button>
             </div>
           </td>
@@ -178,85 +167,141 @@
     </p-table>
   </p-card>
 
-  <!-- Dialog para criar/editar usuário -->
+  <!-- Dialog para criar/editar candidato -->
   <p-dialog 
-    [header]="isEditing ? ('usuario.edit' | translate) : ('usuario.new' | translate)"
+    [header]="isEditing ? 'Editar Candidato' : 'Novo Candidato'"
     [(visible)]="displayDialog" 
     [modal]="true" 
-    [style]="{width: '450px'}"
+    [style]="{width: '450px', minHeight: '520px'}"
     [draggable]="false"
     [resizable]="false">
-    
     <div class="dialog-content">
-      <div class="field">
-        <label for="nome">{{ 'usuario.name' | translate }} *</label>
+      <div style="display: flex; gap: 1rem;">
+        <div class="field" style="flex:1;">
+          <label for="nome">Nome *</label>
+          <input 
+            id="nome"
+            type="text" 
+            pInputText 
+            [(ngModel)]="candidatoForm.nome"
+            class="w-full"
+            placeholder="Nome" />
+        </div>
+        <div *ngIf="!isEditing" class="field" style="flex:1;">
+          <label for="cpf">CPF *</label>
+          <input 
+            id="cpf"
+            type="text" 
+            pInputText 
+            [(ngModel)]="candidatoForm.cpf"
+            class="w-full"
+            placeholder="Somente números" />
+        </div>
+      </div>
+        <div *ngIf="isEditing" class="field">
+          <label for="situacao">Situação</label>
+          <p-dropdown 
+            id="situacao"
+            [options]="[
+              {label: 'Pendente', value: 'Pendente'},
+              {label: 'Processo Finalizado', value: 'Processo Finalizado'}
+            ]"
+            appendTo="body"
+            [(ngModel)]="candidatoForm.situacao"
+            placeholder="Selecione a situação"
+            class="w-full">
+          </p-dropdown>
+        </div>
+      <div class="field" >
+        <label for="vaga">Vaga</label>
         <input 
-          id="nome"
+          id="vaga"
           type="text" 
           pInputText 
-          [(ngModel)]="usuarioForm.nome"
+          [(ngModel)]="candidatoForm.vaga"
           class="w-full"
-          [placeholder]="'usuario.namePlaceholder' | translate" />
+          placeholder="Vaga" />
       </div>
-
-      <div class="field">
-        <label for="email">{{ 'usuario.email' | translate }} *</label>
-        <input 
-          id="email"
-          type="email" 
-          pInputText 
-          [(ngModel)]="usuarioForm.email"
-          class="w-full"
-          [placeholder]="'usuario.emailPlaceholder' | translate" />
+      <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <div class="field" style="flex:1;">
+          <label for="email">Email *</label>
+          <input 
+            id="email"
+            type="email" 
+            pInputText 
+            [(ngModel)]="candidatoForm.email"
+            class="w-full"
+            placeholder="Email" />
+        </div>
+        <div class="field" style="flex:1;">
+          <label for="telefone">Telefone</label>
+          <input 
+            id="telefone"
+            type="text" 
+            pInputText 
+            [(ngModel)]="candidatoForm.telefone"
+            class="w-full"
+            placeholder="Somente números" />
+        </div>
       </div>
-
-      <div class="field">
-        <label for="matricula">{{ 'usuario.matricula' | translate }}</label>
-        <input 
-          id="matricula"
-          type="text" 
-          pInputText 
-          [(ngModel)]="usuarioForm.matricula"
-          class="w-full"
-          maxlength="6"
-          [placeholder]="'usuario.matriculaPlaceholder' | translate" />
-      </div>
-
-      <div class="field">
-        <label for="idioma">{{ 'usuario.language' | translate }}</label>
-        <p-dropdown 
-          id="idioma"
-          [(ngModel)]="usuarioForm.idiomaPreferencia"
-          [options]="idiomaOptions"
-          optionLabel="label"
-          optionValue="value"
-          appendTo="body"
-          class="w-full"
-          [placeholder]="'usuario.languagePlaceholder' | translate">
-        </p-dropdown>
+      <div style="display: flex; gap: 1rem;">
+        <div class="field" style="flex:1;">
+          <label for="sexo">Sexo</label>
+          <p-dropdown 
+            id="sexo"
+            [options]="[
+              {label: 'Masculino', value: 'Masculino'},
+              {label: 'Feminino', value: 'Feminino'},
+              {label: 'Outro', value: 'Outro'}
+            ]"
+            appendTo="body"
+            [(ngModel)]="candidatoForm.sexo"
+            placeholder="Selecione o sexo"
+            class="w-full">
+          </p-dropdown>
+        </div>
+        <div class="field" style="flex:1;">
+          <label for="estado">Estado</label>
+          <p-dropdown 
+            id="estado"
+            appendTo="body"
+            [options]="[
+              {label: 'AC', value: 'AC'}, {label: 'AL', value: 'AL'}, {label: 'AP', value: 'AP'}, {label: 'AM', value: 'AM'},
+              {label: 'BA', value: 'BA'}, {label: 'CE', value: 'CE'}, {label: 'DF', value: 'DF'}, {label: 'ES', value: 'ES'},
+              {label: 'GO', value: 'GO'}, {label: 'MA', value: 'MA'}, {label: 'MT', value: 'MT'}, {label: 'MS', value: 'MS'},
+              {label: 'MG', value: 'MG'}, {label: 'PA', value: 'PA'}, {label: 'PB', value: 'PB'}, {label: 'PR', value: 'PR'},
+              {label: 'PE', value: 'PE'}, {label: 'PI', value: 'PI'}, {label: 'RJ', value: 'RJ'}, {label: 'RN', value: 'RN'},
+              {label: 'RS', value: 'RS'}, {label: 'RO', value: 'RO'}, {label: 'RR', value: 'RR'}, {label: 'SC', value: 'SC'},
+              {label: 'SP', value: 'SP'}, {label: 'SE', value: 'SE'}, {label: 'TO', value: 'TO'}
+            ]"
+            [(ngModel)]="candidatoForm.estado"
+            placeholder="Selecione o estado"
+            class="w-full"
+            filter="true">
+          </p-dropdown>
+        </div>
       </div>
     </div>
-
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
         <p-button 
-          [label]="'common.cancel' | translate"
+          label="Cancelar"
           icon="pi pi-times" 
           variant="outlined"
           severity="secondary"
           (onClick)="fecharDialog()">
         </p-button>
         <p-button 
-          [label]="'common.save' | translate"
+          label="Salvar"
           icon="pi pi-check" 
-          (onClick)="salvarUsuario()"
+          (onClick)="salvarCandidato()"
           [loading]="loading">
         </p-button>
       </div>
     </ng-template>
   </p-dialog>
 
-  <!-- Dialog de Documentos do Candidato -->
+  <!-- Dialog de Documentos do Candidato
   <p-dialog 
     header="Acompanhamento de Documentos" 
     [(visible)]="showDocumentosDialog" 
@@ -307,7 +352,7 @@
         </p-tag>
       </div>
     </div>
-  </p-dialog>
+  </p-dialog> -->
 
   <!-- Toast para mensagens -->
   <p-toast></p-toast>

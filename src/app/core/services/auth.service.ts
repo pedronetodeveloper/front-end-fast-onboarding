@@ -9,6 +9,7 @@ export interface AuthUser {
   email: string;
   role: 'admin' | 'rh' | 'candidato';
   token: string;
+  empresa: string;
 }
 
 @Injectable({
@@ -44,7 +45,8 @@ export class AuthService {
             name: response.user.email, // ou pode ser response.user.id se quiser mostrar o id
             email: response.user.email,
             role: response.user.role,
-            token: response.token
+            token: response.token,
+            empresa: response.user.empresa
           };
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('token', response.token);
@@ -77,11 +79,19 @@ export class AuthService {
     return user ? JSON.parse(user) : null;
   }
 
+
   /**
    * Obter o papel (role) do usuário
    */
   getRole(): string | null {
     return this.getUser()?.role || null;
+  }
+
+  /**
+   * Obter a empresa do usuário logado
+   */
+  getEmpresa(): string | null {
+    return this.getUser()?.empresa || null;
   }
 
   /**

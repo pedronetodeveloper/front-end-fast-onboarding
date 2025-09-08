@@ -24,7 +24,7 @@ export const routes: Routes = [
   },
   {
     path: 'candidatos',
-    loadComponent: () => import('./pages/candidatos/candidatos.component').then(m => m.UsuarioComponent),
+    loadComponent: () => import('./pages/candidatos/candidatos.component').then(m => m.CandidatosComponent),
     canActivate: [authGuard]
   },
   {

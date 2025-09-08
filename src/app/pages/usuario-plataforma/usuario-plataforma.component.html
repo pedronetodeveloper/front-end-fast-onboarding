@@ -59,6 +59,10 @@
             {{ 'usuario-plataform.empresa' | translate }}
             <p-sortIcon field="empresa"></p-sortIcon>
           </th>
+          <th pSortableColumn="role">
+            {{ 'usuario-plataform.role' | translate }}
+            <p-sortIcon field="role"></p-sortIcon>
+          </th>
           <th style="width: 200px">{{ 'common.actions' | translate }}</th>
         </tr>
       </ng-template>
@@ -84,24 +88,27 @@
               <span class="text-muted">{{ 'common.notInformed' | translate }}</span>
             </ng-template>
           </td>
-          <td>
-            <div class="action-buttons">
-              <p-button 
-                icon="pi pi-pencil" 
-                severity="help" 
-                size="small"
-                [title]="'common.edit' | translate"
-                (onClick)="editarUsuario(usuario)">
-              </p-button>
-              <p-button 
-                icon="pi pi-trash" 
-                severity="danger" 
-                size="small"
-                [title]="'common.delete' | translate"
-                (onClick)="confirmarExclusao(usuario)">
-              </p-button>
-            </div>
-          </td>
+            <td>
+              <p-tag [value]="getRoleLabel(usuario.role)" severity="info"></p-tag>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <p-button 
+                  icon="pi pi-pencil" 
+                  severity="help" 
+                  size="small"
+                  [title]="'common.edit' | translate"
+                  (onClick)="editarUsuario(usuario)">
+                </p-button>
+                <p-button 
+                  icon="pi pi-trash" 
+                  severity="danger" 
+                  size="small"
+                  [title]="'common.delete' | translate"
+                  (onClick)="confirmarExclusao(usuario)">
+                </p-button>
+              </div>
+            </td>
         </tr>
       </ng-template>
 
