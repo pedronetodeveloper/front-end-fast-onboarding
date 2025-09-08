@@ -278,57 +278,56 @@
 
   <!-- Dialog de Documentos do Candidato -->
   <p-dialog 
-    header="Acompanhamento de Documentos" 
-    [(visible)]="showDocumentosDialog" 
-    [modal]="true" 
-    [style]="{width: '650px', maxWidth: '98vw'}"
-    [draggable]="false" [resizable]="false">
-    <div *ngIf="candidatoSelecionado">
-      <div class="doc-list-section" style="padding: 1rem 0;">
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
-          <i class="pi pi-user" style="font-size: 1.5rem; color: var(--primary-color);"></i>
-          <span class="doc-list-title" style="font-size: 1.1rem; font-weight: 500;">Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b>:</span>
+
+      header=""
+      [(visible)]="showDocumentosDialog"
+      [modal]="true"
+      [style]="{width: '650px', maxWidth: '98vw'}"
+      [draggable]="false" [resizable]="false"
+      contentStyle="padding:0;">
+      <div *ngIf="candidatoSelecionado" class="doc-modal-content">
+        <div class="doc-modal-header">
+          <i class="pi pi-user"></i>
+          <span>Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b></span>
         </div>
-        <ul class="doc-list" style="list-style: none; padding: 0; margin: 0;">
-          <li *ngFor="let doc of documentosSelecionados" style="margin-bottom: 1rem;">
-            <div class="doc-item-content" style="display: flex; align-items: center; gap: 1rem; background: var(--surface-b); border-radius: 8px; padding: 0.75rem 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
-              <i class="pi pi-file" style="font-size: 1.2rem; color: var(--primary-color);"></i>
-              <span class="doc-name" style="font-weight: 500; min-width: 50px;"><strong>Tipo: </strong>{{ doc.tipo_documento }}</span>
-              <span class="doc-name" style="font-weight: 500; min-width: 50px;"><strong>Documento: </strong>{{ doc.nome_documento }}</span>
-              <p-tag 
-                [value]="
-                  doc.status === 'valido' ? 'Válido' : 
-                  (doc.status === 'invalido' ? 'Inválido' : 
-                  (doc.status === 'analisando' ? 'Analisando' : 'Pendente'))
-                " 
-                [severity]="
-                  doc.status === 'valido' ? 'success' : 
-                  (doc.status === 'invalido' ? 'danger' : 
-                  (doc.status === 'analisando' ? 'info' : 'warning'))
-                "
-                class="doc-status-tag"
-                [ngStyle]="{ 'min-width': '90px', 'text-align': 'center' }">
-              </p-tag>
-              <p-button
-                *ngIf="isCurrentUserHR && doc.status !== 'valido'"
-                icon="pi pi-check"
-                label="Aprovar"
-                severity="success"
-                size="small"
-                (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
-                [ngStyle]="{ 'margin-left': 'auto' }"
-                class="ml-2">
-              </p-button>
-            </div>
-          </li>
-          <li *ngIf="documentosSelecionados.length === 0" style="text-align: center; color: var(--text-color-secondary); padding: 2rem 0;">
-            <i class="pi pi-folder-open" style="font-size: 2rem; color: var(--surface-d);"></i>
-            <div>Nenhum documento enviado.</div>
-          </li>
-        </ul>
+        <div class="doc-list-section">
+          <ul class="doc-list">
+            <li *ngFor="let doc of documentosSelecionados" class="doc-card">
+              <div class="doc-card-content">
+                <div class="doc-card-left">
+                  <i class="pi pi-file"></i>
+                  <div>
+                    <div class="doc-type"><strong>Tipo:</strong> {{ doc.tipo_documento }}</div>
+                    <div class="doc-name"><strong>Documento:</strong> {{ doc.nome_documento }}</div>
+                  </div>
+                </div>
+                <div class="doc-card-right">
+                  <span class="doc-status-label" style="font-weight: 500; margin-right: 0.5rem;">Status:</span>
+                  <p-tag
+                    [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : (doc.status === 'analisando' ? 'Analisando' : 'Pendente'))"
+                    [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : (doc.status === 'analisando' ? 'info' : 'warning'))"
+                    class="doc-status-tag">
+                  </p-tag>
+                  <p-button
+                    *ngIf="isCurrentUserHR && doc.status !== 'valido'"
+                    icon="pi pi-check"
+                    label="Aprovar"
+                    severity="success"
+                    size="small"
+                    (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
+                    class="ml-2 doc-approve-btn">
+                  </p-button>
+                </div>
+              </div>
+            </li>
+            <li *ngIf="documentosSelecionados.length === 0" class="doc-empty-state">
+              <i class="pi pi-folder-open"></i>
+              <div>Nenhum documento enviado.</div>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </p-dialog>
+    </p-dialog>
 
   <p-dialog 
     [header]="('usuario.info' | translate)"
