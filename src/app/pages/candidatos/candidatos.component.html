@@ -55,7 +55,8 @@
           <td>
             <p-tag 
               [value]="candidato.situacao || 'Pendente'"
-              severity="{{ (candidato.situacao === 'Pendente' || !candidato.situacao) ? 'warning' : (candidato.situacao === 'Processo Finalizado' ? 'success' : 'info') }}">
+              [severity]="candidato.situacao === 'Processo Finalizado' ? 'success' : (candidato.situacao === 'Pendente' || !candidato.situacao ? 'warning' : 'info')"
+              [ngClass]="(candidato.situacao === 'Pendente' || !candidato.situacao) ? 'tag-pendente' : ''">
             </p-tag>
           </td>
           <td>
