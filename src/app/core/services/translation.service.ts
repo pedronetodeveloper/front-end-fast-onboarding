@@ -91,7 +91,8 @@ export class TranslationService {
             "project.name": "DocFlow",
             "project.description": "Impulsionando a Transformação Digital no RH.",
             "project.description2": "Otimizando o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
-
+        "definirSenha.title": "Definir Senha",
+        "definirSenha.description": "Por favor, defina sua nova senha.",
             // Navigation
             "nav.menu": "Menu",
             "nav.observability": "Observabilidade",

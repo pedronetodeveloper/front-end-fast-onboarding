@@ -7,8 +7,8 @@
 		<!-- Card Principal de Definir Senha -->
 		<div class="auth-card">
 			<div class="auth-header">
-				<div class="brand-section">
-					<div class="logo-container">
+				<div class="brand-section" style="display: flex; flex-direction: column; align-items: center;">
+					<div class="logo-container" style="display: flex; justify-content: center; width: 100%;">
 						<img src="assets/logo1.5.png" alt="Logo DocFlow" class="brand-logo">
 					</div>
 					<p class="brand-subtitle">{{ 'project.description' | translate }}</p>
@@ -17,8 +17,8 @@
 			<div class="auth-divider"></div>
 			<div class="auth-content">
 				<div class="welcome-section">
-					<h5 class="welcome-title">{{ 'definirSenha.title' | translate }}</h5>
-					<p class="welcome-description">{{ 'definirSenha.description' | translate }}</p>
+					<h5 class="welcome-title" style="margin-bottom: 0.2rem;">{{ 'definirSenha.title' | translate }}</h5>
+					<p class="welcome-description" style="margin-bottom: 0.8rem;">{{ 'definirSenha.description' | translate }}</p>
 				</div>
 				<form (ngSubmit)="definirSenha()" autocomplete="off">
 					<div class="p-fluid">

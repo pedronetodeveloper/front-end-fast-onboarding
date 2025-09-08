@@ -60,6 +60,8 @@ import { InputIconModule } from 'primeng/inputicon';
 })
 export class ObservabilityComponent implements OnInit {
 
+  totalHoras: number = 858;
+
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
   displayDialogInfo = false;
@@ -89,8 +91,9 @@ export class ObservabilityComponent implements OnInit {
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.initChart();
-    this.calculateTimeSaved();
+  this.initChart();
+  this.calculateTimeSaved();
+  this.totalHoras = 0;
   }
 
   calculateTimeSaved() {
@@ -106,6 +109,8 @@ export class ObservabilityComponent implements OnInit {
         unit: 'min'
       };
     });
+    // Soma total das horas economizadas
+    this.totalHoras = this.economiaDeTempoDocs.reduce((acc, doc) => acc + doc.value, 0) / 60;
   }
 
   initChart() {

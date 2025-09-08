@@ -18,6 +18,11 @@ export const routes: Routes = [
     canActivate: [noAuthGuard]
   },
   {
+    path: 'definir-senha',
+    loadComponent: () => import('./pages/definir-senha/definir-senha.component').then(m => m.DefinirSenhaComponent),
+    canActivate: [noAuthGuard]
+  },
+  {
     path: 'home',
     loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
     canActivate: [homeGuard]

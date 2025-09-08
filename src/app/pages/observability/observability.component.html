@@ -1,24 +1,24 @@
 <div class="observability-container" [@pageAnimation]>
-
   <p-card>
     <ng-template pTemplate="content">
-      <div class="flex flex-row justify-center gap-4">
-        <div>
-          <h2 class="text-lg font-semibold mb-2">{{ 'observability.timeSaved' | translate }}</h2>
-          <p class="text-sm text-gray-600 mb-4">{{ 'observability.timeSavedCardDescription' | translate }}</p>
-          <div class="flex flex-wrap gap-6 justify-center py-4">
-            <p-card *ngFor="let doc of economiaDeTempoDocs" class="kpi-card flex-shrink-0 w-56 h-40 rounded-2xl shadow-md" styleClass="border border-surface">
-              <div class="kpi-content">
-                <span class="kpi-icon-wrapper">
-                  <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
-                </span>
-                <div class="kpi-details">
-                  <span class="kpi-label">{{ doc.label | translate }}</span>
-                  <span class="kpi-value">{{ doc.value | number }} {{ 'common.minutes' | translate }}</span>
-                </div>
+      <div>
+        <div class="main-kpi-header">
+          <h2>Ganho Real em Horas de Trabalho</h2>
+          <p>Descubra quanto tempo você <span style="color:#9c27b0;font-weight:bold">ganhou</span> usando nossa plataforma.</p>
+          <div class="total-horas">Total de horas economizadas pelo RH: <span style="color:#222;font-size:1.5rem">858,9 horas ou 107,4 dias úteis.</span> </div>
+        </div>
+        <div class="kpi-row">
+          <ng-container *ngFor="let doc of economiaDeTempoDocs">
+            <p-card class="kpi-card">
+              <div class="kpi-icon-wrapper">
+                <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
+              </div>
+              <div class="kpi-details">
+                <span class="kpi-label">{{ doc.label | translate }}</span>
+                <span class="kpi-value">{{ (doc.value / 60) | number:'1.1-1' }} <span style="font-size:1rem;font-weight:500">{{ 'common.hours' | translate }}</span></span>
               </div>
             </p-card>
-          </div>
+          </ng-container>
         </div>
       </div>
     </ng-template>

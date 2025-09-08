@@ -109,9 +109,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private updateNavigationVisibility(url: string): void {
-    // Mostra navegação em todas as rotas, mesmo sem autenticação
-    const isLoginRoute = url === '/login' || url.startsWith('/login');
-    this.showNavigation = !isLoginRoute;
+    // Oculta navegação em /login e /definir-senha
+    const isLoginOrDefinirSenhaRoute =
+      url === '/login' || url.startsWith('/login') ||
+      url === '/definir-senha' || url.startsWith('/definir-senha');
+    this.showNavigation = !isLoginOrDefinirSenhaRoute;
 
     // Sidebar só visível se usuário autenticado
     const user = this.authService.getUser();

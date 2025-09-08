@@ -1,3 +1,107 @@
+
+// Novo layout para KPIs e card principal
+.observability-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-kpi-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.main-kpi-header h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.main-kpi-header p {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 0.5rem;
+}
+
+.main-kpi-header .total-horas {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #9c27b0;
+  margin-top: 0.5rem;
+}
+
+.kpi-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 1.2rem 2rem;
+  min-width: 240px;
+  max-width: 300px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.kpi-card:hover {
+  box-shadow: 0 4px 16px rgba(124,58,237,0.15);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.kpi-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  background: #f3f0fe;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kpi-icon {
+  font-size: 2rem;
+}
+
+.kpi-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.kpi-value {
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #9c27b0;
+}
+
+@media (max-width: 900px) {
+  .kpi-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+  .main-kpi-header h2 {
+    font-size: 2rem;
+  }
+}
 .observability-container {
   padding: 1.5rem;
   max-width: 1200px;
@@ -225,56 +329,3 @@
   }
 }
 
-  .kpi-card {
-    .p-card-body {
-      padding: 0 !important; // Remove default padding to allow full control
-    }
-
-    .kpi-content {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      height: 100%;
-      padding: 1rem; // Add desired padding here
-    }
-
-    .kpi-icon-wrapper {
-      width: 3rem; // Larger icon area
-      height: 3rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 50%;
-      background: var(--surface-a); // A subtle background for the icon
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1); // Soft shadow for depth
-    }
-
-    .kpi-icon {
-      font-size: 1.5rem; // Larger icon size
-    }
-
-    .kpi-details {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .kpi-label {
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: var(--text-color-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .kpi-value {
-      font-weight: 700;
-      font-size: 1.8rem; // Larger value font size
-      color: var(--text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
