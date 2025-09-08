@@ -172,7 +172,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     } else if (user.role === 'rh') {
       // HR can see document tracking, candidate registration and observability
       roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
-        ['/acompanhamento-documentos', '/candidatos', '/observabilidade'].includes(item.route)
+        ['/candidatos', '/observabilidade'].includes(item.route)
       );
     } else if (user.role === 'candidato') {
       // Candidato só pode ver acompanhamento de documentos

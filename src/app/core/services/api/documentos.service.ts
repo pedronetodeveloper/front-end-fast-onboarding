@@ -8,6 +8,7 @@ export interface Documento {
     document_type: string;
     email: string;
     file_content?: string;
+    status: string;
 }
 
 @Injectable({
@@ -24,6 +25,14 @@ export class DocumentosService {
       const user = localStorage.getItem('user');
       email = user ? (JSON.parse(user).email as string | undefined) : undefined;
     }
+    let params = new HttpParams();
+    if (email) {
+      params = params.set('email', email);
+    }
+    return this.http.get<Documento[]>(`${this.apiUrl}/documentos`, { params });
+  }
+
+  listarDocumentosRh(email?: string): Observable<Documento[]> {
     let params = new HttpParams();
     if (email) {
       params = params.set('email', email);

@@ -20,6 +20,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { LocalStorageService } from '../../core/services/local-storage.service';
 import { AuthService } from '../../core/services/auth.service';
 import { CandidatoService } from '../../core/services/api/candidato.service';
+import { DocumentosService, Documento } from '../../core/services/api/documentos.service';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -75,12 +76,16 @@ export class CandidatosComponent implements OnInit {
   private confirmationService = inject(ConfirmationService);
   private messageService = inject(MessageService);
   private candidatoService = inject(CandidatoService);
+  private documentosService = inject(DocumentosService);
   private authService = inject(AuthService);
 
   // Data
   candidatos: CandidatoApi[] = [];
   filteredCandidatos: CandidatoApi[] = [];
   selectedCandidato: CandidatoApi | null = null;
+  showDocumentosDialog = false;
+  candidatoSelecionado: CandidatoApi | null = null;
+  documentosSelecionados: any[] = [];
   loading = false;
 
   // Search and filter
@@ -331,5 +336,58 @@ export class CandidatosComponent implements OnInit {
    */
   get isCurrentUserHR(): boolean {
     return this.authService.getRole() === 'rh';
+  }
+
+  /**
+   * Abrir modal de documentos do candidato
+   */
+  abrirDocumentosDialog(candidato: CandidatoApi): void {
+    this.candidatoSelecionado = candidato;
+    this.showDocumentosDialog = true;
+    this.documentosSelecionados = [];
+    if (candidato.email) {
+      this.documentosService.listarDocumentosRh(candidato.email).subscribe({
+        next: (docs) => {
+          this.documentosSelecionados = docs;
+        },
+        error: () => {
+          this.documentosSelecionados = [];
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao buscar documentos.' });
+        }
+      });
+    }
+  }
+
+  /**
+   * Aprovar documento individualmente
+   */
+  aprovarDocumento(candidato: CandidatoApi, doc: Documento): void {
+    if (!doc.id) {
+      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'ID do documento não encontrado.' });
+      return;
+    }
+    // Aqui você pode implementar a chamada para atualizar o status do documento para 'valido'.
+    // Exemplo: PATCH ou PUT na API (ajuste conforme backend)
+    const documentoAtualizado = { ...doc, status: 'valido' };
+    // Supondo que exista um endpoint para atualizar documento
+    // this.documentosService.atualizarDocumento(documentoAtualizado).subscribe({
+    //   next: () => {
+    //     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Documento aprovado.' });
+    //     // Atualiza lista após aprovação
+    //     if (candidato.email) {
+    //       this.documentosService.llistarDocumentosRh(candidato.email).subscribe({
+    //         next: (docs) => {
+    //           this.documentosSelecionados = docs;
+    //         }
+    //       });
+    //     }
+    //   },
+    //   error: () => {
+    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao aprovar documento.' });
+    //   }
+    // });
+    // Como não há endpoint, apenas simula aprovação localmente:
+    doc.status = 'valido';
+    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Documento aprovado.' });
   }
 }

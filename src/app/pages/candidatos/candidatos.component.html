@@ -1,4 +1,5 @@
 <div class="usuario-container" [@pageAnimation]>
+
   <p-card>
     <ng-template pTemplate="header">
       <div class="card-header">
@@ -6,45 +7,15 @@
         <p class="card-subtitle">{{ 'usuario.subtitle' | translate }}</p>
       </div>
     </ng-template>
-
     <p-toolbar styleClass="mb-4">
-      <ng-template pTemplate="left">
-        <p-button 
-          severity="success" 
-          [label]="'usuario.new' | translate"
-          icon="pi pi-plus" 
-          (onClick)="novoCandidato()">
-        </p-button>
-        <p-button
-          class="ml-2"
-          icon="pi pi-info" 
-          severity="info" 
-          size="small"
-          [title]="'Ao adicionar um novo candidato ...'"
-          (onClick)="abrirModal()">
-        </p-button>
-      </ng-template>
-      
-      <ng-template pTemplate="center">
-        <div class="search-container">
-            <p-iconfield>
-                <p-inputicon class="pi pi-search" />
-                <input type="text" pInputText placeholder="Search" />
-            </p-iconfield>
-        </div>
-      </ng-template>
+      <p-button 
+        severity="success" 
+        [label]="'usuario.new' | translate"
+        icon="pi pi-plus" 
+        (onClick)="novoCandidato()">
+      </p-button>
     </p-toolbar>
-
-    <p-table 
-      [value]="filteredCandidatos" 
-      [loading]="loading"
-      [scrollable]="true"
-      scrollHeight="400px"
-      styleClass="p-datatable-striped"
-      [sortField]="sortField"
-      [sortOrder]="sortOrder"
-      (onSort)="onSort($event)">
-      
+  <p-table [value]="filteredCandidatos">
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="nome">
@@ -70,7 +41,6 @@
           <th style="width: 200px">Ações</th>
         </tr>
       </ng-template>
-      
       <ng-template pTemplate="body" let-candidato>
         <tr>
           <td>
@@ -104,11 +74,18 @@
                 title="Excluir"
                 (onClick)="confirmarExclusao(candidato)">
               </p-button>
+              <p-button 
+                *ngIf="isCurrentUserHR"
+                icon="pi pi-file"
+                severity="info"
+                size="small"
+                title="Acompanhar Documentos"
+                (onClick)="abrirDocumentosDialog(candidato)">
+              </p-button>
             </div>
           </td>
         </tr>
       </ng-template>
-
       <ng-template pTemplate="loadingbody">
         <tr>
           <td><p-skeleton height="2rem"></p-skeleton></td>
@@ -124,7 +101,6 @@
           </td>
         </tr>
       </ng-template>
-      
       <ng-template pTemplate="loadingbody">
         <tr *ngFor="let item of [1,2,3,4,5]">
           <td>
@@ -153,7 +129,6 @@
           </td>
         </tr>
       </ng-template>
-      
       <ng-template pTemplate="emptymessage">
         <tr>
           <td colspan="6" class="text-center">
@@ -301,36 +276,54 @@
     </ng-template>
   </p-dialog>
 
-  <!-- Dialog de Documentos do Candidato
+  <!-- Dialog de Documentos do Candidato -->
   <p-dialog 
     header="Acompanhamento de Documentos" 
     [(visible)]="showDocumentosDialog" 
     [modal]="true" 
-    [style]="{width: '600px', maxWidth: '95vw'}"
-    [draggable]="false"
-    [resizable]="false">
+    [style]="{width: '650px', maxWidth: '98vw'}"
+    [draggable]="false" [resizable]="false">
     <div *ngIf="candidatoSelecionado">
-      <div class="doc-list-section">
-        <p class="doc-list-title">Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b>:</p>
-        <ul class="doc-list">
-          <li *ngFor="let doc of documentosSelecionados">
-            <div class="doc-item-content">
-              <span class="doc-name">{{ doc.nome }}</span>
+      <div class="doc-list-section" style="padding: 1rem 0;">
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+          <i class="pi pi-user" style="font-size: 1.5rem; color: var(--primary-color);"></i>
+          <span class="doc-list-title" style="font-size: 1.1rem; font-weight: 500;">Documentos enviados de <b>{{ candidatoSelecionado.nome }}</b>:</span>
+        </div>
+        <ul class="doc-list" style="list-style: none; padding: 0; margin: 0;">
+          <li *ngFor="let doc of documentosSelecionados" style="margin-bottom: 1rem;">
+            <div class="doc-item-content" style="display: flex; align-items: center; gap: 1rem; background: var(--surface-b); border-radius: 8px; padding: 0.75rem 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04);">
+              <i class="pi pi-file" style="font-size: 1.2rem; color: var(--primary-color);"></i>
+              <span class="doc-name" style="font-weight: 500; min-width: 50px;"><strong>Tipo: </strong>{{ doc.tipo_documento }}</span>
+              <span class="doc-name" style="font-weight: 500; min-width: 50px;"><strong>Documento: </strong>{{ doc.nome_documento }}</span>
               <p-tag 
-                [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : 'Pendente')" 
-                [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : 'warning')"
-                class="doc-status-tag">
+                [value]="
+                  doc.status === 'valido' ? 'Válido' : 
+                  (doc.status === 'invalido' ? 'Inválido' : 
+                  (doc.status === 'analisando' ? 'Analisando' : 'Pendente'))
+                " 
+                [severity]="
+                  doc.status === 'valido' ? 'success' : 
+                  (doc.status === 'invalido' ? 'danger' : 
+                  (doc.status === 'analisando' ? 'info' : 'warning'))
+                "
+                class="doc-status-tag"
+                [ngStyle]="{ 'min-width': '90px', 'text-align': 'center' }">
               </p-tag>
+              <p-button
+                *ngIf="isCurrentUserHR && doc.status !== 'valido'"
+                icon="pi pi-check"
+                label="Aprovar"
+                severity="success"
+                size="small"
+                (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
+                [ngStyle]="{ 'margin-left': 'auto' }"
+                class="ml-2">
+              </p-button>
             </div>
-            <p-button
-              *ngIf="isCurrentUserHR && doc.status !== 'valido'"
-              icon="pi pi-check"
-              label="Aprovar"
-              severity="success"
-              size="small"
-              (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
-              class="ml-2">
-            </p-button>
+          </li>
+          <li *ngIf="documentosSelecionados.length === 0" style="text-align: center; color: var(--text-color-secondary); padding: 2rem 0;">
+            <i class="pi pi-folder-open" style="font-size: 2rem; color: var(--surface-d);"></i>
+            <div>Nenhum documento enviado.</div>
           </li>
         </ul>
       </div>
@@ -352,7 +345,7 @@
         </p-tag>
       </div>
     </div>
-  </p-dialog> -->
+  </p-dialog>
 
   <!-- Toast para mensagens -->
   <p-toast></p-toast>
