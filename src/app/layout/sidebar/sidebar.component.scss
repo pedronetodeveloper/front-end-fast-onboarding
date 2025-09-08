@@ -89,7 +89,7 @@
   }
 
   .brand-logo-full {
-    height: 40px; /* Adjusted size */
+    height: 100px; /* Adjusted size */
     object-fit: contain;
     transition: all 0.3s ease;
     display: block;
@@ -169,7 +169,8 @@
   @media (max-width: 767px) {
     display: none;
   }
-}
+}
+
 // Navigation - Using global styles
 .sidebar-nav {
   flex: 1;
