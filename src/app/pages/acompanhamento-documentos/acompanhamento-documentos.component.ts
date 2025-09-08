@@ -6,6 +6,7 @@ import { Usuario } from '../../shared/interface/usuario.interface';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { HttpEventType } from '@angular/common/http';
 import { DocumentService } from '../../core/services/document.service';
+import { DocumentosService } from '../../core/services/api/documentos.service';
 import { UploadDocumentModalComponent } from './upload-document-modal/upload-document-modal.component'; // Import the new modal component
 
 // PrimeNG Modules for the modal
@@ -23,7 +24,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class AcompanhamentoDocumentosComponent implements OnInit {
   user: AuthUser | null = null;
-  documentos: { nome: string; tipo: string; status: 'valido' | 'invalido' | 'pendente' }[] = [];
+  documentos: any[] = [];
   uploadProgress: number = 0;
   uploadMessage: string = '';
   displayUploadModal: boolean = false; // Control modal visibility
@@ -31,6 +32,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   private authService = inject(AuthService);
   private localStorageService = inject(LocalStorageService);
   private documentService = inject(DocumentService);
+  private documentosService = inject(DocumentosService);
 
   get isCurrentUserHR(): boolean {
     return this.authService.getRole() === 'rh';
@@ -38,16 +40,27 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authService.getUser();
-    this.atualizarDocumentos();
+    this.listarDocumentosApi();
   }
 
-  atualizarDocumentos(): void {
-    if (this.user?.role === 'candidato') {
-      const candidatos = this.localStorageService.getItem<Usuario>('candidatos');
-      const candidato = candidatos.find(u => u.email === this.user?.email);
-      this.documentos = candidato?.documentos || [];
+  listarDocumentosApi(): void {
+    const user = this.authService.getUser();
+    const email = user?.email;
+    if (!email) {
+      console.error('Email do usuário não encontrado.');
+      return;
     }
+    this.documentosService.listarDocumentos(email).subscribe({
+      next: (docs) => {
+        this.documentos = docs;
+      },
+      error: (err) => {
+        console.error('Erro ao listar documentos:', err);
+      }
+    });
   }
+
+  // Removido atualizarDocumentos pois agora os documentos vêm da API
 
   getStatusCount(status: 'valido' | 'invalido' | 'pendente'): number {
     return this.documentos.filter(doc => doc.status === status).length;
@@ -60,34 +73,37 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   onDocumentUploaded(event: { file: File, documentType: string }): void {
     const { file, documentType } = event;
 
-    if (file && documentType) {
-      this.uploadMessage = `Uploading ${file.name} (${documentType})...`;
+    if (file && documentType && this.user?.email) {
+      this.uploadMessage = `Enviando ${file.name} (${documentType})...`;
       this.uploadProgress = 0;
 
-      this.documentService.uploadDocument(file).subscribe({
-        next: (event) => {
-          if (event.type === HttpEventType.UploadProgress) {
-            this.uploadProgress = Math.round(100 * (event.loaded / event.total!));
-          } else if (event.type === HttpEventType.Response) {
-            this.uploadMessage = `Upload of ${file.name} successful!`;
-            console.log('File uploaded successfully:', event.body);
-            // Here you might want to update the documents list or show a success message
-            this.atualizarDocumentos(); // Refresh documents after upload
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        const documentoPayload = {
+          filename: file.name,
+          document_type: documentType,
+          email: this.user!.email,
+          file_content: base64
+        };
+        this.documentosService.cadastrarDocumento(documentoPayload).subscribe({
+          next: (response) => {
+            this.uploadMessage = `Upload de ${file.name} realizado com sucesso!`;
+            // this.atualizarDocumentos();
+          },
+          error: (err) => {
+            this.uploadMessage = `Falha ao enviar ${file.name}.`;
+            console.error('Erro no envio:', err);
+          },
+          complete: () => {
+            setTimeout(() => {
+              this.uploadProgress = 0;
+              this.uploadMessage = '';
+            }, 3000);
           }
-        },
-        error: (err) => {
-          this.uploadMessage = `Upload of ${file.name} failed.`;
-          console.error('Upload error:', err);
-          // Handle error, show error message to user
-        },
-        complete: () => {
-          // Optional: clear progress bar after a delay
-          setTimeout(() => {
-            this.uploadProgress = 0;
-            this.uploadMessage = '';
-          }, 3000);
-        }
-      });
+        });
+      };
+      reader.readAsDataURL(file);
     }
   }
 }

@@ -175,9 +175,9 @@ export class SidebarComponent implements OnInit, OnDestroy {
         ['/acompanhamento-documentos', '/candidatos', '/observabilidade'].includes(item.route)
       );
     } else if (user.role === 'candidato') {
-      // Candidate can only see home and document tracking
+      // Candidato só pode ver acompanhamento de documentos
       roleBasedRoutes = menuItems.filter((item: SidebarMenuItem) =>
-        ['/home', '/acompanhamento-documentos'].includes(item.route)
+        item.route === '/acompanhamento-documentos'
       );
     }
 

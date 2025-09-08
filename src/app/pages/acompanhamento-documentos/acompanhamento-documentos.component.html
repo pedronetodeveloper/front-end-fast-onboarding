@@ -2,63 +2,104 @@
   <!-- Header Section -->
   <header class="page-header text-center">
     <h1 class="title">{{ 'acompanhamento.title' | translate }}</h1>
-    <p class="subtitle">Acompanhe o status dos seus documentos enviados e gerencie pendências de forma rápida e fácil.</p>
+    <p class="subtitle">Acompanhe o status dos seus documentos enviados e gerencie pendências de forma rápida e fácil.
+    </p>
   </header>
-
-  <!-- Summary KPI Card Section -->
   <section class="summary-kpi-section row justify-content-center">
     <div class="col-lg-8 col-md-10">
       <div class="summary-kpi-card">
-        <div class="kpi-item">
-          <i class="fas fa-file-alt kpi-icon"></i>
-          <div class="kpi-content">
-            <p class="kpi-label">Total de Documentos</p>
-            <h3 class="kpi-value">{{ documentos.length }}</h3>
+        <div class="kpi-items-row" style="display: flex; justify-content: center; align-items: stretch; gap: 0;">
+          <div class="kpi-item">
+            <i class="fas fa-file-alt kpi-icon"></i>
+            <div class="kpi-content">
+              <p class="kpi-label">Total de Documentos</p>
+              <h3 class="kpi-value">{{ documentos.length }}</h3>
+            </div>
+          </div>
+          <div class="kpi-item">
+            <i class="fas fa-check-circle kpi-icon"></i>
+            <div class="kpi-content">
+              <p class="kpi-label">Documentos Válidos</p>
+              <h3 class="kpi-value">{{ getStatusCount('valido') }}</h3>
+            </div>
+          </div>
+          <div class="kpi-item">
+            <i class="fas fa-exclamation-triangle kpi-icon"></i>
+            <div class="kpi-content">
+              <p class="kpi-label">Pendentes/Inválidos</p>
+              <h3 class="kpi-value">{{ getStatusCount('pendente') + getStatusCount('invalido') }}</h3>
+            </div>
           </div>
         </div>
-        <div class="kpi-item">
-          <i class="fas fa-check-circle kpi-icon"></i>
-          <div class="kpi-content">
-            <p class="kpi-label">Documentos Válidos</p>
-            <h3 class="kpi-value">{{ getStatusCount('valido') }}</h3>
-          </div>
-        </div>
-        <div class="kpi-item">
-          <i class="fas fa-exclamation-triangle kpi-icon"></i>
-          <div class="kpi-content">
-            <p class="kpi-label">Pendentes/Inválidos</p>
-            <h3 class="kpi-value">{{ getStatusCount('pendente') + getStatusCount('invalido') }}</h3>
-          </div>
+        <!-- Frase comercial motivacional abaixo das KPIs, dentro do card -->
+        <div class="kpi-marketing-message text-center mb-2" style="padding-top: 0;">
+          <ng-container *ngIf="getStatusCount('pendente') + getStatusCount('invalido') > 0; else fraseFinalizacaoComercial">
+            <div style="display: block; background: #fffbe6; border-radius: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px 48px; margin: 32px auto 24px auto; border: 1px solid #ffe58f; max-width: 700px; width: 100%;">
+              <span style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-exclamation-circle" style="color: #d97706; font-size: 1.7rem;"></i>
+                <span style="font-size: 1.15rem; color: #d97706; font-weight: 600;">
+                  <span style="font-weight: bold;">Atenção!</span> Aproveite para <strong>reenviar</strong> seus documentos pendentes ou inválidos<br>e garanta sua contratação sem atrasos.
+                  <br>
+                  <span style="font-size: 1rem; color: #a67c00; font-weight: 400;">Estamos aqui para ajudar você a conquistar essa oportunidade!</span>
+                </span>
+              </span>
+            </div>
+          </ng-container>
+          <ng-template #fraseFinalizacaoComercial>
+            <div style="display: block; background: #f6f0fa; border-radius: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px 48px; margin: 32px auto 24px auto; border: 1px solid #a259d9; max-width: 700px; width: 100%;">
+              <span style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <i class="fas fa-check-circle" style="color: #a259d9; font-size: 1.7rem;"></i>
+                <span style="font-size: 1.15rem; color: #222; font-weight: 600;">
+                  <span style="font-weight: semi-bold;">Parabéns!</span> Você está a um passo de concluir seu processo de contratação.<br>
+                  <span style="font-size: 1rem; color: #222; font-weight: 400;">Continue acompanhando e finalize sua jornada com sucesso!</span>
+                </span>
+              </span>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>
   </section>
 
+
+
   <!-- Document Cards Section -->
   <section class="document-cards-section">
-    <div class="row" *ngIf="documentos.length > 0; else noDocuments">
-      <div class="col-lg-4 col-md-6 mb-4" *ngFor="let doc of documentos">
-        <div class="document-card h-100">
-          <div class="card-body">
-            <div class="d-flex align-items-center mb-3">
-              <i class="fas fa-file-alt document-icon me-3"></i>
-              <h5 class="card-title mb-0">{{ doc.nome }}</h5>
+    <ng-container *ngIf="documentos.length > 0; else noDocuments">
+      <div class="card document-main-card mb-4 bg-white border-0"
+        style="border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%;">
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-primary btn-lg" (click)="onAttachDocuments()" *ngIf="!isCurrentUserHR">Enviar
+            Documentos</button>
+        </div>
+        <div class="document-cards-flex"
+          style="display: flex; flex-direction: row; gap: 24px; overflow-x: auto; padding-bottom: 8px;">
+          <div *ngFor="let doc of documentos" style="display: flex; justify-content: center; align-items: stretch;">
+            <div
+              class="document-card shadow rounded border-0 p-3 animate__animated animate__fadeIn d-flex flex-column align-items-center"
+              style="min-width:180px; max-width:220px;">
+              <div class="document-icon-wrapper mb-2">
+                <i class="fas fa-file-alt document-icon fa-2x text-primary"></i>
+              </div>
+              <div class="card-title mb-1 text-center fw-bold"><strong>Tipo:</strong> {{ doc.tipo_documento }}</div>
+              <div class="card-title mb-1 text-center fw-bold"><strong>Documento:</strong> {{ doc.nome_documento }}
+              </div>
+              <div class="mb-2 w-100 d-flex justify-content-center">
+                <span *ngIf="doc.status" class="status-badge px-2 py-1 rounded-pill fw-semibold" [ngClass]="{
+                  'status-valido': doc.status === 'valido',
+                  'status-invalido': doc.status === 'invalido',
+                  'status-pendente': doc.status === 'pendente',
+                  'status-analisando': doc.status === 'analisando'
+                }" style="color: #222; background: #f3f3f3;">
+                  <strong>Status:</strong> {{ doc.status | uppercase }}
+                </span>
+                <span *ngIf="!doc.status" class="text-danger"><strong>Status:</strong> N/A</span>
+              </div>
             </div>
-            <div class="status-badge" [ngClass]="{
-              'status-valido': doc.status === 'valido',
-              'status-invalido': doc.status === 'invalido',
-              'status-pendente': doc.status === 'pendente'
-            }">
-              {{ doc.status | uppercase }}
-            </div>
-            <p class="card-text mt-3">Verifique os detalhes e o status do seu documento.</p>
-          </div>
-          <div class="card-footer">
-            <button class="btn btn-primary w-100">Ver Detalhes</button>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </section>
 
   <!-- No Documents Template -->
@@ -67,15 +108,14 @@
       <i class="fas fa-folder-open empty-icon"></i>
       <h3>Nenhum documento enviado ainda.</h3>
       <p>Comece enviando seus documentos para iniciar o processo de onboarding.</p>
-      <input type="file" #fileInput style="display: none;"  multiple>
-      <button class="btn btn-primary btn-lg mt-3" (click)="onAttachDocuments()" *ngIf="!isCurrentUserHR">Enviar Documentos</button>
+      <input type="file" #fileInput style="display: none;" multiple>
+      <button class="btn btn-primary btn-lg mt-3" (click)="onAttachDocuments()" *ngIf="!isCurrentUserHR">Enviar
+        Documentos</button>
     </div>
   </ng-template>
 
   <!-- Upload Document Modal -->
-  <app-upload-document-modal 
-    [(visible)]="displayUploadModal" 
-    (documentUploaded)="onDocumentUploaded($event)">
+  <app-upload-document-modal [(visible)]="displayUploadModal" (documentUploaded)="onDocumentUploaded($event)">
   </app-upload-document-modal>
 
 </div>

@@ -90,7 +90,7 @@ export class TranslationService {
             // Title
             "project.name": "DocFlow",
             "project.description": "Impulsionando a Transformação Digital no RH.",
-            "project.description2": "Otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
+            "project.description2": "Otimizando o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
 
             // Navigation
             "nav.menu": "Menu",

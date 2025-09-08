@@ -1,0 +1,53 @@
+<div class="login-container" [@pageAnimation]>
+	<div class="login-wrapper">
+		<!-- Mensagem de Erro -->
+		<div *ngIf="errorMessage" class="error-section">
+			<p-message severity="error" [text]="errorMessage" styleClass="w-full mb-4"></p-message>
+		</div>
+		<!-- Card Principal de Definir Senha -->
+		<div class="auth-card">
+			<div class="auth-header">
+				<div class="brand-section">
+					<div class="logo-container">
+						<img src="assets/logo1.5.png" alt="Logo DocFlow" class="brand-logo">
+					</div>
+					<p class="brand-subtitle">{{ 'project.description' | translate }}</p>
+				</div>
+			</div>
+			<div class="auth-divider"></div>
+			<div class="auth-content">
+				<div class="welcome-section">
+					<h5 class="welcome-title">{{ 'definirSenha.title' | translate }}</h5>
+					<p class="welcome-description">{{ 'definirSenha.description' | translate }}</p>
+				</div>
+				<form (ngSubmit)="definirSenha()" autocomplete="off">
+					<div class="p-fluid">
+						<div class="p-field mb-2">
+							<label for="senha" class="flex align-items-center"><i class="pi pi-lock mr-2"></i>Nova Senha</label>
+							<input id="senha" pInputText type="password" [(ngModel)]="senha" name="senha" required placeholder="Digite a nova senha">
+						</div>
+						<div class="p-field mb-3">
+							<label for="confirmarSenha" class="flex align-items-center"><i class="pi pi-lock mr-2"></i>Confirmar Senha</label>
+							<input id="confirmarSenha" pInputText type="password" [(ngModel)]="confirmarSenha" name="confirmarSenha" required placeholder="Confirme a nova senha">
+						</div>
+						<div class="login-actions">
+							<p-button 
+								[label]="isSaving ? 'Aguarde...' : 'Definir Senha'"
+								[icon]="isSaving ? 'pi pi-spin pi-spinner' : 'pi pi-check'"
+								[loading]="isSaving"
+								styleClass="w-full main-login-btn"
+								size="large"
+								type="submit">
+							</p-button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="bg-decoration">
+		<div class="decoration-circle circle-1"></div>
+		<div class="decoration-circle circle-2"></div>
+		<div class="decoration-circle circle-3"></div>
+	</div>
+</div>
