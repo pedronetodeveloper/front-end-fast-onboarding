@@ -1,3 +1,20 @@
+/* Status badge cores */
+.status-badge.status-valido {
+  background: rgba(56, 203, 137, 0.18);
+  color: #2e7d32;
+}
+.status-badge.status-invalido {
+  background: rgba(255, 82, 82, 0.18);
+  color: #c62828;
+}
+.status-badge.status-pendente {
+  background: rgba(255, 152, 0, 0.22);
+  color: #b36a00;
+}
+.status-badge.status-analisando {
+  background: #222;
+  color: #eaeaea;
+}
 /* General Page Styling */
 .document-status-page {
   padding: 2rem;

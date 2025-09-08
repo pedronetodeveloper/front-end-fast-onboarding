@@ -56,7 +56,7 @@
             <p-tag 
               [value]="candidato.situacao || 'Pendente'"
               [severity]="candidato.situacao === 'Processo Finalizado' ? 'success' : (candidato.situacao === 'Pendente' || !candidato.situacao ? 'warning' : 'info')"
-              [ngClass]="(candidato.situacao === 'Pendente' || !candidato.situacao) ? 'tag-pendente' : ''">
+              [style]="candidato.situacao === 'Processo Finalizado' ? {'background':'#43a047','color':'#fff'} : ((candidato.situacao === 'Pendente' || !candidato.situacao) ? {'background':'#fff9c4','color':'#a67c00'} : {})">
             </p-tag>
           </td>
           <td>
@@ -305,8 +305,8 @@
                 <div class="doc-card-right">
                   <span class="doc-status-label" style="font-weight: 500; margin-right: 0.5rem;">Status:</span>
                   <p-tag
-                    [value]="doc.status === 'valido' ? 'Válido' : (doc.status === 'invalido' ? 'Inválido' : (doc.status === 'analisando' ? 'Analisando' : 'Pendente'))"
-                    [severity]="doc.status === 'valido' ? 'success' : (doc.status === 'invalido' ? 'danger' : (doc.status === 'analisando' ? 'info' : 'warning'))"
+                    [value]="doc.status === 'APROVADO' ? 'Aprovado' : (doc.status === 'REPROVADO' ? 'Reprovado' : (doc.status === 'analisando' ? 'Analisando' : doc.status))"
+                    [severity]="doc.status === 'APROVADO' ? 'success' : (doc.status === 'REPROVADO' ? 'danger' : (doc.status === 'analisando' ? 'info' : 'warning'))"
                     class="doc-status-tag">
                   </p-tag>
                   <p-button

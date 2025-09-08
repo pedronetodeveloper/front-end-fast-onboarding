@@ -31,8 +31,9 @@ export class UploadDocumentModalComponent implements OnInit {
     this.documentTypes = [
       { name: 'RG', code: 'RG' },
       { name: 'CPF', code: 'CPF' },
-      { name: 'Comprovante de Residência', code: 'COMP_RESIDENCIA' },
-      { name: 'Comprovante de Renda', code: 'COMP_RENDA' },
+      { name: 'Comprovante de Residência', code: 'Comprovante de Residencia' },
+      { name: 'Titulo de Eleitor', code: 'Titulo de eleitor' },
+      { name: 'Carteira de Trabalho', code: 'Carteira de trabalho' },
       { name: 'Outros', code: 'OUTROS' }
     ];
   }

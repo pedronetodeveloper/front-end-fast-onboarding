@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { MessageService } from 'primeng/api';
 import { CommonModule, NgClass } from '@angular/common';
 import { AuthService, AuthUser } from '../../core/services/auth.service';
 import { LocalStorageService } from '../../core/services/local-storage.service';
@@ -8,7 +9,7 @@ import { HttpEventType } from '@angular/common/http';
 import { DocumentService } from '../../core/services/document.service';
 import { DocumentosService } from '../../core/services/api/documentos.service';
 import { UploadDocumentModalComponent } from './upload-document-modal/upload-document-modal.component'; // Import the new modal component
-
+import { ToastModule } from 'primeng/toast';
 // PrimeNG Modules for the modal
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -20,7 +21,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './acompanhamento-documentos.component.html',
   styleUrls: ['./acompanhamento-documentos.component.scss'],
   standalone: true,
-  imports: [CommonModule, TranslatePipe, NgClass, UploadDocumentModalComponent, DialogModule, ButtonModule, DropdownModule, FormsModule]
+  imports: [CommonModule, ToastModule, TranslatePipe, NgClass, UploadDocumentModalComponent, DialogModule, ButtonModule, DropdownModule, FormsModule],
+  providers: [MessageService]
 })
 export class AcompanhamentoDocumentosComponent implements OnInit {
   user: AuthUser | null = null;
@@ -33,6 +35,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   private localStorageService = inject(LocalStorageService);
   private documentService = inject(DocumentService);
   private documentosService = inject(DocumentosService);
+  private messageService = inject(MessageService);
 
   get isCurrentUserHR(): boolean {
     return this.authService.getRole() === 'rh';
@@ -53,6 +56,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     this.documentosService.listarDocumentos(email).subscribe({
       next: (docs) => {
         this.documentos = docs;
+        console.log(this.documentos);
       },
       error: (err) => {
         console.error('Erro ao listar documentos:', err);
@@ -62,7 +66,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
 
   // Removido atualizarDocumentos pois agora os documentos vêm da API
 
-  getStatusCount(status: 'valido' | 'invalido' | 'pendente'): number {
+  getStatusCount(status: 'APROVADO' | 'REPROVADO' | 'analisando'): number {
     return this.documentos.filter(doc => doc.status === status).length;
   }
 
@@ -89,7 +93,13 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
         this.documentosService.cadastrarDocumento(documentoPayload).subscribe({
           next: (response) => {
             this.uploadMessage = `Upload de ${file.name} realizado com sucesso!`;
-            // this.atualizarDocumentos();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Upload realizado',
+              detail: `O documento ${file.name} foi enviado com sucesso!`,
+              life: 3500
+            });
+            this.listarDocumentosApi();
           },
           error: (err) => {
             this.uploadMessage = `Falha ao enviar ${file.name}.`;
