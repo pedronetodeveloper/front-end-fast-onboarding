@@ -1,10 +1,11 @@
 // Sidebar Container - Using global styles
+
 .sidebar-container {
   position: fixed;
   top: 0;
   left: 0;
   height: 100vh;
-  width: 280px;
+  width: 220px;
   background: var(--surface-e);
   border-right: 1px solid var(--border-color);
   box-shadow: 2px 0 8px var(--shadow-color);
@@ -31,7 +32,7 @@
   }
 
   &.hover-expanded {
-    width: 280px;
+    width: 220px;
     box-shadow: 4px 0 16px var(--shadow-color);
     
     .nav-label,
@@ -56,20 +57,30 @@
 }
 
 // Sidebar Header - Using global styles
+
 .sidebar-header {
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Changed to space-between */
+  justify-content: center;
   min-height: 70px;
   position: relative;
 
+  /* Centraliza o logo quando aberto */
   .sidebar-container.collapsed & {
     justify-content: center;
   }
 }
 
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s ease;
+  width: 100%;
+  justify-content: center;
+}
 .sidebar-brand {
   display: flex;
   align-items: center;
