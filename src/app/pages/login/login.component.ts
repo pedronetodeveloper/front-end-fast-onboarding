@@ -57,7 +57,7 @@ export class LoginComponent implements OnInit {
         } else if (user.role === 'rh') {
           this.router.navigate(['/candidatos']);
         } else if (user.role === 'candidato') {
-          this.router.navigate(['/upload-documentos']);
+          this.router.navigate(['/acompanhamento-documentos']);
         } else {
           this.router.navigate(['/']);
         }
