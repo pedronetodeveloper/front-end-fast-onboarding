@@ -290,59 +290,89 @@
     border-top: 1px solid var(--border-color);
   }
 
-  // Skeleton Loading Styles
-  .skeleton-text,
-  .skeleton-tag,
-  .skeleton-button,
-  .skeleton-icon {
-    background: linear-gradient(90deg, var(--surface-c) 25%, var(--surface-d) 50%, var(--surface-c) 75%);
-    background-size: 200% 100%;
-    animation: skeleton-loading 1.5s infinite;
-    border-radius: 4px;
+  // Skeleton Loading Styles - Melhorados
+  ::ng-deep .p-skeleton {
+    background: linear-gradient(90deg, var(--surface-c, #e3f2fd) 25%, var(--surface-d, #f5f5f5) 50%, var(--surface-c, #e3f2fd) 75%) !important;
+    background-size: 200% 100% !important;
+    animation: skeleton-shimmer 1.8s ease-in-out infinite !important;
+    border-radius: 6px !important;
   }
 
-  .skeleton-text {
-    height: 16px;
-    width: 100%;
-    
-    &.skeleton-name {
-      width: 120px;
-    }
-    
-    &.skeleton-email {
-      width: 160px;
-    }
+  // Skeleton específicos para diferentes elementos
+  ::ng-deep .skeleton-user-icon {
+    background: linear-gradient(90deg, #e8f4f8 25%, #f0f8ff 50%, #e8f4f8 75%) !important;
   }
 
-  .skeleton-tag {
-    height: 24px;
-    width: 60px;
-    border-radius: 12px;
-    
-    &.skeleton-small {
-      width: 30px;
-    }
+  ::ng-deep .skeleton-user-name {
+    background: linear-gradient(90deg, #f0f4f7 25%, #f8fafc 50%, #f0f4f7 75%) !important;
   }
 
-  .skeleton-button {
-    height: 32px;
-    width: 32px;
-    border-radius: 6px;
+  ::ng-deep .skeleton-email {
+    background: linear-gradient(90deg, #e8f2ff 25%, #f0f8ff 50%, #e8f2ff 75%) !important;
   }
 
-  .skeleton-icon {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    flex-shrink: 0;
+  ::ng-deep .skeleton-estado {
+    background: linear-gradient(90deg, #e8f5e8 25%, #f0fff0 50%, #e8f5e8 75%) !important;
   }
 
-  @keyframes skeleton-loading {
+  ::ng-deep .skeleton-vaga {
+    background: linear-gradient(90deg, #fff8e8 25%, #fffdf0 50%, #fff8e8 75%) !important;
+  }
+
+  ::ng-deep .skeleton-tag {
+    background: linear-gradient(90deg, #f3e5f5 25%, #faf5ff 50%, #f3e5f5 75%) !important;
+  }
+
+  ::ng-deep .skeleton-button {
+    background: linear-gradient(90deg, #e0e7ff 25%, #f0f4ff 50%, #e0e7ff 75%) !important;
+  }
+
+  // Animação mais suave para o skeleton
+  @keyframes skeleton-shimmer {
     0% {
       background-position: -200% 0;
+      opacity: 0.9;
+    }
+    50% {
+      opacity: 1;
     }
     100% {
       background-position: 200% 0;
+      opacity: 0.9;
+    }
+  }
+
+  // Estilização da área de info do usuário no loading
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  // Botões de ação durante o loading
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Melhoria para tabelas com skeleton
+  ::ng-deep .p-datatable .p-datatable-tbody > tr.p-skeleton-row {
+    height: 3.5rem;
+    
+    td {
+      padding: 0.75rem 1rem;
+      vertical-align: middle;
+    }
+  }
+
+  // Efeito hover suave nos skeletons
+  ::ng-deep .p-skeleton {
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      opacity: 0.8 !important;
     }
   }
 
@@ -437,10 +467,6 @@
     .doc-name {
       font-weight: 500;
       color: var(--text-color);
-    }
-
-    .doc-status-tag {
-      /* PrimeNG p-tag already has good styling */
     }
   }
 }

@@ -15,7 +15,7 @@
         (onClick)="novoCandidato()">
       </p-button>
     </p-toolbar>
-  <p-table [value]="filteredCandidatos">
+  <p-table [value]="filteredCandidatos" [loading]="loading">
       <ng-template pTemplate="header">
         <tr>
           <th pSortableColumn="nome">
@@ -88,44 +88,30 @@
         </tr>
       </ng-template>
       <ng-template pTemplate="loadingbody">
-        <tr>
-          <td><p-skeleton height="2rem"></p-skeleton></td>
-          <td><p-skeleton height="2rem"></p-skeleton></td>
-          <td><p-skeleton height="2rem"></p-skeleton></td>
-          <td><p-skeleton height="2rem"></p-skeleton></td>
-          <td><p-skeleton height="2rem"></p-skeleton></td>
-          <td>
-            <div class="action-buttons">
-              <p-skeleton width="2rem" height="2rem" borderRadius="4px"></p-skeleton>
-              <p-skeleton width="2rem" height="2rem" borderRadius="4px"></p-skeleton>
-            </div>
-          </td>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="loadingbody">
         <tr *ngFor="let item of [1,2,3,4,5]">
           <td>
             <div class="user-info">
-              <div class="skeleton-icon"></div>
-              <div class="skeleton-text skeleton-name"></div>
+              <p-skeleton width="1.2rem" height="1.2rem" borderRadius="50%" class="skeleton-user-icon"></p-skeleton>
+              <p-skeleton width="8rem" height="1rem" class="skeleton-user-name"></p-skeleton>
             </div>
           </td>
           <td>
-            <div class="skeleton-text skeleton-email"></div>
+            <p-skeleton width="12rem" height="1rem" class="skeleton-email"></p-skeleton>
           </td>
           <td>
-            <div class="skeleton-tag"></div>
+            <p-skeleton width="3rem" height="1rem" class="skeleton-estado"></p-skeleton>
           </td>
           <td>
-            <div class="skeleton-tag"></div>
+            <p-skeleton width="10rem" height="1rem" class="skeleton-vaga"></p-skeleton>
           </td>
           <td>
-            <div class="skeleton-tag skeleton-small"></div>
+            <p-skeleton width="6rem" height="1.5rem" borderRadius="12px" class="skeleton-tag"></p-skeleton>
           </td>
           <td>
             <div class="action-buttons">
-              <div class="skeleton-button"></div>
-              <div class="skeleton-button"></div>
+              <p-skeleton width="2rem" height="2rem" borderRadius="6px" class="skeleton-button"></p-skeleton>
+              <p-skeleton width="2rem" height="2rem" borderRadius="6px" class="skeleton-button"></p-skeleton>
+              <p-skeleton width="2rem" height="2rem" borderRadius="6px" class="skeleton-button"></p-skeleton>
             </div>
           </td>
         </tr>
