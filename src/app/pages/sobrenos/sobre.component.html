@@ -1,25 +1,73 @@
 <div class="sobre-page">
   <!-- Header Section -->
   <div class="hero-section">
-     <div class="intro-content">
-      <h2>Impulsionando a Transformação Digital no RH</h2>
-      <p>Somos a DocFlow, a solução que impulsiona a transformação digital no setor de Recursos Humanos.<br> Nosso propósito é simples e claro: otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.</p>
+    <div class="intro-content">
+      <h1 class="hero-title">Impulsionando a Transformação Digital no RH</h1>
+      <p class="hero-subtitle">Somos a DocFlow, a solução que impulsiona a transformação digital no setor de Recursos
+        Humanos.<br> Nosso propósito é simples e claro: otimizar o processo de admissão, eliminando a burocracia e
+        liberando o potencial do seu time.</p>
     </div>
   </div>
 
   <!-- Social Proof Section -->
   <div class="social-proof-section">
     <h2>Empresas que confiam na DocFlow</h2>
-    <div class="logos-container">
-      <!-- Placeholders for client logos -->
-      <img src="../../../assets/images/empresaqueconfiamnaDocFlow/001.png" alt="Logo Empresa 1">
-      <img src="../../../assets/images/empresaqueconfiamnaDocFlow/002.png" alt="Logo Empresa 2">
-      <img src="../../../assets/images/empresaqueconfiamnaDocFlow/003.png" alt="Logo Empresa 3">
-      <img src="../../../assets/images/empresaqueconfiamnaDocFlow/004.png" alt="Logo Empresa 4">
-      <img src="../../../assets/images/empresaqueconfiamnaDocFlow/005.png" alt="Logo Empresa 5">
+    <div class="carousel-container">
+      <p-carousel [value]="empresas" [numVisible]="4" [numScroll]="1" [circular]="true"
+        [responsiveOptions]="responsiveOptions" autoplayInterval="3000" [showIndicators]="false"
+        [showNavigators]="true">
+        <ng-template let-empresa #item>
+          <div class="empresa-logo-card">
+            <div class="logo-wrapper">
+              <img [src]="empresa.image" [alt]="empresa.name" class="empresa-logo" />
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
     </div>
   </div>
-  
+
+  <!-- Testimonials Section -->
+  <div class="testimonials-section">
+    <div class="testimonials-header">
+      <h2>O que nossos clientes dizem</h2>
+      <p>Veja como a DocFlow transformou a experiência de admissão dessas empresas</p>
+    </div>
+    
+    <div class="testimonials-carousel">
+      <p-carousel [value]="depoimentos" [numVisible]="3" [numScroll]="1" [circular]="true"
+        [responsiveOptions]="responsiveOptions" autoplayInterval="5000" [showIndicators]="true"
+        [showNavigators]="true">
+        <ng-template let-depoimento #item>
+          <div class="testimonial-card">
+            <div class="testimonial-content">
+              <div class="quote-icon">
+                <i class="pi pi-quote-left"></i>
+              </div>
+              <p class="testimonial-text">{{ depoimento.depoimento }}</p>
+              <div class="rating">
+                <i class="pi pi-star-fill" *ngFor="let star of [1,2,3,4,5]"></i>
+              </div>
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                <img [src]="depoimento.avatar" [alt]="depoimento.nome" />
+                <div class="verified-badge">
+                  <i class="pi pi-check"></i>
+                </div>
+              </div>
+              <div class="author-info">
+                <h4>{{ depoimento.nome }}</h4>
+                <p class="author-role">{{ depoimento.cargo }}</p>
+                <p class="author-company">{{ depoimento.empresa }}</p>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+
   <!-- Core Values Section -->
   <div class="values-section">
     <div class="values-grid">
@@ -51,7 +99,8 @@
     <div class="cta-content">
       <h2>Pronto para otimizar seu RH?</h2>
       <p>Descubra como a DocFlow pode transformar o processo de admissão da sua empresa.</p>
-      <button pButton type="button" label="Conheça Nossos Planos" class="p-button-primary p-button-lg"></button>
+      <button pButton type="button" label="Conheça Nossos Planos" class="p-button-primary p-button-lg cta-button"
+        (click)="navigateToHome()"></button>
     </div>
   </div>
 </div>

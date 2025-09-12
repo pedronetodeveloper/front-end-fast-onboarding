@@ -8,7 +8,17 @@
   <section class="summary-kpi-section row justify-content-center">
     <div class="col-lg-8 col-md-10">
       <div class="summary-kpi-card">
-        <div class="kpi-items-row" style="display: flex; justify-content: center; align-items: stretch; gap: 0;">
+        <!-- Skeleton Loading for KPIs -->
+        <div *ngIf="isLoading" class="kpi-items-row" style="display: flex; justify-content: center; align-items: stretch; gap: 0;">
+          <div class="kpi-item" *ngFor="let item of [1,2,3,4]">
+            <div class="skeleton skeleton-kpi-icon" style="width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 0.5rem;"></div>
+            <div class="skeleton skeleton-text" style="width: 120px; height: 14px; margin: 0 auto 0.2rem;"></div>
+            <div class="skeleton skeleton-text" style="width: 40px; height: 28px; margin: 0 auto;"></div>
+          </div>
+        </div>
+        
+        <!-- Real KPI Content -->
+        <div *ngIf="!isLoading" class="kpi-items-row" style="display: flex; justify-content: center; align-items: stretch; gap: 0;">
           <div class="kpi-item">
             <i class="fas fa-file-alt kpi-icon" style="color: #a259d9;"></i>
             <div class="kpi-content">
@@ -37,10 +47,14 @@
               <h3 class="kpi-value">{{ getStatusCount('REPROVADO') }}</h3>
             </div>
           </div>
-          
         </div>
+        <!-- Skeleton para mensagem comercial -->
+        <div *ngIf="isLoading" class="kpi-marketing-message text-center mb-2" style="padding-top: 0;">
+          <div class="skeleton" style="height: 80px; border-radius: 18px; max-width: 700px; width: 100%; margin: 32px auto 24px auto;"></div>
+        </div>
+        
         <!-- Frase comercial motivacional abaixo das KPIs, dentro do card -->
-        <div class="kpi-marketing-message text-center mb-2" style="padding-top: 0;">
+        <div *ngIf="!isLoading" class="kpi-marketing-message text-center mb-2" style="padding-top: 0;">
           <ng-container *ngIf=" getStatusCount('REPROVADO') > 0; else fraseFinalizacaoComercial">
             <div style="display: block; background: #fffbe6; border-radius: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 28px 48px; margin: 32px auto 24px auto; border: 1px solid #ffe58f; max-width: 700px; width: 100%;">
               <span style="display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -71,12 +85,52 @@
 
   <!-- Document Cards Section -->
   <section class="document-cards-section">
-    <ng-container *ngIf="documentos.length > 0; else noDocuments">
-      <div class="card document-main-card mb-4 bg-white border-0"
+    <!-- Skeleton Loading for Document Cards -->
+    <div *ngIf="isLoading" class="card document-main-card bg-white border-0"
+      style="border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%;">
+      <div class="skeleton-button-container mb-3">
+        <div class="skeleton skeleton-button" style="display: inline-block;"></div>
+        <div class="skeleton skeleton-message" style="display: inline-block; margin-left: 1rem;"></div>
+      </div>
+      <div class="document-cards-flex"
+        style="display: flex; flex-direction: row; gap: 24px; overflow-x: auto; padding-bottom: 8px;">
+        <div *ngFor="let item of [1,2,3]" style="display: flex; justify-content: center; align-items: stretch;">
+          <div class="skeleton-card">
+            <div class="skeleton skeleton-icon"></div>
+            <div class="skeleton skeleton-text skeleton-title"></div>
+            <div class="skeleton skeleton-text skeleton-subtitle"></div>
+            <div class="skeleton skeleton-text skeleton-status"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real Content -->
+    <ng-container *ngIf="!isLoading && documentos.length > 0; else noDocuments">
+      <div class="card document-main-card bg-white border-0"
         style="border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%;">
-        <div class="d-flex justify-content-end mb-3">
-          <button class="btn btn-primary btn-lg" (click)="onAttachDocuments()" *ngIf="!isCurrentUserHR">Enviar
-            Documentos</button>
+        <div class="button-message-container mb-3">
+          <button class="btn btn-lg" 
+                  (click)="onAttachDocuments()" 
+                  *ngIf="!isCurrentUserHR"
+                  [disabled]="isUploadBlocked()"
+                  [ngClass]="isUploadBlocked() ? 'btn-secondary' : 'btn-primary'">
+            {{ isUploadBlocked() ? 'Limite Atingido' : 'Enviar Documentos' }}
+          </button>
+
+          <!-- Aviso sobre os 5 documentos -->
+          <div class="upload-info-message" 
+               style="background: #f6f0fa; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 16px 20px; border: 1px solid #a259d9; max-width: 320px;">
+            <span style="display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-info-circle" style="color: #a259d9; font-size: 1.1rem;"></i>
+              <span style="font-size: 0.9rem; color: #222; font-weight: 500; line-height: 1.3;">
+                <strong>Progresso:</strong> {{ documentos.length }}/5 documentos enviados
+                <span *ngIf="isUploadBlocked()" style="display: block; font-size: 0.8rem; color: #2e7d32;">
+                  ✓ Limite máximo atingido
+                </span>
+              </span>
+            </span>
+          </div>
         </div>
         <div class="document-cards-flex"
           style="display: flex; flex-direction: row; gap: 24px; overflow-x: auto; padding-bottom: 8px;">
@@ -110,13 +164,33 @@
 
   <!-- No Documents Template -->
   <ng-template #noDocuments>
-    <div class="text-center no-documents-message">
+    <div *ngIf="!isLoading" class="text-center no-documents-message">
       <i class="fas fa-folder-open empty-icon"></i>
       <h3>Nenhum documento enviado ainda.</h3>
       <p>Comece enviando seus documentos para iniciar o processo de onboarding.</p>
       <input type="file" #fileInput style="display: none;" multiple>
-      <button class="btn btn-primary btn-lg mt-3" (click)="onAttachDocuments()" *ngIf="!isCurrentUserHR">Enviar
-        Documentos</button>
+      
+      <!-- Container para botão e aviso lado a lado -->
+      <div class="button-message-container mt-3">
+        <button class="btn btn-primary btn-lg" 
+                (click)="onAttachDocuments()" 
+                *ngIf="!isCurrentUserHR"
+                [disabled]="isUploadBlocked()"
+                [ngClass]="{'btn-secondary': isUploadBlocked()}">
+          {{ isUploadBlocked() ? 'Limite Atingido' : 'Enviar Documentos' }}
+        </button>
+        
+        <!-- Aviso sobre os 5 documentos -->
+        <div class="upload-info-message" 
+             style="background: #e3f2fd; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 16px 20px; border: 1px solid #bbdefb; max-width: 300px;">
+          <span style="display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-info-circle" style="color: #1976d2; font-size: 1.1rem;"></i>
+            <span style="font-size: 0.9rem; color: #1565c0; font-weight: 500; line-height: 1.3;">
+              <strong>Importante:</strong> Você precisa enviar exatamente <strong>5 documentos</strong> para completar o processo.
+            </span>
+          </span>
+        </div>
+      </div>
     </div>
   </ng-template>
 
@@ -124,7 +198,64 @@
   <app-upload-document-modal [(visible)]="displayUploadModal" (documentUploaded)="onDocumentUploaded($event)">
   </app-upload-document-modal>
 
-</div>
+  <!-- Help Widget -->
+  <div class="help-widget-container">
+    <!-- Help Button -->
+    <button class="help-widget-button" 
+            (click)="toggleHelpWidget()" 
+            [class.active]="showHelpWidget"
+            title="Precisa de ajuda?">
+      <i class="fas fa-question-circle" *ngIf="!showHelpWidget"></i>
+      <i class="fas fa-times" *ngIf="showHelpWidget"></i>
+    </button>
 
+    <!-- Help Panel -->
+    <div class="help-widget-panel" 
+         [class.show]="showHelpWidget"
+         [@slideInOut]>
+      <div class="help-widget-header">
+        <div class="help-avatar">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="help-title">
+          <h4>Assistente DocFlow</h4>
+          <p>Como posso ajudar?</p>
+        </div>
+      </div>
+      
+      <div class="help-widget-content">
+        <div class="help-message">
+          <div class="message-bubble">
+            <p><strong>Olá!</strong> 👋</p>
+            <p>Precisa de ajuda com seus documentos?</p>
+            <p>Entre em contato conosco:</p>
+            
+            <div class="email-container">
+              <div class="email-display">
+                <i class="fas fa-envelope"></i>
+                <span>{{ supportEmail }}</span>
+              </div>
+              <button class="copy-email-btn" 
+                      (click)="copyEmailToClipboard()"
+                      title="Copiar email">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+            
+            <div class="help-tips">
+              <p><strong>Dicas rápidas:</strong></p>
+              <ul>
+                <li>Verifique se seus documentos estão em formato PDF ou imagem</li>
+                <li>Máximo de 5 documentos por processo</li>
+                <li>Acompanhe o status em tempo real</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
 
 <p-toast></p-toast>
