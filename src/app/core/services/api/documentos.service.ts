@@ -68,4 +68,54 @@ export class DocumentosService {
     const uploadUrl = 'https://6cn7ey72ak.execute-api.us-east-1.amazonaws.com/upload-doc-plataforma';
     return this.http.post<any>(uploadUrl, documento);
   }
+
+  /**
+   * Download de documento
+   */
+  downloadDocumento(filename: string): Observable<{
+    download_url: string;
+    filename: string;
+    expires_in: number;
+  }> {
+    const downloadUrl = 'https://6cn7ey72ak.execute-api.us-east-1.amazonaws.com/download-doc-plataforma';
+    const params = new HttpParams().set('filename', filename);
+    
+    return this.http.get<{
+      download_url: string;
+      filename: string;
+      expires_in: number;
+    }>(downloadUrl, { params });
+  }
+
+  /**
+   * Aprovar documento
+   */
+  aprovarDocumento(nomeDocumento: string, emailCandidato: string): Observable<{
+    message: string;
+    nome_documento: string;
+    email_candidato: string;
+    status_anterior: string;
+    status_atual: string;
+    data_aprovacao: string;
+  }> {
+    const aprovarUrl = `${this.apiUrl}/documentos/aprovar`;
+    const payload = {
+      nome_documento: nomeDocumento,
+      email_candidato: emailCandidato
+    };
+    
+    return this.http.put<{
+      message: string;
+      nome_documento: string;
+      email_candidato: string;
+      status_anterior: string;
+      status_atual: string;
+      data_aprovacao: string;
+    }>(aprovarUrl, payload);
+  }
+
+
+
+
+
 }

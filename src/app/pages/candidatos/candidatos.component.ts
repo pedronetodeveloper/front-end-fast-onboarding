@@ -22,6 +22,15 @@ import { AuthService } from '../../core/services/auth.service';
 import { CandidatoService } from '../../core/services/api/candidato.service';
 import { DocumentosService, Documento } from '../../core/services/api/documentos.service';
 
+// Interface para documentos vindos da API (estrutura real)
+interface DocumentoComUI {
+  id?: number | string;
+  nome_documento: string;
+  tipo_documento: string;
+  status: string;
+  downloading?: boolean;
+}
+
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
@@ -85,7 +94,7 @@ export class CandidatosComponent implements OnInit {
   selectedCandidato: CandidatoApi | null = null;
   showDocumentosDialog = false;
   candidatoSelecionado: CandidatoApi | null = null;
-  documentosSelecionados: any[] = [];
+  documentosSelecionados: DocumentoComUI[] = [];
   loading = false;
 
   // Search and filter
@@ -348,7 +357,9 @@ export class CandidatosComponent implements OnInit {
     if (candidato.email) {
       this.documentosService.listarDocumentosRh(candidato.email).subscribe({
         next: (docs) => {
-          this.documentosSelecionados = docs;
+          console.log('Documentos recebidos da API:', docs);
+          // Faz cast dos dados vindos da API para a interface correta
+          this.documentosSelecionados = docs as any[];
         },
         error: () => {
           this.documentosSelecionados = [];
@@ -361,33 +372,86 @@ export class CandidatosComponent implements OnInit {
   /**
    * Aprovar documento individualmente
    */
-  aprovarDocumento(candidato: CandidatoApi, doc: Documento): void {
-    if (!doc.id) {
-      this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'ID do documento não encontrado.' });
+  aprovarDocumento(candidato: CandidatoApi, doc: DocumentoComUI): void {
+    if (!doc.nome_documento || !candidato.email) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: 'Erro', 
+        detail: 'Dados do documento ou candidato não encontrados.' 
+      });
       return;
     }
-    // Aqui você pode implementar a chamada para atualizar o status do documento para 'valido'.
-    // Exemplo: PATCH ou PUT na API (ajuste conforme backend)
-    const documentoAtualizado = { ...doc, status: 'valido' };
-    // Supondo que exista um endpoint para atualizar documento
-    // this.documentosService.atualizarDocumento(documentoAtualizado).subscribe({
-    //   next: () => {
-    //     this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Documento aprovado.' });
-    //     // Atualiza lista após aprovação
-    //     if (candidato.email) {
-    //       this.documentosService.llistarDocumentosRh(candidato.email).subscribe({
-    //         next: (docs) => {
-    //           this.documentosSelecionados = docs;
-    //         }
-    //       });
-    //     }
-    //   },
-    //   error: () => {
-    //     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao aprovar documento.' });
-    //   }
-    // });
-    // Como não há endpoint, apenas simula aprovação localmente:
-    doc.status = 'valido';
-    this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Documento aprovado.' });
+
+    this.documentosService.aprovarDocumento(doc.nome_documento, candidato.email).subscribe({
+      next: (response) => {
+        // Atualiza o status local do documento
+        doc.status = 'APROVADO';
+        
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Sucesso', 
+          detail: `Documento "${doc.nome_documento}" aprovado com sucesso.` 
+        });
+        
+        // Recarrega a lista de documentos para garantir sincronização
+        if (candidato.email) {
+          this.documentosService.listarDocumentosRh(candidato.email).subscribe({
+            next: (docs) => {
+              this.documentosSelecionados = docs as any[];
+            }
+          });
+        }
+      },
+      error: (error) => {
+        console.error('Erro ao aprovar documento:', error);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Erro', 
+          detail: 'Erro ao aprovar documento. Tente novamente.' 
+        });
+      }
+    });
+  }
+
+  /**
+   * Download de documento
+   */
+  downloadDocumento(doc: DocumentoComUI): void {
+    if (!doc.nome_documento) {
+      this.messageService.add({ 
+        severity: 'error', 
+        summary: 'Erro', 
+        detail: 'Nome do arquivo não encontrado.' 
+      });
+      return;
+    }
+
+    // Adiciona propriedade de loading no documento específico
+    doc.downloading = true;
+
+    this.documentosService.downloadDocumento(doc.nome_documento).subscribe({
+      next: (response) => {
+        // Abre a URL de download em uma nova aba
+        window.open(response.download_url, '_blank');
+        
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Sucesso', 
+          detail: `Download de "${doc.nome_documento}" iniciado.` 
+        });
+        
+        doc.downloading = false;
+      },
+      error: (error) => {
+        console.error('Erro no download:', error);
+        this.messageService.add({ 
+          severity: 'error', 
+          summary: 'Erro', 
+          detail: 'Erro ao baixar o documento.' 
+        });
+        
+        doc.downloading = false;
+      }
+    });
   }
 }

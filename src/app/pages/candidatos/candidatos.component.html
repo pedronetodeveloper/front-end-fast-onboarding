@@ -309,15 +309,27 @@
                     [severity]="doc.status === 'APROVADO' ? 'success' : (doc.status === 'REPROVADO' ? 'danger' : (doc.status === 'analisando' ? 'info' : 'warning'))"
                     class="doc-status-tag">
                   </p-tag>
-                  <p-button
-                    *ngIf="isCurrentUserHR && doc.status !== 'valido'"
-                    icon="pi pi-check"
-                    label="Aprovar"
-                    severity="success"
-                    size="small"
-                    (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
-                    class="ml-2 doc-approve-btn">
-                  </p-button>
+                  <div class="doc-actions" style="display: flex; gap: 0.5rem; margin-left: 0.5rem;">
+                    <p-button
+                      *ngIf="isCurrentUserHR"
+                      icon="pi pi-download"
+                      title="Baixar Documento"
+                      severity="info"
+                      size="small"
+                      (onClick)="downloadDocumento(doc)"
+                      [loading]="doc.downloading"
+                      class="doc-download-btn">
+                    </p-button>
+                    <p-button
+                      *ngIf="isCurrentUserHR && doc.status !== 'APROVADO'"
+                      icon="pi pi-check"
+                      label="Aprovar"
+                      severity="success"
+                      size="small"
+                      (onClick)="aprovarDocumento(candidatoSelecionado, doc)"
+                      class="doc-approve-btn">
+                    </p-button>
+                  </div>
                 </div>
               </div>
             </li>
