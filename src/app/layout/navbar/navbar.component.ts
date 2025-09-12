@@ -52,6 +52,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isMenuOpen = false;
   isLanguageSubmenuOpen = false;
   isSobreNosPage = false;
+  isAdmin = false;
+  companyName = "";
 
   // Mapa das flags dos idiomas
   languageFlags: { [key: string]: string } = {
@@ -124,9 +126,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
         nameParts.length > 1
           ? (nameParts[0][0] + nameParts[1][0]).toUpperCase()
           : nameParts[0].substring(0, 2).toUpperCase();
+      
+      // Definir se o usuário é admin e o nome da empresa
+      this.isAdmin = user.role === 'admin';
+      this.companyName = user.empresa || '';
     } else {
       this.displayName = "";
       this.userInitials = "";
+      this.isAdmin = false;
+      this.companyName = "";
     }
   }
 

@@ -39,6 +39,15 @@
     border-radius: 0.5rem;
   }
   
+  .company-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #141414;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-left: 0.5rem;
+  }
+  
   span {
     font-size: 1.25rem;
     font-weight: bold;
@@ -475,6 +484,10 @@
     font-size: 1.1rem;
   }
   
+  .navbar-brand .company-name {
+    font-size: 1.2rem;
+  }
+  
   .user-name {
     display: none; // Hide user name on mobile
   }
@@ -532,6 +545,10 @@
     
     span {
       font-size: 1rem;
+    }
+    
+    .company-name {
+      font-size: 0.9rem;
     }
   }
 }
