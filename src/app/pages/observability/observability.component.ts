@@ -67,17 +67,97 @@ export class ObservabilityComponent implements OnInit {
   displayDialogInfo = false;
 
   docsProcessados = [
-    { label: 'observability.rg', count: 120, icon: 'pi pi-id-card', color1: '#4ade80', color2: '#22c55e' },
-    { label: 'observability.cpf', count: 98, icon: 'pi pi-user', color1: '#60a5fa', color2: '#3b82f6' },
-    { label: 'observability.carteiraIdentidade', count: 110, icon: 'pi pi-home', color1: '#fbbf24', color2: '#f59e0b' },
-    { label: 'observability.comprovanteEndereco', count: 105, icon: 'pi pi-map-marker', color1: '#a78bfa', color2: '#8b5cf6' }
+    { 
+      label: 'observability.rg', 
+      count: 120, 
+      icon: 'pi pi-id-card', 
+      color1: '#4ade80', 
+      color2: '#22c55e',
+      status: { aprovado: 95, reprovado: 15, pendente: 10 }
+    },
+    { 
+      label: 'observability.cpf', 
+      count: 98, 
+      icon: 'pi pi-user', 
+      color1: '#60a5fa', 
+      color2: '#3b82f6',
+      status: { aprovado: 88, reprovado: 5, pendente: 5 }
+    },
+    { 
+      label: 'observability.carteiraTrabalho', 
+      count: 110, 
+      icon: 'pi pi-briefcase', 
+      color1: '#fbbf24', 
+      color2: '#f59e0b',
+      status: { aprovado: 92, reprovado: 12, pendente: 6 }
+    },
+    { 
+      label: 'observability.comprovanteEndereco', 
+      count: 105, 
+      icon: 'pi pi-map-marker', 
+      color1: '#a78bfa', 
+      color2: '#8b5cf6',
+      status: { aprovado: 87, reprovado: 10, pendente: 8 }
+    }
   ];
   economiaDeTempoDocs: any[] = [];
+
+  // KPIs de contratações e performance
+  kpisContratacao = [
+    {
+      label: 'observability.contratacoesMes',
+      value: 45,
+      icon: 'pi pi-users',
+      color1: '#10b981',
+      color2: '#059669',
+      unit: 'contratações'
+    },
+    {
+      label: 'observability.horasEconomizadas',
+      value: 858.9,
+      icon: 'pi pi-clock',
+      color1: '#8b5cf6',
+      color2: '#7c3aed',
+      unit: 'horas'
+    },
+    {
+      label: 'observability.eficienciaProcesso',
+      value: 92.5,
+      icon: 'pi pi-chart-line',
+      color1: '#f59e0b',
+      color2: '#d97706',
+      unit: '%'
+    },
+    {
+      label: 'observability.tempoMedioProcessamento',
+      value: 24,
+      icon: 'pi pi-stopwatch',
+      color1: '#ef4444',
+      color2: '#dc2626',
+      unit: 'horas'
+    },
+    {
+      label: 'observability.documentosProcessados',
+      value: 433,
+      icon: 'pi pi-file-check',
+      color1: '#06b6d4',
+      color2: '#0891b2',
+      unit: 'docs'
+    },
+    {
+      label: 'observability.taxaAprovacao',
+      value: 89.2,
+      icon: 'pi pi-check-circle',
+      color1: '#22c55e',
+      color2: '#16a34a',
+      unit: '%'
+    }
+  ];
 
   acuraciaDocs = [
     { label: 'observability.rg', value: 95, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
     { label: 'observability.cpf', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
-    { label: 'observability.comprovanteResidencia', value: 92, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-home' },
+    { label: 'observability.carteiraTrabalho', value: 92, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-briefcase' },
     { label: 'observability.comprovanteEndereco', value: 94, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
   ];
 
@@ -120,48 +200,88 @@ export class ObservabilityComponent implements OnInit {
       const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
       const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
 
+      // Preparar dados agrupados por tipo de documento e status
+      const labels = this.docsProcessados.map(doc => {
+        switch(doc.label) {
+          case 'observability.rg': return 'RG';
+          case 'observability.cpf': return 'CPF';
+          case 'observability.carteiraTrabalho': return 'Carteira de Trabalho';
+          case 'observability.comprovanteEndereco': return 'Comprovante de Endereço';
+          default: return doc.label;
+        }
+      });
+
       this.data = {
-        labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
+        labels: labels,
         datasets: [
           {
-            label: 'RG',
-            backgroundColor: '#4ade80',
-            data: [50, 70, 65, 90, 80, 40, 30]
+            label: 'Aprovado',
+            backgroundColor: '#22c55e',
+            borderColor: '#16a34a',
+            borderWidth: 1,
+            data: this.docsProcessados.map(doc => doc.status.aprovado)
           },
           {
-            label: 'CPF',
-            backgroundColor: '#60a5fa',
-            data: [60, 65, 70, 85, 90, 50, 35]
+            label: 'Reprovado',
+            backgroundColor: '#ef4444',
+            borderColor: '#dc2626',
+            borderWidth: 1,
+            data: this.docsProcessados.map(doc => doc.status.reprovado)
           },
           {
-            label: 'Carteira de Trabalho',
-            backgroundColor: '#fbbf24',
-            data: [30, 50, 45, 60, 55, 25, 20]
-          },
-          {
-            label: 'Comprovante Endereço',
-            backgroundColor: '#a78bfa',
-            data: [25, 35, 40, 50, 60, 30, 15]
+            label: 'Pendente',
+            backgroundColor: '#f59e0b',
+            borderColor: '#d97706',
+            borderWidth: 1,
+            data: this.docsProcessados.map(doc => doc.status.pendente)
           }
         ]
       };
 
-
       this.options = {
         maintainAspectRatio: false,
         aspectRatio: 0.8,
+        responsive: true,
         plugins: {
           legend: {
+            position: 'top',
             labels: {
-              color: textColor
+              color: textColor,
+              usePointStyle: true,
+              padding: 20,
+              font: {
+                size: 12,
+                weight: '500'
+              }
             }
           },
           title: {
             display: true,
-            text: 'Documentos Processados por Dia',
+            text: 'Status dos Documentos por Tipo',
             color: textColor,
             font: {
-              size: 16
+              size: 16,
+              weight: '600'
+            },
+            padding: {
+              top: 10,
+              bottom: 30
+            }
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleColor: '#fff',
+            bodyColor: '#fff',
+            borderColor: surfaceBorder,
+            borderWidth: 1,
+            cornerRadius: 8,
+            displayColors: true,
+            callbacks: {
+              label: function(context: any) {
+                return context.dataset.label + ': ' + context.parsed.y + ' documentos';
+              }
             }
           }
         },
@@ -170,23 +290,39 @@ export class ObservabilityComponent implements OnInit {
             ticks: {
               color: textColorSecondary,
               font: {
-                weight: 500
+                weight: '500',
+                size: 11
+              },
+              maxRotation: 45,
+              minRotation: 0
+            },
+            grid: {
+              color: surfaceBorder,
+              drawBorder: false,
+              display: false
+            }
+          },
+          y: {
+            beginAtZero: true,
+            ticks: {
+              color: textColorSecondary,
+              font: {
+                size: 11
+              },
+              callback: function(value: any) {
+                return value + ' docs';
               }
             },
             grid: {
               color: surfaceBorder,
               drawBorder: false
             }
-          },
-          y: {
-            ticks: {
-              color: textColorSecondary
-            },
-            grid: {
-              color: surfaceBorder,
-              drawBorder: false
-            }
           }
+        },
+        interaction: {
+          mode: 'nearest',
+          axis: 'x',
+          intersect: false
         }
       };
       this.cd.markForCheck()

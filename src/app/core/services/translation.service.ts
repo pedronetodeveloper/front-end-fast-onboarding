@@ -80,6 +80,7 @@ export class TranslationService {
             "observability.cpf": "CPF",
             "observability.comprovanteResidencia": "Comprovante de Residência",
             "observability.comprovanteEndereco": "Comprovante de Endereço",
+            "observability.carteiraTrabalho": "Carteira de Trabalho",
             "observability.docsPerSecond": "Documentos por Segundo",
             "observability.docsShort": "doc/s",
             "observability.accuracyTitle": "Acurácia (%) da Análise dos Documentos",
@@ -87,6 +88,14 @@ export class TranslationService {
             "observability.details": "Ver Detalhes",
             "observability.docsPerDay": "Documentos Processados por Dia",
             "observability.infoDialog": "Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para envio de documentos.",
+            
+            // Dashboard KPIs
+            "observability.contratacoesMes": "Contratações no Mês",
+            "observability.horasEconomizadas": "Horas Economizadas",
+            "observability.eficienciaProcesso": "Eficiência do Processo",
+            "observability.tempoMedioProcessamento": "Tempo Médio de Processamento",
+            "observability.documentosProcessados": "Documentos Processados",
+            "observability.taxaAprovacao": "Taxa de Aprovação",
             // Title
             "project.name": "DocFlow",
             "project.description": "Impulsionando a Transformação Digital no RH.",
@@ -471,6 +480,7 @@ export class TranslationService {
             "observability.cpf": "CPF",
             "observability.comprovanteResidencia": "Proof of Residence",
             "observability.comprovanteEndereco": "Proof of Address",
+            "observability.carteiraTrabalho": "Work Card",
             "observability.docsPerSecond": "Documents per Second",
             "observability.docsShort": "doc/s",
             "observability.accuracyTitle": "Accuracy (%) of Document Analysis",
@@ -478,6 +488,14 @@ export class TranslationService {
             "observability.details": "View Details",
             "observability.docsPerDay": "Documents Processed per Day",
             "observability.infoDialog": "When adding the candidate to the system, login credentials will automatically be sent to them with access to this platform for document submission.",
+            
+            // Dashboard KPIs
+            "observability.contratacoesMes": "Monthly Hires",
+            "observability.horasEconomizadas": "Hours Saved",
+            "observability.eficienciaProcesso": "Process Efficiency",
+            "observability.tempoMedioProcessamento": "Average Processing Time",
+            "observability.documentosProcessados": "Documents Processed",
+            "observability.taxaAprovacao": "Approval Rate",
             // Navigation (complemento)
             "nav.observability": "Observability",
             "nav.upload": "Upload files",

@@ -3,19 +3,39 @@
     <ng-template pTemplate="content">
       <div>
         <div class="main-kpi-header">
-          <h2>Ganho Real em Horas de Trabalho</h2>
-          <p>Descubra quanto tempo você <span style="color:#9c27b0;font-weight:bold">ganhou</span> usando nossa plataforma.</p>
-          <div class="total-horas">Total de horas economizadas pelo RH: <span style="color:#222;font-size:1.5rem">858,9 horas ou 107,4 dias úteis.</span> </div>
+          <h2>Dashboard de Observabilidade</h2>
+          <p>Acompanhe as <span style="color:#141414;font-weight:bold">métricas de performance</span> e contratações em tempo real.</p>
+          <div class="total-summary">
+            <div class="summary-item">
+              <span class="summary-label">Contratações no Mês:</span>
+              <span class="summary-value">45</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Horas Economizadas:</span>
+              <span class="summary-value">858,9h</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Taxa de Aprovação:</span>
+              <span class="summary-value">89,2%</span>
+            </div>
+          </div>
         </div>
-        <div class="kpi-row">
-          <ng-container *ngFor="let doc of economiaDeTempoDocs">
+        
+        <!-- Grid de KPIs 3x2 -->
+        <div class="kpi-grid">
+          <ng-container *ngFor="let kpi of kpisContratacao">
             <p-card class="kpi-card">
-              <div class="kpi-icon-wrapper">
-                <i [class]="doc.icon" class="kpi-icon" [ngStyle]="{'color': doc.color1}"></i>
-              </div>
-              <div class="kpi-details">
-                <span class="kpi-label">{{ doc.label | translate }}</span>
-                <span class="kpi-value">{{ (doc.value / 60) | number:'1.1-1' }} <span style="font-size:1rem;font-weight:500">{{ 'common.hours' | translate }}</span></span>
+              <div class="kpi-content">
+                <div class="kpi-icon-wrapper" [ngStyle]="{'background-color': kpi.color1 + '15'}">
+                  <i [class]="kpi.icon" class="kpi-icon" [ngStyle]="{'color': kpi.color1}"></i>
+                </div>
+                <div class="kpi-details">
+                  <span class="kpi-label">{{ kpi.label | translate }}</span>
+                  <div class="kpi-value-container">
+                    <span class="kpi-value">{{ kpi.value | number:'1.1-1' }}</span>
+                    <span class="kpi-unit">{{ kpi.unit }}</span>
+                  </div>
+                </div>
               </div>
             </p-card>
           </ng-container>

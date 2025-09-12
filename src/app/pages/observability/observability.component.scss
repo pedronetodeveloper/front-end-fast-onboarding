@@ -1,105 +1,234 @@
-
-// Novo layout para KPIs e card principal
+// Layout principal do container
 .observability-container {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  min-height: 100vh;
 }
 
+// Cabeçalho principal com resumo
 .main-kpi-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #9c27b0 0%, #7c3aed 100%);
+  border-radius: 2rem;
+  color: white;
+  box-shadow: 0 10px 30px rgba(156, 39, 176, 0.3);
 }
 
 .main-kpi-header h2 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 800;
-  color: #222;
   margin-bottom: 0.5rem;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .main-kpi-header p {
-  font-size: 1.2rem;
-  color: #444;
-  margin-bottom: 0.5rem;
-}
-
-.main-kpi-header .total-horas {
   font-size: 1.3rem;
-  font-weight: bold;
-  color: #9c27b0;
-  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  opacity: 1;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
 }
 
-.kpi-row {
+.total-summary {
   display: flex;
+  gap: 3rem;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
 }
 
-.kpi-card {
-  background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 1.2rem 2rem;
-  min-width: 240px;
-  max-width: 300px;
+.summary-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  transition: box-shadow 0.2s, transform 0.2s;
+  gap: 0.5rem;
 }
 
-.kpi-card:hover {
-  box-shadow: 0 4px 16px rgba(124,58,237,0.15);
-  transform: translateY(-2px) scale(1.03);
+.summary-label {
+  font-size: 0.9rem;
+  opacity: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+.summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+// Grid de KPIs 3x2
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+// Cards dos KPIs
+.kpi-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #9c27b0, #7c3aed, #06b6d4);
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.kpi-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.5rem;
+  min-height: 140px;
 }
 
 .kpi-icon-wrapper {
-  width: 3rem;
-  height: 3rem;
-  background: #f3f0fe;
-  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.kpi-card:hover .kpi-icon-wrapper {
+  transform: rotate(5deg) scale(1.1);
 }
 
 .kpi-icon {
   font-size: 2rem;
+  transition: color 0.3s ease;
 }
 
 .kpi-details {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  width: 100%;
 }
 
 .kpi-label {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #333;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.kpi-value-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .kpi-value {
-  font-size: 1.7rem;
-  font-weight: 700;
-  color: #9c27b0;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.kpi-unit {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+// Responsividade para grid
+@media (max-width: 1200px) {
+  .kpi-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 
 @media (max-width: 900px) {
-  .kpi-row {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
+  .observability-container {
+    padding: 1rem;
   }
+  
+  .main-kpi-header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
   .main-kpi-header h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
+  }
+  
+  .total-summary {
+    gap: 2rem;
+  }
+  
+  .summary-value {
+    font-size: 1.5rem;
+  }
+  
+  .kpi-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .kpi-content {
+    padding: 1.5rem;
+  }
+  
+  .kpi-value {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .total-summary {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .summary-item {
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
   }
 }
 .observability-container {
@@ -280,10 +409,36 @@
 }
 
 // Responsive
+// Melhorias no gráfico
+::ng-deep .p-chart {
+  .p-chart-canvas {
+    border-radius: 1rem;
+  }
+}
+
+::ng-deep .p-card {
+  border-radius: 1.5rem;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  
+  .p-card-content {
+    padding: 2rem;
+  }
+  
+  .p-card-header {
+    padding: 1.5rem 2rem 0 2rem;
+    border-bottom: none;
+    
+    .text-lg {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .observability-container {
-    padding: 1rem;
-
     .search-container {
       flex-direction: column;
       align-items: stretch;
@@ -316,6 +471,14 @@
         justify-content: center;
       }
     }
+
+    ::ng-deep .p-card .p-card-content {
+      padding: 1rem;
+    }
+    
+    ::ng-deep .p-card .p-card-header {
+      padding: 1rem 1rem 0 1rem;
+    }
   }
 }
 
@@ -328,4 +491,3 @@
     }
   }
 }
-
