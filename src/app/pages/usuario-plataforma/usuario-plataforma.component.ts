@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
@@ -19,6 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import { UsuarioService } from '../../core/services/api/usuario.service';
 import { EmpresaService, Empresa } from '../../core/services/api/empresa.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { emailValidator } from '../../shared/validators/email.validator';
 
 // Interfaces
 import { CreateUsuarioRequest, UpdateUsuarioRequest, CreateUsuarioPlataformaRequest, UpdateUsuarioPlataformaRequest, UsuarioPlataforma } from '../../shared/interface/usuario.interface';
@@ -46,7 +47,8 @@ export interface Usuario {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+  FormsModule,
+  ReactiveFormsModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -102,21 +104,29 @@ export class UsuarioPlataformComponent implements OnInit {
   isEditing = false;
 
   // Form data
-  usuarioForm: Usuario= {
-    empresa: '',
-    nome: '',
-    email: '',
-    role:''
-  };
+
+  usuarioFormGroup!: FormGroup;
 
 
   empresaOptions: { label: string; value: string }[] = [];
 
   candidatoSelecionado: Usuario | null = null;
 
+  constructor(private fb: FormBuilder) {}
+
   ngOnInit(): void {
     this.carregarUsuarios();
     this.carregarEmpresas();
+    this.initForm();
+  }
+
+  initForm(): void {
+    this.usuarioFormGroup = this.fb.group({
+      empresa: ['', Validators.required],
+      nome: ['', Validators.required],
+      email: ['', [Validators.required, emailValidator]],
+      role: ['', Validators.required]
+    });
   }
 
     carregarEmpresas(): void {
@@ -164,12 +174,7 @@ export class UsuarioPlataformComponent implements OnInit {
    * Abrir dialog para criar novo usuário
    */
   novoUsuario(): void {
-    this.usuarioForm = {
-      empresa: '',
-      nome: '',
-      email: '',
-      role:''
-    };
+    this.usuarioFormGroup.reset();
     this.isEditing = false;
     this.abrirDialogUsuario();
   }
@@ -178,12 +183,12 @@ export class UsuarioPlataformComponent implements OnInit {
    * Abrir dialog para editar usuário
    */
   editarUsuario(usuario: Usuario): void {
-    this.usuarioForm = {
+    this.usuarioFormGroup.patchValue({
       empresa: usuario.empresa || '',
       nome: usuario.nome || '',
       email: usuario.email || '',
       role: usuario.role || ''
-    };
+    });
     this.selectedUsuario = usuario;
     this.isEditing = true;
     this.abrirDialogUsuario();
@@ -193,20 +198,21 @@ export class UsuarioPlataformComponent implements OnInit {
    * Salvar usuário (criar ou atualizar)
    */
   salvarUsuario(): void {
-    if (!this.usuarioForm.nome || !this.usuarioForm.email) {
+    if (this.usuarioFormGroup.invalid) {
+      this.usuarioFormGroup.markAllAsTouched();
       this.messageService.add({
         severity: 'warn',
         summary: 'Atenção',
-        detail: 'Nome e email são obrigatórios'
+        detail: 'Preencha todos os campos obrigatórios corretamente.'
       });
       return;
     }
     this.loading = true;
+    const usuarioData = this.usuarioFormGroup.value;
     if (this.isEditing && this.selectedUsuario) {
-      // Atualizar usuário via service
       const usuarioAtualizado = {
         ...this.selectedUsuario,
-        ...this.usuarioForm,
+        ...usuarioData,
         id: this.selectedUsuario.id
       } as Usuario & { id: string };
       this.usuarioService.atualizarUsuario(usuarioAtualizado).subscribe({
@@ -230,11 +236,7 @@ export class UsuarioPlataformComponent implements OnInit {
         }
       });
     } else {
-      // Criar novo usuário via service
-      const novoUsuario = {
-        ...this.usuarioForm,
-      }
-      this.usuarioService.criarUsuario(novoUsuario).subscribe({
+      this.usuarioService.criarUsuario(usuarioData).subscribe({
         next: () => {
           this.messageService.add({
             severity: 'success',
@@ -313,12 +315,7 @@ export class UsuarioPlataformComponent implements OnInit {
   fecharDialog(): void {
     this.displayDialog = false;
     this.selectedUsuario = null;
-    this.usuarioForm = {
-      nome: '',
-      email: '',
-      empresa: '',
-      role: ''
-    };
+    this.usuarioFormGroup.reset();
   }
 
   // ...existing code...

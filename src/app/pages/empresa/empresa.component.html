@@ -103,7 +103,7 @@
                 severity="danger" 
                 size="small"
                 [title]="'common.delete' | translate"
-                (onClick)="confirmarExclusao(empresa)">
+                (onClick)="confirmarExclusaoDialog(empresa)">
               </p-button>
             </div>
           </td>
@@ -149,22 +149,26 @@
     [style]="{width: '450px'}"
     [draggable]="false"
     [resizable]="false">
-    <div class="dialog-content">
+
+    <form [formGroup]="empresaFormGroup" class="dialog-content">
       <div class="field">
         <label for="nome">{{ 'empresa.name' | translate }} *</label>
         <input 
           id="nome"
           type="text" 
           pInputText 
-          [(ngModel)]="empresaForm.nome"
+          formControlName="nome"
           class="w-full"
           [placeholder]="'empresa.namePlaceholder' | translate" />
+        <div *ngIf="empresaFormGroup.get('nome')?.invalid && empresaFormGroup.get('nome')?.touched" class="text-danger">
+          {{ 'common.required' | translate }}
+        </div>
       </div>
       <div class="field">
         <label for="plano">{{ 'empresa.plan' | translate }} *</label>
         <p-dropdown 
           id="plano"
-          [(ngModel)]="empresaForm.planos"
+          formControlName="planos"
           [options]="planoOptions"
           optionLabel="label"
           optionValue="value"
@@ -173,26 +177,37 @@
           (onChange)="onPlanoChange()"
           [placeholder]="'empresa.planPlaceholder' | translate">
         </p-dropdown>
+        <div *ngIf="empresaFormGroup.get('planos')?.invalid && empresaFormGroup.get('planos')?.touched" class="text-danger">
+          {{ 'common.required' | translate }}
+        </div>
       </div>
       <div class="field">
-        <label for="nome">{{ 'empresa.phone' | translate }} *</label>
+        <label for="telefone">{{ 'empresa.phone' | translate }} *</label>
         <input 
-          id="nome"
+          id="telefone"
           type="text" 
           pInputText 
-          [(ngModel)]="empresaForm.telefone_responsavel"
+          formControlName="telefone_responsavel"
           class="w-full"
           [placeholder]="'empresa.phonePlaceholder' | translate" />
+        <div *ngIf="empresaFormGroup.get('telefone_responsavel')?.invalid && empresaFormGroup.get('telefone_responsavel')?.touched" class="text-danger">
+          <span *ngIf="empresaFormGroup.get('telefone_responsavel')?.errors?.['required']">{{ 'common.required' | translate }}</span>
+          <span *ngIf="empresaFormGroup.get('telefone_responsavel')?.errors?.['telefoneInvalido']">Telefone inválido</span>
+        </div>
       </div>
       <div class="field">
-        <label for="responsavel">{{ 'empresa.email_responsavel' | translate }} *</label>
+        <label for="email">{{ 'empresa.email_responsavel' | translate }} *</label>
         <input 
-          id="responsavel"
+          id="email"
           type="text" 
           pInputText 
-          [(ngModel)]="empresaForm.email_responsavel"
+          formControlName="email_responsavel"
           class="w-full"
           [placeholder]="'empresa.email_responsavel' | translate" />
+        <div *ngIf="empresaFormGroup.get('email_responsavel')?.invalid && empresaFormGroup.get('email_responsavel')?.touched" class="text-danger">
+          <span *ngIf="empresaFormGroup.get('email_responsavel')?.errors?.['required']">{{ 'common.required' | translate }}</span>
+          <span *ngIf="empresaFormGroup.get('email_responsavel')?.errors?.['emailInvalido']">Email inválido</span>
+        </div>
       </div>
       <div class="field">
         <label for="cnpj">{{ 'empresa.cnpj' | translate }} *</label>
@@ -200,11 +215,16 @@
           id="cnpj"
           type="text" 
           pInputText 
-          [(ngModel)]="empresaForm.cnpj"
+          formControlName="cnpj"
           class="w-full"
           [placeholder]="'empresa.cnpjPlaceholder' | translate" />
+        <div *ngIf="empresaFormGroup.get('cnpj')?.invalid && empresaFormGroup.get('cnpj')?.touched" class="text-danger">
+          <span *ngIf="empresaFormGroup.get('cnpj')?.errors?.['required']">{{ 'common.required' | translate }}</span>
+          <span *ngIf="empresaFormGroup.get('cnpj')?.errors?.['cnpjInvalido']">CNPJ inválido</span>
+          <span *ngIf="empresaFormGroup.get('cnpj')?.errors?.['cpfCnpjInvalido']">CNPJ inválido</span>
+        </div>
       </div>
-    </div>
+    </form>
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
         <p-button 

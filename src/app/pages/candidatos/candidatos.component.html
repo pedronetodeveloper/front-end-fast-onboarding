@@ -137,7 +137,7 @@
     [style]="{width: '450px', minHeight: '520px'}"
     [draggable]="false"
     [resizable]="false">
-    <div class="dialog-content">
+    <form [formGroup]="candidatoFormGroup" class="dialog-content">
       <div style="display: flex; gap: 1rem;">
         <div class="field" style="flex:1;">
           <label for="nome">Nome *</label>
@@ -145,42 +145,50 @@
             id="nome"
             type="text" 
             pInputText 
-            [(ngModel)]="candidatoForm.nome"
+            formControlName="nome"
             class="w-full"
             placeholder="Nome" />
+          <div *ngIf="candidatoFormGroup.get('nome')?.invalid && candidatoFormGroup.get('nome')?.touched" class="text-danger">
+            Nome é obrigatório
+          </div>
         </div>
-        <div *ngIf="!isEditing" class="field" style="flex:1;">
+        <div class="field" style="flex:1;">
           <label for="cpf">CPF *</label>
           <input 
             id="cpf"
             type="text" 
             pInputText 
-            [(ngModel)]="candidatoForm.cpf"
+            formControlName="cpf"
             class="w-full"
             placeholder="Somente números" />
+          <div *ngIf="candidatoFormGroup.get('cpf')?.invalid && candidatoFormGroup.get('cpf')?.touched" class="text-danger">
+            <span *ngIf="candidatoFormGroup.get('cpf')?.errors?.['required']">CPF é obrigatório</span>
+            <span *ngIf="candidatoFormGroup.get('cpf')?.errors?.['cpfInvalido']">CPF inválido</span>
+            <span *ngIf="candidatoFormGroup.get('cpf')?.errors?.['cpfCnpjInvalido']">CPF inválido</span>
+          </div>
         </div>
       </div>
-        <div *ngIf="isEditing" class="field">
-          <label for="situacao">Situação</label>
-          <p-dropdown 
-            id="situacao"
-            [options]="[
-              {label: 'Pendente', value: 'Pendente'},
-              {label: 'Processo Finalizado', value: 'Processo Finalizado'}
-            ]"
-            appendTo="body"
-            [(ngModel)]="candidatoForm.situacao"
-            placeholder="Selecione a situação"
-            class="w-full">
-          </p-dropdown>
-        </div>
+      <div *ngIf="isEditing" class="field">
+        <label for="situacao">Situação</label>
+        <p-dropdown 
+          id="situacao"
+          [options]="[
+            {label: 'Pendente', value: 'Pendente'},
+            {label: 'Processo Finalizado', value: 'Processo Finalizado'}
+          ]"
+          appendTo="body"
+          formControlName="situacao"
+          placeholder="Selecione a situação"
+          class="w-full">
+        </p-dropdown>
+      </div>
       <div class="field" >
         <label for="vaga">Vaga</label>
         <input 
           id="vaga"
           type="text" 
           pInputText 
-          [(ngModel)]="candidatoForm.vaga"
+          formControlName="vaga"
           class="w-full"
           placeholder="Vaga" />
       </div>
@@ -191,9 +199,13 @@
             id="email"
             type="email" 
             pInputText 
-            [(ngModel)]="candidatoForm.email"
+            formControlName="email"
             class="w-full"
             placeholder="Email" />
+          <div *ngIf="candidatoFormGroup.get('email')?.invalid && candidatoFormGroup.get('email')?.touched" class="text-danger">
+            <span *ngIf="candidatoFormGroup.get('email')?.errors?.['required']">Email é obrigatório</span>
+            <span *ngIf="candidatoFormGroup.get('email')?.errors?.['email']">Email inválido</span>
+          </div>
         </div>
         <div class="field" style="flex:1;">
           <label for="telefone">Telefone</label>
@@ -201,9 +213,12 @@
             id="telefone"
             type="text" 
             pInputText 
-            [(ngModel)]="candidatoForm.telefone"
+            formControlName="telefone"
             class="w-full"
             placeholder="Somente números" />
+          <div *ngIf="candidatoFormGroup.get('telefone')?.invalid && candidatoFormGroup.get('telefone')?.touched" class="text-danger">
+            <span *ngIf="candidatoFormGroup.get('telefone')?.errors?.['telefoneInvalido']">Telefone inválido</span>
+          </div>
         </div>
       </div>
       <div style="display: flex; gap: 1rem;">
@@ -217,7 +232,7 @@
               {label: 'Outro', value: 'Outro'}
             ]"
             appendTo="body"
-            [(ngModel)]="candidatoForm.sexo"
+            formControlName="sexo"
             placeholder="Selecione o sexo"
             class="w-full">
           </p-dropdown>
@@ -236,14 +251,14 @@
               {label: 'RS', value: 'RS'}, {label: 'RO', value: 'RO'}, {label: 'RR', value: 'RR'}, {label: 'SC', value: 'SC'},
               {label: 'SP', value: 'SP'}, {label: 'SE', value: 'SE'}, {label: 'TO', value: 'TO'}
             ]"
-            [(ngModel)]="candidatoForm.estado"
+            formControlName="estado"
             placeholder="Selecione o estado"
             class="w-full"
             filter="true">
           </p-dropdown>
         </div>
       </div>
-    </div>
+    </form>
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
         <p-button 

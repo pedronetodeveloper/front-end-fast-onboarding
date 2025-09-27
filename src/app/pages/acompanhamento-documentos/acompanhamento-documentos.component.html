@@ -164,23 +164,20 @@
 
   <!-- No Documents Template -->
   <ng-template #noDocuments>
-    <div *ngIf="!isLoading" class="text-center no-documents-message">
+    <div *ngIf="!isLoading" class="no-documents-message" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
       <i class="fas fa-folder-open empty-icon"></i>
-      <h3>Nenhum documento enviado ainda.</h3>
-      <p>Comece enviando seus documentos para iniciar o processo de onboarding.</p>
+      <h3 style="text-align: center;">Nenhum documento enviado ainda.</h3>
+      <p style="text-align: center;">Comece enviando seus documentos para iniciar o processo de onboarding.</p>
       <input type="file" #fileInput style="display: none;" multiple>
-      
-      <!-- Container para botão e aviso lado a lado -->
-      <div class="button-message-container mt-3">
+      <div class="button-message-container" style="margin-top: 2rem; justify-content: center;">
         <button class="btn btn-primary btn-lg" 
                 (click)="onAttachDocuments()" 
                 *ngIf="!isCurrentUserHR"
                 [disabled]="isUploadBlocked()"
-                [ngClass]="{'btn-secondary': isUploadBlocked()}">
+                [ngClass]="{'btn-secondary': isUploadBlocked()}"
+                style="margin-right: 1rem;">
           {{ isUploadBlocked() ? 'Limite Atingido' : 'Enviar Documentos' }}
         </button>
-        
-        <!-- Aviso sobre os 5 documentos -->
         <div class="upload-info-message" 
              style="background: #e3f2fd; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 16px 20px; border: 1px solid #bbdefb; max-width: 300px;">
           <span style="display: flex; align-items: center; gap: 8px;">

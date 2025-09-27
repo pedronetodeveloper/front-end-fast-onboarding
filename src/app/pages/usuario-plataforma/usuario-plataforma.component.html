@@ -89,7 +89,7 @@
             </ng-template>
           </td>
             <td>
-              <p-tag [value]="getRoleLabel(usuario.role)" severity="info"></p-tag>
+              <p-tag [value]="getRoleLabel(usuario.role)" severity="info" class="role-tag"></p-tag>
             </td>
             <td>
               <div class="action-buttons">
@@ -171,6 +171,7 @@
   </p-card>
 
   <!-- Dialog para criar/editar usuário -->
+
   <p-dialog 
     [header]="isEditing ? ('usuario-plataform.edit' | translate) : ('usuario-plataform.new' | translate)"
     [(visible)]="displayDialog" 
@@ -178,25 +179,22 @@
     [style]="{width: '450px'}"
     [draggable]="false"
     [resizable]="false">
-    
-    <div class="dialog-content">
+    <form [formGroup]="usuarioFormGroup" class="dialog-content">
       <div class="field">
         <label for="empresa">{{ 'usuario-plataform.empresa' | translate }} *</label>
-        <ng-container *ngIf="!isEditing; else empresaTexto">
-          <p-dropdown 
-            id="empresa"
-            [(ngModel)]="usuarioForm.empresa"
-            [options]="empresaOptions"
-            optionLabel="label"
-            optionValue="value"
-            appendTo="body"
-            class="w-full"
-            [placeholder]="'usuario-plataform.empresaPlaceholder' | translate">
-          </p-dropdown>
-        </ng-container>
-        <ng-template #empresaTexto>
-          <p-tag [value]="usuarioForm.empresa" severity="info"></p-tag>
-        </ng-template>
+        <p-dropdown 
+          id="empresa"
+          formControlName="empresa"
+          [options]="empresaOptions"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          class="w-full"
+          [placeholder]="'usuario-plataform.empresaPlaceholder' | translate">
+        </p-dropdown>
+        <div *ngIf="usuarioFormGroup.get('empresa')?.invalid && usuarioFormGroup.get('empresa')?.touched" class="text-danger">
+          {{ 'common.required' | translate }}
+        </div>
       </div>
       <div class="field">
         <label for="nome">{{ 'usuario-plataform.name' | translate }} *</label>
@@ -204,48 +202,49 @@
           id="nome"
           type="text" 
           pInputText 
-          [(ngModel)]="usuarioForm.nome"
+          formControlName="nome"
           class="w-full"
           [placeholder]="'usuario-plataform.namePlaceholder' | translate" />
+        <div *ngIf="usuarioFormGroup.get('nome')?.invalid && usuarioFormGroup.get('nome')?.touched" class="text-danger">
+          {{ 'common.required' | translate }}
+        </div>
       </div>
-
       <div class="field">
         <label for="email">{{ 'usuario-plataform.email' | translate }} *</label>
         <input 
           id="email"
           type="email" 
           pInputText 
-          [(ngModel)]="usuarioForm.email"
+          formControlName="email"
           class="w-full"
           [placeholder]="'usuario-plataform.emailPlaceholder' | translate" />
+        <div *ngIf="usuarioFormGroup.get('email')?.invalid && usuarioFormGroup.get('email')?.touched" class="text-danger">
+          <span *ngIf="usuarioFormGroup.get('email')?.errors?.['required']">{{ 'common.required' | translate }}</span>
+          <span *ngIf="usuarioFormGroup.get('email')?.errors?.['emailInvalido']">Email inválido</span>
+        </div>
       </div>
       <div class="field">
         <label for="role">{{ 'usuario-plataform.role' | translate }}</label>
-          <ng-container *ngIf="!isEditing; else roleTexto">
-            <p-dropdown
-              id="role"
-              [(ngModel)]="usuarioForm.role"
-              [options]="[
-                { label: 'Administrador', value: 'admin' },
-                { label: 'Responsável', value: 'user' },
-                { label: 'Candidato', value: 'candidate' },
-                { label: 'RH', value: 'rh' }
-              ]"
-              optionLabel="label"
-              optionValue="value"
-              appendTo="body"
-              class="w-full"
-              [placeholder]="'usuario-plataform.rolePlaceholder' | translate">
-            </p-dropdown>
-          </ng-container>
-          <ng-template #roleTexto>
-            <p-tag [value]="usuarioForm.role" severity="info"></p-tag>
-          </ng-template>
+        <p-dropdown
+          id="role"
+          formControlName="role"
+          [options]="[
+            { label: 'Administrador', value: 'admin' },
+            { label: 'Responsável', value: 'user' },
+            { label: 'Candidato', value: 'candidate' },
+            { label: 'RH', value: 'rh' }
+          ]"
+          optionLabel="label"
+          optionValue="value"
+          appendTo="body"
+          class="w-full"
+          [placeholder]="'usuario-plataform.rolePlaceholder' | translate">
+        </p-dropdown>
+        <div *ngIf="usuarioFormGroup.get('role')?.invalid && usuarioFormGroup.get('role')?.touched" class="text-danger">
+          {{ 'common.required' | translate }}
+        </div>
       </div>
-
-  <!-- campo de idioma removido do formulário -->
-    </div>
-
+    </form>
     <ng-template pTemplate="footer">
       <div class="dialog-footer">
         <p-button 

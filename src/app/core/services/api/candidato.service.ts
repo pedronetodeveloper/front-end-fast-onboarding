@@ -31,7 +31,7 @@ export class CandidatoService {
   }
 
   deletarCandidato(id: number | string): Observable<void> {
-    return this.http.delete<void>(`${this.candidatoApiUrl}`, { body: id });
+  return this.http.delete<void>(`${this.candidatoApiUrl}`, { body: { id } });
   }
 
   /**

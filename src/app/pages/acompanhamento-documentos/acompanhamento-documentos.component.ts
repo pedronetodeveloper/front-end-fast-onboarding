@@ -112,13 +112,55 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   onDocumentUploaded(event: { file: File, documentType: string }): void {
     const { file, documentType } = event;
 
+    // Validação de tipo de arquivo suportado
+    const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Tipo de arquivo não suportado',
+        detail: 'Envie apenas PDF, PNG ou JPEG.',
+        life: 5000
+      });
+      return;
+    }
+
+    // Validação de tamanho máximo (10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Arquivo muito grande',
+        detail: 'O arquivo deve ter no máximo 10MB.',
+        life: 5000
+      });
+      return;
+    }
+
     if (file && documentType && this.user?.email) {
       this.uploadMessage = `Enviando ${file.name} (${documentType})...`;
       this.uploadProgress = 0;
 
       const reader = new FileReader();
       reader.onload = () => {
-        const base64 = (reader.result as string).split(',')[1];
+        let base64 = '';
+        const result = reader.result as string;
+        // Garante que é base64 puro
+        if (result.startsWith('data:')) {
+          base64 = result.substring(result.indexOf(',') + 1);
+        } else {
+          base64 = result;
+        }
+        // Validação extra: base64 só pode conter caracteres válidos
+        const base64Regex = /^[A-Za-z0-9+/=]+$/;
+        if (!base64Regex.test(base64)) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Arquivo inválido',
+            detail: 'O arquivo não pôde ser convertido corretamente. Tente outro arquivo.',
+            life: 5000
+          });
+          return;
+        }
         const documentoPayload = {
           filename: file.name,
           document_type: documentType,

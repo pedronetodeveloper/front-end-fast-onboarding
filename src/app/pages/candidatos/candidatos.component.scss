@@ -1,3 +1,8 @@
+// Estilo para mensagens de erro obrigatórias
+.text-danger {
+  color: #f44336;
+  font-weight: 600;
+}
 /* Tag customizada para Pendente */
 .tag-pendente {
   background: rgba(255, 152, 0, 0.3) !important;

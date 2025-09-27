@@ -7,7 +7,10 @@
 
         <a routerLink="/home" class="navbar-brand">
             <img *ngIf="!isLoggedIn || isAdmin" src="assets/logo1.5.png" alt="Logo DocFlow" class="brand-logo">
-            <span *ngIf="isLoggedIn && !isAdmin && companyName" class="company-name">{{ companyName }}</span>
+                        <span *ngIf="isLoggedIn && !isAdmin && companyName" class="company-name-highlight">
+                            <i class="pi pi-building company-icon"></i>
+                            {{ companyName }}
+                        </span>
         </a>
     </div>
 

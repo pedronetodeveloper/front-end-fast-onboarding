@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { telefoneValidator } from '../../shared/validators/telefone.validator';
+import { cpfCnpjValidator } from '../../shared/validators/cpf.validator';
 
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
@@ -59,7 +61,8 @@ export interface CandidatoApi {
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+  FormsModule,
+  ReactiveFormsModule,
     TableModule,
     ButtonModule,
     DialogModule,
@@ -108,19 +111,27 @@ export class CandidatosComponent implements OnInit {
   isEditing = false;
 
   // Form data
-  candidatoForm: CandidatoApi = {
-    nome: '',
-    email: '',
-    situacao: '',
-    estado: '',
-    vaga: '',
-    telefone: '',
-    sexo: '',
-    empresa: ''
-  };
+  candidatoFormGroup!: FormGroup;
+
+  constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.carregarCandidatos();
+    this.initForm();
+  }
+
+  initForm(): void {
+    this.candidatoFormGroup = this.fb.group({
+      nome: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      cpf: ['', [Validators.required, cpfCnpjValidator]],
+      telefone: ['', telefoneValidator],
+      situacao: [''],
+      estado: [''],
+      vaga: [''],
+      sexo: [''],
+      empresa: ['']
+    });
   }
 
   abrirModal():void{
@@ -149,16 +160,7 @@ export class CandidatosComponent implements OnInit {
    * Abrir dialog para criar novo candidato
    */
   novoCandidato(): void {
-    this.candidatoForm = {
-      nome: '',
-      email: '',
-      situacao: '',
-      estado: '',
-      vaga: '',
-      telefone: '',
-      sexo: '',
-      empresa: ''
-    };
+    this.candidatoFormGroup.reset();
     this.isEditing = false;
     this.abrirDialogCandidato();
   }
@@ -167,16 +169,17 @@ export class CandidatosComponent implements OnInit {
    * Abrir dialog para editar candidato
    */
   editarCandidato(candidato: CandidatoApi): void {
-    this.candidatoForm = {
+    this.candidatoFormGroup.patchValue({
       nome: candidato.nome || '',
       email: candidato.email || '',
+      cpf: candidato.cpf || '',
+      telefone: candidato.telefone || '',
       situacao: candidato.situacao || '',
       estado: candidato.estado || '',
       vaga: candidato.vaga || '',
-      telefone: candidato.telefone || '',
       sexo: candidato.sexo || '',
       empresa: candidato.empresa || ''
-    };
+    });
     this.selectedCandidato = candidato;
     this.isEditing = true;
     this.abrirDialogCandidato();
@@ -190,20 +193,21 @@ export class CandidatosComponent implements OnInit {
    * Salvar candidato (criar ou atualizar)
    */
   salvarCandidato(): void {
-    if (!this.candidatoForm.nome || !this.candidatoForm.email) {
+    if (this.candidatoFormGroup.invalid) {
+      this.candidatoFormGroup.markAllAsTouched();
       this.messageService.add({
         severity: 'warn',
         summary: 'Atenção',
-        detail: 'Nome e email são obrigatórios'
+        detail: 'Preencha todos os campos obrigatórios corretamente.'
       });
       return;
     }
     this.loading = true;
+    const formValue = this.candidatoFormGroup.value;
     if (this.isEditing && this.selectedCandidato) {
-      // Atualizar candidato via service
       const candidatoAtualizado = {
         ...this.selectedCandidato,
-        ...this.candidatoForm,
+        ...formValue,
         id: this.selectedCandidato.id
       } as CandidatoApi & { id: number };
       this.candidatoService.editarCandidato(candidatoAtualizado).subscribe({
@@ -219,10 +223,9 @@ export class CandidatosComponent implements OnInit {
         }
       });
     } else {
-      // Criar novo candidato via service
       const empresa = this.authService.getEmpresa();
       const novoCandidato = {
-        ...this.candidatoForm,
+        ...formValue,
         empresa: empresa || ''
       };
       this.candidatoService.salvarCandidato(novoCandidato).subscribe({
@@ -296,16 +299,7 @@ export class CandidatosComponent implements OnInit {
   fecharDialog(): void {
     this.displayDialog = false;
     this.selectedCandidato = null;
-    this.candidatoForm = {
-      nome: '',
-      email: '',
-      situacao: '',
-      estado: '',
-      vaga: '',
-      telefone: '',
-      sexo: '',
-      empresa: ''
-    };
+    this.candidatoFormGroup.reset();
   }
 
   /**

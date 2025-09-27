@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
@@ -16,7 +16,9 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmpresaService, Empresa } from '../../core/services/api/empresa.service';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { emailValidator } from '../../shared/validators/email.validator';
+import { telefoneValidator } from '../../shared/validators/telefone.validator';
+import { cpfCnpjValidator } from '../../shared/validators/cnpj.validator';
 // Interface importada do serviço
 
 @Component({
@@ -27,19 +29,20 @@ import { InputTextModule } from 'primeng/inputtext';
   imports: [
     CommonModule,
     FormsModule,
-    CardModule,
-    ToolbarModule,
-    ButtonModule,
-    TableModule,
-    TagModule,
-    DialogModule,
-    DropdownModule,
-    InputTextModule,
-    ToastModule,
-    ConfirmDialogModule,
-    IconFieldModule,
-    InputIconModule,
-    TranslatePipe
+  CardModule,
+  ToolbarModule,
+  ButtonModule,
+  TableModule,
+  TagModule,
+  DialogModule,
+  DropdownModule,
+  InputTextModule,
+  ToastModule,
+  ConfirmDialogModule,
+  IconFieldModule,
+  InputIconModule,
+  TranslatePipe,
+  ReactiveFormsModule
   ],
   providers: [ConfirmationService]
 })
@@ -47,6 +50,7 @@ export class EmpresaComponent {
   private messageService = inject(MessageService);
   private empresaService = inject(EmpresaService);
   empresas: Empresa[] = [];
+  empresaFormGroup!: FormGroup;
   filteredEmpresas: Empresa[] = [];
   loading = false;
   sortField = 'nome';
@@ -62,8 +66,22 @@ export class EmpresaComponent {
     { label: 'Enterprise', value: 'Enterprise' }
   ];
 
+  constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) {
+    this.initializeValidators();
+  }
+
   ngOnInit() {
     this.carregarEmpresas();
+  }
+
+  initializeValidators() {
+    this.empresaFormGroup = this.fb.group({
+      nome: ['', Validators.required],
+      cnpj: ['', [Validators.required, cpfCnpjValidator]],
+      planos: ['', Validators.required],
+      email_responsavel: ['', [Validators.required, emailValidator]],
+      telefone_responsavel: ['', [Validators.required, telefoneValidator]]
+    });
   }
 
   carregarEmpresas() {
@@ -83,19 +101,30 @@ export class EmpresaComponent {
 
   novaEmpresa() {
     this.isEditing = false;
-    this.empresaForm = { nome: '', cnpj: '', planos: '', email_responsavel: '', telefone_responsavel: '' };
+    this.empresaFormGroup.reset();
     this.displayDialog = true;
   }
 
   editarEmpresa(empresa: Empresa) {
     this.isEditing = true;
-    this.empresaForm = { ...empresa };
+    this.empresaFormGroup.patchValue({
+      nome: empresa.nome,
+      cnpj: empresa.cnpj,
+      planos: empresa.planos,
+      email_responsavel: empresa.email_responsavel,
+      telefone_responsavel: empresa.telefone_responsavel
+    });
     this.displayDialog = true;
   }
 
   salvarEmpresa() {
-    if (this.isEditing && this.empresaForm.id) {
-      this.empresaService.atualizarEmpresa(String(this.empresaForm.id), this.empresaForm).subscribe({
+    if (this.empresaFormGroup.invalid) {
+      this.empresaFormGroup.markAllAsTouched();
+      return;
+    }
+    const empresaData = this.empresaFormGroup.value;
+    if (this.isEditing && empresaData.id) {
+      this.empresaService.atualizarEmpresa(String(empresaData.id), empresaData).subscribe({
         next: (empresa) => {
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa editada com sucesso!' });
           this.carregarEmpresas();
@@ -106,7 +135,7 @@ export class EmpresaComponent {
         }
       });
     } else {
-      this.empresaService.criarEmpresa(this.empresaForm as Empresa).subscribe({
+      this.empresaService.criarEmpresa(empresaData as Empresa).subscribe({
         next: (empresa) => {
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa cadastrada com sucesso!' });
           this.carregarEmpresas();
@@ -123,15 +152,24 @@ export class EmpresaComponent {
     // Nenhuma lógica extra necessária, apenas atualiza o campo planos
   }
 
-  confirmarExclusao(empresa: Empresa) {
+  confirmarExclusaoDialog(empresa: Empresa) {
     if (!empresa.id) return;
-    this.empresaService.deletarEmpresa(String(empresa.id)).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa excluída com sucesso!' });
-        this.carregarEmpresas();
-      },
-      error: () => {
-        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir empresa.' });
+    this.confirmationService.confirm({
+      message: 'Tem certeza que deseja excluir esta empresa?',
+      header: 'Confirmação',
+      icon: 'pi pi-exclamation-triangle',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.empresaService.deletarEmpresa(String(empresa.id)).subscribe({
+          next: () => {
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa excluída com sucesso!' });
+            this.carregarEmpresas();
+          },
+          error: () => {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir empresa.' });
+          }
+        });
       }
     });
   }

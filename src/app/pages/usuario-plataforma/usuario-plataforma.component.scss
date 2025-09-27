@@ -1,3 +1,12 @@
+  // Deixar o texto do perfil em capslock na tabela
+  .role-tag {
+    text-transform: uppercase;
+  }
+// Estilo para erros dos inputs igual ao cadastro de empresa
+.text-danger {
+  color: #f44336;
+  font-weight: 600;
+}
 .usuario-container {
   padding: 1.5rem;
   max-width: 1200px;
