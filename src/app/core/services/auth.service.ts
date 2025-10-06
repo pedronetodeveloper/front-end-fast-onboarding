@@ -35,7 +35,7 @@ export class AuthService {
    * candidato: candidato@teste.com / candidato123@
    */
   login(email: string, senha: string): Observable<AuthUser> {
-    const url = 'https://yyzvaldhm1.execute-api.us-east-1.amazonaws.com/login';
+    const url = 'https://gae7zljdek.execute-api.us-east-1.amazonaws.com/login';
     const body = { email, password: senha };
     return new Observable<AuthUser>(observer => {
       this.http.post<any>(url, body).subscribe({

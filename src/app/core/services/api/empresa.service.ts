@@ -16,7 +16,7 @@ export interface Empresa {
 })
 export class EmpresaService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://41zz2bizyl.execute-api.us-east-1.amazonaws.com/empresas';
+  private apiUrl = 'https://tvqck2z8ml.execute-api.us-east-1.amazonaws.com/empresas';
 
   /**
    * Listar todas as empresas

@@ -8,7 +8,7 @@ import { Candidato } from '../../../shared/interface/candidatos.interface';
 })
 export class CandidatoApiService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://3x8fg540pj.execute-api.us-east-1.amazonaws.com/candidatos';
+  private apiUrl = 'https://14bq2mqpx1.execute-api.us-east-1.amazonaws.com/candidatos';
 
   /**
    * Listar todos os candidatos

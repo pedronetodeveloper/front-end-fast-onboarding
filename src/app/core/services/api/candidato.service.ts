@@ -21,7 +21,7 @@ export interface CandidatoApi {
 })
 export class CandidatoService {
   private http = inject(HttpClient);
-  private candidatoApiUrl = 'https://3x8fg540pj.execute-api.us-east-1.amazonaws.com/candidatos';
+  private candidatoApiUrl = 'https://14bq2mqpx1.execute-api.us-east-1.amazonaws.com/candidatos';
 
   /**
    * Salvar novo candidato (POST)

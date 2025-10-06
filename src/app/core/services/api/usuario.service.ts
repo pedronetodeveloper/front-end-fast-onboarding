@@ -10,12 +10,18 @@ export interface Usuario {
   empresa: string;
 }
 
+export interface SendPass{
+  token: string;
+  senha: string;
+  ur: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://robhy88jri.execute-api.us-east-1.amazonaws.com/usuarios';
+  private apiUrl = 'https://kvf1h1xdki.execute-api.us-east-1.amazonaws.com/usuarios';
 
   /**
    * Listar todos os usuários
@@ -50,5 +56,19 @@ export class UsuarioService {
    */
   deletarUsuario(id: number | string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}`, { body: { id } });
+  }
+
+  /**
+   * Criar novo usuário
+   */
+  criarSenha(sendPass: SendPass): Observable<SendPass> {
+    // 1. Constrói a URL com o 'ur' como parte do caminho.
+    const url = `${this.apiUrl}/${sendPass.ur}/senha`;
+    
+    // 2. Remove o 'ur' do objeto para enviar no corpo da requisição.
+    const { ur, ...body } = sendPass;
+
+    // 3. Envia a requisição POST para a URL construída com o novo corpo.
+    return this.http.post<SendPass>(url, sendPass);
   }
 }
