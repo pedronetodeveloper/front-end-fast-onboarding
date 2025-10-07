@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, PLATFORM_ID, ChangeDetectorRef, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { DashService } from '../../core/services/api/dash.service';
 // PrimeNG imports
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +15,7 @@ import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ChartModule } from 'primeng/chart';
-
+import { AuthUser } from '../../core/services/auth.service';
 // Services
 import { ConfirmationService, MessageService } from 'primeng/api';
 
@@ -63,134 +63,144 @@ export class ObservabilityComponent implements OnInit {
   totalHoras: number = 858;
 
   private confirmationService = inject(ConfirmationService);
+  private dashService = inject(DashService);
   private messageService = inject(MessageService);
   displayDialogInfo = false;
 
-  docsProcessados = [
-    { 
-      label: 'observability.rg', 
-      count: 120, 
-      icon: 'pi pi-id-card', 
-      color1: '#4ade80', 
-      color2: '#22c55e',
-      status: { aprovado: 95, reprovado: 15, pendente: 10 }
-    },
-    { 
-      label: 'observability.cpf', 
-      count: 98, 
-      icon: 'pi pi-user', 
-      color1: '#60a5fa', 
-      color2: '#3b82f6',
-      status: { aprovado: 88, reprovado: 5, pendente: 5 }
-    },
-    { 
-      label: 'observability.carteiraTrabalho', 
-      count: 110, 
-      icon: 'pi pi-briefcase', 
-      color1: '#fbbf24', 
-      color2: '#f59e0b',
-      status: { aprovado: 92, reprovado: 12, pendente: 6 }
-    },
-    { 
-      label: 'observability.comprovanteEndereco', 
-      count: 105, 
-      icon: 'pi pi-map-marker', 
-      color1: '#a78bfa', 
-      color2: '#8b5cf6',
-      status: { aprovado: 87, reprovado: 10, pendente: 8 }
-    }
-  ];
+  
   economiaDeTempoDocs: any[] = [];
-
+  kpisContratacao: any[] = [];
+  docsProcessados: any[] = [];
   // KPIs de contratações e performance
-  kpisContratacao = [
-    {
-      label: 'observability.contratacoesMes',
-      value: 45,
-      icon: 'pi pi-users',
-      color1: '#10b981',
-      color2: '#059669',
-      unit: 'contratações'
-    },
-    {
-      label: 'observability.horasEconomizadas',
-      value: 858.9,
-      icon: 'pi pi-clock',
-      color1: '#8b5cf6',
-      color2: '#7c3aed',
-      unit: 'horas'
-    },
-    {
-      label: 'observability.eficienciaProcesso',
-      value: 92.5,
-      icon: 'pi pi-chart-line',
-      color1: '#f59e0b',
-      color2: '#d97706',
-      unit: '%'
-    },
-    {
-      label: 'observability.tempoMedioProcessamento',
-      value: 24,
-      icon: 'pi pi-stopwatch',
-      color1: '#ef4444',
-      color2: '#dc2626',
-      unit: 'horas'
-    },
-    {
-      label: 'observability.documentosProcessados',
-      value: 433,
-      icon: 'pi pi-file-check',
-      color1: '#06b6d4',
-      color2: '#0891b2',
-      unit: 'docs'
-    },
-    {
-      label: 'observability.taxaAprovacao',
-      value: 89.2,
-      icon: 'pi pi-check-circle',
-      color1: '#22c55e',
-      color2: '#16a34a',
-      unit: '%'
-    }
-  ];
-
-  acuraciaDocs = [
-    { label: 'observability.rg', value: 95, color1: '#4ade80', color2: '#22c55e', icon: 'pi pi-id-card' },
-    { label: 'observability.cpf', value: 98, color1: '#60a5fa', color2: '#3b82f6', icon: 'pi pi-user' },
-    { label: 'observability.carteiraTrabalho', value: 92, color1: '#fbbf24', color2: '#f59e0b', icon: 'pi pi-briefcase' },
-    { label: 'observability.comprovanteEndereco', value: 94, color1: '#a78bfa', color2: '#8b5cf6', icon: 'pi pi-map-marker' }
-  ];
-
-
   data: any;
-
   options: any;
-
   platformId = inject(PLATFORM_ID);
+  numeroContratacoes: number = 0;
+  docsProcessadosTotal: number = 0;
+  taxaAprovacao: number = 0;
 
   constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-  this.initChart();
-  this.calculateTimeSaved();
-  this.totalHoras = 0;
+    this.initChart();
+    const userString = localStorage.getItem('user');
+    let user: AuthUser | null = null;
+
+    if (userString) {
+      user = JSON.parse(userString);
+    }
+    if (user) {
+      // Corrected type here
+      this.loadContratacoes(user.empresa); 
+      this.loadTaxaAprovacao(user.empresa);
+      this.loadDocumentosPorTipo(user.empresa);
+      this.updateKpis();
+    }
   }
 
-  calculateTimeSaved() {
-    const humanTimePerDoc = 2 * 60; // 2 hours in minutes
-    const systemTimePerDoc = 1; // 1 minute
-    const timeSavedPerDoc = humanTimePerDoc - systemTimePerDoc;
-
-    this.economiaDeTempoDocs = this.docsProcessados.map(doc => {
-      const totalTimeSaved = doc.count * timeSavedPerDoc;
-      return {
-        ...doc,
-        value: totalTimeSaved,
-        unit: 'min'
-      };
+  loadContratacoes(empresa?: string) {
+    this.dashService.buscarContratacoes(empresa).subscribe(data => {
+      this.numeroContratacoes = data.contratacoes;
+      this.updateKpis();
     });
-    // Soma total das horas economizadas
-    this.totalHoras = this.economiaDeTempoDocs.reduce((acc, doc) => acc + doc.value, 0) / 60;
+  }
+
+  loadTaxaAprovacao(empresa?: string) {
+    this.dashService.buscarTaxaAprovacao(empresa).subscribe(data => {
+      this.taxaAprovacao = data.taxa_aprovacao;
+      this.docsProcessadosTotal = data.total_documentos;
+      this.updateKpis();
+    });
+  }
+
+  loadDocumentosPorTipo(empresa?: string) {
+    this.dashService.buscarDocumentosPorTipo(empresa).subscribe(data => {
+        const newDocsProcessados: any[] = [];
+        const docMap: any = {
+            rg: { label: 'observability.rg', icon: 'pi pi-id-card', color1: '#4ade80', color2: '#22c55e' },
+            cpf: { label: 'observability.cpf', icon: 'pi pi-user', color1: '#60a5fa', color2: '#3b82f6' },
+            carteiraDeTrabalho: { label: 'observability.carteiraTrabalho', icon: 'pi pi-briefcase', color1: '#fbbf24', color2: '#f59e0b'},
+            comprovanteDeEndereco: { label: 'observability.comprovanteEndereco', icon: 'pi pi-map-marker', color1: '#a78bfa', color2: '#8b5cf6'},
+            tituloEleitor: { label: 'observability.tituloEleitor', icon: 'pi pi-vote', color1: '#a78bfa', color2: '#8b5cf6'}
+        };
+        for (const docType in data) {
+            if (data.hasOwnProperty(docType)) {
+                const docData = data[docType];
+                const docConfig = docMap[docType];
+                if (docConfig) {
+                    newDocsProcessados.push({
+                        label: docConfig.label,
+                        count: docData.total,
+                        icon: docConfig.icon,
+                        color1: docConfig.color1,
+                        color2: docConfig.color2,
+                        status: { 
+                            aprovado: docData.aprovado, 
+                            reprovado: docData.reprovado, 
+                            pendente: docData.pendente 
+                        }
+                    });
+                }
+            }
+        }
+        this.docsProcessados = newDocsProcessados;
+       this.docsProcessados = [...newDocsProcessados];
+        this.cd.detectChanges();
+        this.initChart();
+      });
+  }
+
+  private updateKpis() {
+    this.kpisContratacao = [
+      {
+        label: 'observability.contratacoesMes',
+        value: this.numeroContratacoes,
+        icon: 'pi pi-users',
+        color1: '#10b981',
+        color2: '#059669',
+        unit: 'contratações'
+      },
+      {
+        label: 'observability.horasEconomizadas',
+        value: this.numeroContratacoes * 4, // Valor fixo
+        icon: 'pi pi-clock',
+        color1: '#8b5cf6',
+        color2: '#7c3aed',
+        unit: 'horas'
+      },
+      {
+        label: 'observability.eficienciaProcesso',
+        value: 92.5, 
+        icon: 'pi pi-chart-line',
+        color1: '#f59e0b',
+        color2: '#d97706',
+        unit: '%'
+      },
+      {
+        label: 'observability.tempoMedioProcessamento',
+        value: 1.20, 
+        icon: 'pi pi-stopwatch',
+        color1: '#ef4444',
+        color2: '#dc2626',
+        unit: 'minutos'
+      },
+      {
+        label: 'observability.documentosProcessados',
+        value: this.docsProcessadosTotal,
+        icon: 'pi pi-file-check',
+        color1: '#06b6d4',
+        color2: '#0891b2',
+        unit: 'docs'
+      },
+      {
+        label: 'observability.taxaAprovacao',
+        value: this.taxaAprovacao,
+        icon: 'pi pi-check-circle',
+        color1: '#22c55e',
+        color2: '#16a34a',
+        unit: '%'
+      }
+    ];
   }
 
   initChart() {

@@ -87,16 +87,16 @@ export class TranslationService {
             "observability.accuracyTitle": "Acurácia (%) da Análise dos Documentos",
             "observability.validDocs": "Documentos Válidos",
             "observability.details": "Ver Detalhes",
-            "observability.docsPerDay": "Documentos Processados por Dia",
+            "observability.docsPerDay": "Total de Documentos Processados",
             "observability.infoDialog": "Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para envio de documentos.",
             
             // Dashboard KPIs
-            "observability.contratacoesMes": "Contratações no Mês",
+            "observability.contratacoesMes": "Contratações total",
             "observability.horasEconomizadas": "Horas Economizadas",
             "observability.eficienciaProcesso": "Eficiência do Processo",
-            "observability.tempoMedioProcessamento": "Tempo Médio de Processamento",
+            "observability.tempoMedioProcessamento": "Tempo Médio de Processamento por Documento",
             "observability.documentosProcessados": "Documentos Processados",
-            "observability.taxaAprovacao": "Taxa de Aprovação",
+            "observability.taxaAprovacao": "Taxa de Aprovação de Documentos",
             // Title
             "project.name": "DocFlow",
             "project.description": "Impulsionando a Transformação Digital no RH.",
@@ -487,7 +487,7 @@ export class TranslationService {
             "observability.accuracyTitle": "Accuracy (%) of Document Analysis",
             "observability.validDocs": "Valid Documents",
             "observability.details": "View Details",
-            "observability.docsPerDay": "Documents Processed per Day",
+            "observability.docsPerDay": "Documents Processed Total",
             "observability.infoDialog": "When adding the candidate to the system, login credentials will automatically be sent to them with access to this platform for document submission.",
             
             // Dashboard KPIs
@@ -887,7 +887,7 @@ export class TranslationService {
             "observability.accuracyTitle": "Precisión (%) del Análisis de Documentos",
             "observability.validDocs": "Documentos Válidos",
             "observability.details": "Ver Detalles",
-            "observability.docsPerDay": "Documentos Procesados por Día",
+            "observability.docsPerDay": "Documentos Procesados Total",
             "observability.infoDialog": "Al agregar el candidato al sistema, automáticamente se enviará el acceso a la plataforma para el envío de documentos.",
             // Navegação (complemento)
             "nav.observability": "Observabilidad",

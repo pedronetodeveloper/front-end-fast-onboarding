@@ -40,6 +40,7 @@ export class AuthService {
     return new Observable<AuthUser>(observer => {
       this.http.post<any>(url, body).subscribe({
         next: (response) => {
+          console.log(response);
           // response: { token, user: { id, email, role } }
           const user: AuthUser = {
             name: response.user.email, // ou pode ser response.user.id se quiser mostrar o id
