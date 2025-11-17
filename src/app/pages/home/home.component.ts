@@ -2,6 +2,7 @@ import { Component, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 // PrimeNG imports
 import { ButtonModule } from 'primeng/button';
@@ -45,6 +46,8 @@ export class HomeComponent implements OnInit {
   private messageService = inject(MessageService);
   private themeService = inject(ThemeService);
   private translationService = inject(TranslationService);
+  private authService = inject(AuthService);
+  
   isAtBottom = false;
 
   @HostListener('window:scroll', [])
@@ -84,7 +87,7 @@ export class HomeComponent implements OnInit {
       contratacoesMes: 'até 10',
       documentosMes: 'até 100',
       preco: 'R$ 249,00',
-      excedenteDoc: 'R$ 0,50',
+      excedenteDoc: 'R$ 1,75',
       popular: false,
       features: [
         'plans.features.basicProcessing',
@@ -99,7 +102,7 @@ export class HomeComponent implements OnInit {
       contratacoesMes: 'até 30',
       documentosMes: 'até 400',
       preco: 'R$ 599,00',
-      excedenteDoc: 'R$ 0,40',
+      excedenteDoc: 'R$ 1,00',
       popular: true,
       features: [
         'plans.features.advancedProcessing',
@@ -115,7 +118,7 @@ export class HomeComponent implements OnInit {
       contratacoesMes: 'até 100',
       documentosMes: 'até 1.500',
       preco: 'R$ 1.290,00',
-      excedenteDoc: 'R$ 0,30',
+      excedenteDoc: 'R$ 0,65',
       popular: false,
       features: [
         'plans.features.advancedAI',
@@ -145,16 +148,8 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  enviarContato() {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Contato enviado',
-      detail: 'Sua mensagem foi enviada com sucesso! Em breve entraremos em contato.'
-    });
-    
-    // Reset do formulário
-    this.resetForm();
-  }
+  isSending = false; // Novo estado para desabilitar o botão
+  
 
   resetForm() {
     this.contato = { nome: '', email: '', empresa: '', plano: '', mensagem: '' };
@@ -283,6 +278,34 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  enviarContato(): void {
+    // ⚠️ Importante: Verifica se o formulário está válido antes de enviar (já é feito no HTML, mas é bom ter aqui também)
+    if (/* !this.contactForm.form.valid */ false) {
+        return; // Retorna se não for válido (assumindo validação no HTML)
+    }
+
+    this.isSending = true; // Inicia o estado de envio
+
+    // Chamar a Service, passando o objeto 'contato'
+    this.authService.enviarContato(this.contato).subscribe({
+      next: (response) => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Contato realizado com sucesso!!!' });
+        // Mostrar mensagem de sucesso ao usuário (ex: um Toast)
+        // this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Sua mensagem foi enviada!' });
+        
+        // Opcional: Limpar o formulário após o envio
+        this.contato = { nome: '', email: '', empresa: '', plano: '', mensagem: '' };
+        this.isSending = false;
+      },
+      error: (err) => {
+        console.error('Erro ao enviar o contato:', err);
+        // Mostrar mensagem de erro
+        // this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao enviar, tente novamente.' });
+        
+        this.isSending = false;
+      }
+    });
+  }
 
 }
 

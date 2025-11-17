@@ -22,13 +22,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { emailValidator } from '../../shared/validators/email.validator';
 
 // Interfaces
-import { CreateUsuarioRequest, UpdateUsuarioRequest, CreateUsuarioPlataformaRequest, UpdateUsuarioPlataformaRequest, UsuarioPlataforma } from '../../shared/interface/usuario.interface';
 
 // Pipes
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 // Animations
-import { pageEnterAnimation } from '../../shared/animations';
 
 // Icon field
 import { IconFieldModule } from 'primeng/iconfield';
@@ -76,7 +74,6 @@ export class UsuarioPlataformComponent implements OnInit {
   getRoleLabel(role: string): string {
     switch (role) {
       case 'admin': return 'Administrador';
-      case 'user': return 'Responsável';
       case 'candidate': return 'Candidato';
       case 'rh': return 'RH';
       default: return role;

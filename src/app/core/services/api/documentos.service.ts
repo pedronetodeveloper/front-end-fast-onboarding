@@ -79,7 +79,7 @@ export class DocumentosService {
     filename: string;
     expires_in: number;
   }> {
-    const downloadUrl = 'https://6cn7ey72ak.execute-api.us-east-1.amazonaws.com/download-doc-plataforma';
+    const downloadUrl = 'https://4b7puwi0te.execute-api.us-east-1.amazonaws.com/download-doc-plataforma';
     const params = new HttpParams().set('filename', filename);
     
     return this.http.get<{

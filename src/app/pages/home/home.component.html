@@ -137,7 +137,7 @@
         </div>
       </div>
       <div class="dialog-actions">
-        <button pButton type="submit" [label]="'contact.send' | translate" icon="pi pi-check" [disabled]="!contactForm.form.valid"></button>
+        <button pButton type="submit" [label]="'contact.send' | translate" [label]="(isSending ? 'Enviando...' : ('contact.send' | translate))" icon="pi pi-check" [disabled]="!contactForm.form.valid || isSending"></button>
       </div>
     </form>
   </div>

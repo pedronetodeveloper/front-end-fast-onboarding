@@ -12,6 +12,14 @@ export interface AuthUser {
   empresa: string;
 }
 
+interface Contato {
+  nome: string;
+  email: string;
+  empresa: string;
+  plano: string; // O valor deve ser plano_de_interesse no JSON
+  mensagem: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -61,6 +69,21 @@ export class AuthService {
         }
       });
     });
+  }
+
+  enviarContato(contatoData: Contato): Observable<any> { 
+    // URL do seu endpoint da API Gateway para contato
+    const url = 'https://b8ctqfkdo0.execute-api.us-east-1.amazonaws.com/contato';
+    
+    // [AJUSTE AQUI] Mapear para as chaves esperadas pela Lambda (Python)
+    const body = { 
+        nome: contatoData.nome,
+        email: contatoData.email,
+        empresa: contatoData.empresa,
+        plano_de_interesse: contatoData.plano, // A Lambda espera 'plano_de_interesse'
+        mensagem: contatoData.mensagem
+    }; 
+    return this.http.post<any>(url, body); 
   }
 
   /**
