@@ -9,6 +9,7 @@ export interface Documento {
     email: string;
     file_content?: string;
     status: string;
+    tentativas: number;
 }
 
 @Injectable({

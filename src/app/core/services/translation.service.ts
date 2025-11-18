@@ -52,7 +52,7 @@ export class TranslationService {
             "empresa.cnpj": "CNPJ",
             "empresa.plan": "Plano",
             "empresa.telefone_responsavel": "Telefone",
-            "empresa.phonePlaceholder":"(XX) 9XXXX-XXXX",
+            "empresa.phonePlaceholder": "(XX) 9XXXX-XXXX",
             "empresa.usersLimit": "Limite de Usuários",
             "empresa.actions": "Ações",
             "empresa.empty": "Nenhuma empresa encontrada",
@@ -69,13 +69,13 @@ export class TranslationService {
             "empresa.email_responsavel": "Email do responsável",
             "empresa.emailPlaceholder": "Digite o email do responsável",
             "empresa.success.delete": "Empresa excluída com sucesso!",
-            "observability.carteiraIdentidade":"Carteira de Trabalho",
+            "observability.carteiraIdentidade": "Carteira de Trabalho",
             "empresa.error": "Ocorreu um erro ao processar a empresa.",
-            
+
             // Observability
             "observability.avgProcessingTime": "Tempo Médio de Processamento (ms)",
-            "observability.timeSavedCardDescription":" Essa kpis mostram quando tempo você ganhou em usar a plataforma",
-            "observability.accuracyCardDescription":" Essa kpis mostram a % de acerto de leitura de cada documento",
+            "observability.timeSavedCardDescription": " Essa kpis mostram quando tempo você ganhou em usar a plataforma",
+            "observability.accuracyCardDescription": " Essa kpis mostram a % de acerto de leitura de cada documento",
             "observability.rg": "RG",
             "observability.timeSaved": "Ganho em Horas de Trabalho",
             "observability.cpf": "CPF",
@@ -90,7 +90,7 @@ export class TranslationService {
             "observability.details": "Ver Detalhes",
             "observability.docsPerDay": "Total de Documentos Processados",
             "observability.infoDialog": "Ao adicionar o candidato no sistema, automaticamente será enviado o login para o mesmo com o acesso a está plataforma para envio de documentos.",
-            
+
             // Dashboard KPIs
             "observability.contratacoesMes": "Contratações total",
             "observability.horasEconomizadas": "Horas Economizadas",
@@ -102,8 +102,25 @@ export class TranslationService {
             "project.name": "DocFlow",
             "project.description": "Impulsionando a Transformação Digital no RH.",
             "project.description2": "Otimizando o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
-        "definirSenha.title": "Definir Senha",
-        "definirSenha.description": "Por favor, defina sua nova senha.",
+            "definirSenha.title": "Definir Senha",
+            "definirSenha.description": "Por favor, defina sua nova senha.",
+            // Dentro de pt:
+            "sobre.heroTitle": "Impulsionando a Transformação Digital no RH",
+            "sobre.heroSubtitle": "Somos a DocFlow, a solução que impulsiona a transformação digital no setor de Recursos Humanos. Nosso propósito é simples e claro: otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
+            "sobre.socialProofTitle": "Empresas que confiam na DocFlow",
+            "sobre.testimonialsTitle": "O que nossos clientes dizem",
+            "sobre.testimonialsSubtitle": "Veja como a DocFlow transformou a experiência de admissão dessas empresas",
+            "sobre.valueMissionTitle": "Nossa Missão",
+            "sobre.valueMissionDesc": "Otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.",
+            "sobre.valueTechTitle": "Nossa Tecnologia",
+            "sobre.valueTechDesc": "Automação da leitura de documentos com OCR para garantir precisão e agilidade.",
+            "sobre.valueVisionTitle": "Nossa Visão de Excelência",
+            "sobre.valueVisionDesc": "Transformar processos complexos em uma experiência ágil, segura e livre de erros.",
+            "sobre.valueImpactTitle": "Nosso Impacto",
+            "sobre.valueImpactDesc": "Agilizar contratações, otimizar o tempo do time e elevar a experiência dos novos colaboradores.",
+            "sobre.ctaTitle": "Pronto para otimizar seu RH?",
+            "sobre.ctaSubtitle": "Descubra como a DocFlow pode transformar o processo de admissão da sua empresa.",
+            "sobre.ctaButton": "Conheça Nossos Planos",
             // Navigation
             "nav.menu": "Menu",
             "nav.observability": "Observabilidade",
@@ -179,7 +196,7 @@ export class TranslationService {
             // Plans Section
             "home.plans.title": "Planos e Preços",
             "home.plans.description": "Escolha o plano ideal para sua empresa e potencialize seus processos de contratação.",
-            
+
             // Plans Details
             "plans.start.name": "Start",
             "plans.start.profile": "Micro/Pequena",
@@ -189,7 +206,7 @@ export class TranslationService {
             "plans.pro.profile": "Média",
             "plans.enterprise.name": "Enterprise",
             "plans.enterprise.profile": "Grande",
-            
+
             // Plan Features
             "plans.features.basicProcessing": "Processamento básico",
             "plans.features.emailSupport": "Suporte por email",
@@ -211,7 +228,7 @@ export class TranslationService {
             "plans.features.enterpriseDashboard": "Dashboard enterprise",
             "plans.features.customReports": "Relatórios customizados",
             "plans.features.slaGuaranteed": "SLA garantido",
-            
+
             // Plan Labels
             "plans.labels.popularBadge": "Mais Popular",
             "plans.labels.contractionsMonth": "Contratações/mês",
@@ -221,7 +238,7 @@ export class TranslationService {
             "plans.labels.selectPlan": "Selecionar",
             "plans.labels.choosePlan": "Escolher Plano",
             "plans.labels.monthPeriod": "/mês",
-            
+
             // Contact Form
             "contact.title": "Entre em contato",
             "contact.subtitle": "Fale com nossa equipe e conheça o plano certo para a sua empresa.",
@@ -264,7 +281,7 @@ export class TranslationService {
             "common.hours": "horas",
             "common.days": "dias",
             "common.months": "meses",
-           " common.years": "anos",
+            " common.years": "anos",
             "common.clearSearch": "Limpar busca",
 
             // Navigation
@@ -322,6 +339,7 @@ export class TranslationService {
 
             // footer
             "footer.allRights": "Todos os direitos reservados",
+            "nav.sobrenos": "Sobre nós",
 
             // PrimeNG Translations
             "primeng.startsWith": "Começa com",
@@ -490,7 +508,7 @@ export class TranslationService {
             "observability.details": "View Details",
             "observability.docsPerDay": "Documents Processed Total",
             "observability.infoDialog": "When adding the candidate to the system, login credentials will automatically be sent to them with access to this platform for document submission.",
-            
+
             // Dashboard KPIs
             "observability.contratacoesMes": "Monthly Hires",
             "observability.horasEconomizadas": "Hours Saved",
@@ -600,7 +618,7 @@ export class TranslationService {
             // Plans Section
             "home.plans.title": "Plans & Pricing",
             "home.plans.description": "Choose the ideal plan for your company and enhance your hiring processes.",
-            
+
             // Plans Details
             "plans.start.name": "Start",
             "plans.start.profile": "Micro/Small",
@@ -610,7 +628,7 @@ export class TranslationService {
             "plans.pro.profile": "Medium",
             "plans.enterprise.name": "Enterprise",
             "plans.enterprise.profile": "Large",
-            
+
             // Plan Features
             "plans.features.basicProcessing": "Basic processing",
             "plans.features.emailSupport": "Email support",
@@ -632,7 +650,7 @@ export class TranslationService {
             "plans.features.enterpriseDashboard": "Enterprise dashboard",
             "plans.features.customReports": "Custom reports",
             "plans.features.slaGuaranteed": "SLA guaranteed",
-            
+
             // Plan Labels
             "plans.labels.popularBadge": "Most Popular",
             "plans.labels.contractionsMonth": "Hires/month",
@@ -642,7 +660,7 @@ export class TranslationService {
             "plans.labels.selectPlan": "Select",
             "plans.labels.choosePlan": "Choose Plan",
             "plans.labels.monthPeriod": "/month",
-            
+
             // Contact Form
             "contact.title": "Contact Us",
             "contact.subtitle": "Talk to our team to get access to the platform.",
@@ -671,6 +689,8 @@ export class TranslationService {
             "login.lastSession": "Last session:",
             "login.quickLogin": "Quick Login",
             "login.loading": "Loading...",
+            "project.description2": "Optimizing the admission process, eliminating bureaucracy, and unlocking your team's potential.",
+
 
             // Common
             "common.online": "Online",
@@ -687,6 +707,24 @@ export class TranslationService {
             // Navigation
             "nav.usuarios": "Users",
             "nav.cursos": "Courses",
+            // Dentro de en:
+            "sobre.heroTitle": "Driving Digital Transformation in HR",
+            "sobre.heroSubtitle": "We are DocFlow, the solution that drives digital transformation in Human Resources. Our purpose is simple and clear: optimize the hiring process, eliminate bureaucracy, and unlock your team's potential.",
+            "sobre.socialProofTitle": "Companies that trust DocFlow",
+            "sobre.testimonialsTitle": "What our clients say",
+            "sobre.testimonialsSubtitle": "See how DocFlow transformed the onboarding experience for these companies",
+            "sobre.valueMissionTitle": "Our Mission",
+            "sobre.valueMissionDesc": "Optimize the hiring process, eliminate bureaucracy, and unlock your team's potential.",
+            "sobre.valueTechTitle": "Our Technology",
+            "sobre.valueTechDesc": "Automated document reading with OCR for accuracy and agility.",
+            "sobre.valueVisionTitle": "Our Vision of Excellence",
+            "sobre.valueVisionDesc": "Transform complex processes into an agile, secure, and error-free experience.",
+            "sobre.valueImpactTitle": "Our Impact",
+            "sobre.valueImpactDesc": "Speed up hiring, optimize team time, and enhance the experience of new employees.",
+            "sobre.ctaTitle": "Ready to optimize your HR?",
+            "sobre.ctaSubtitle": "Discover how DocFlow can transform your company's hiring process.",
+            "sobre.ctaButton": "See Our Plans",
+
 
             // Usuario
             "usuario.title": "User Management",
@@ -759,6 +797,7 @@ export class TranslationService {
             "primeng.nextDecade": "Next Decade",
             "primeng.prevYear": "Previous Year",
             "primeng.nextYear": "Next Year",
+            "nav.sobrenos": "About us",
             "primeng.prevMonth": "Previous Month",
             "primeng.nextMonth": "Next Month",
             "primeng.prevHour": "Previous Hour",
@@ -992,7 +1031,7 @@ export class TranslationService {
             // Plans Section
             "home.plans.title": "Planes y Precios",
             "home.plans.description": "Elige el plan ideal para tu empresa y potencia tus procesos de contratación.",
-            
+
             // Plans Details
             "plans.start.name": "Start",
             "plans.start.profile": "Micro/Pequeña",
@@ -1002,7 +1041,7 @@ export class TranslationService {
             "plans.pro.profile": "Mediana",
             "plans.enterprise.name": "Enterprise",
             "plans.enterprise.profile": "Grande",
-            
+
             // Plan Features
             "plans.features.basicProcessing": "Procesamiento básico",
             "plans.features.emailSupport": "Soporte por email",
@@ -1024,7 +1063,7 @@ export class TranslationService {
             "plans.features.enterpriseDashboard": "Dashboard enterprise",
             "plans.features.customReports": "Informes personalizados",
             "plans.features.slaGuaranteed": "SLA garantizado",
-            
+
             // Plan Labels
             "plans.labels.popularBadge": "Más Popular",
             "plans.labels.contractionsMonth": "Contrataciones/mes",
@@ -1034,7 +1073,8 @@ export class TranslationService {
             "plans.labels.selectPlan": "Seleccionar",
             "plans.labels.choosePlan": "Elegir Plan",
             "plans.labels.monthPeriod": "/mes",
-            
+            "nav.sobrenos": "Sobre Nosotros",
+            "project.description2": "Optimizando el proceso de admisión, eliminando la burocracia y desbloqueando el potencial de tu equipo.",
             // Contact Form
             "contact.title": "Contáctanos",
             "contact.subtitle": "Habla con nuestro equipo para obtener acceso a la plataforma.",
@@ -1070,6 +1110,23 @@ export class TranslationService {
             "common.edit": "Editar",
             "common.delete": "Eliminar",
             "common.save": "Guardar",
+            // Dentro de es:
+            "sobre.heroTitle": "Impulsando la Transformación Digital en RRHH",
+            "sobre.heroSubtitle": "Somos DocFlow, la solución que impulsa la transformación digital en Recursos Humanos. Nuestro propósito es simple y claro: optimizar el proceso de admisión, eliminar la burocracia y liberar el potencial de tu equipo.",
+            "sobre.socialProofTitle": "Empresas que confían en DocFlow",
+            "sobre.testimonialsTitle": "Lo que dicen nuestros clientes",
+            "sobre.testimonialsSubtitle": "Mira cómo DocFlow transformó la experiencia de admisión de estas empresas",
+            "sobre.valueMissionTitle": "Nuestra Misión",
+            "sobre.valueMissionDesc": "Optimizar el proceso de admisión, eliminar la burocracia y liberar el potencial de tu equipo.",
+            "sobre.valueTechTitle": "Nuestra Tecnología",
+            "sobre.valueTechDesc": "Automatización de la lectura de documentos con OCR para garantizar precisión y agilidad.",
+            "sobre.valueVisionTitle": "Nuestra Visión de Excelencia",
+            "sobre.valueVisionDesc": "Transformar procesos complejos en una experiencia ágil, segura y sin errores.",
+            "sobre.valueImpactTitle": "Nuestro Impacto",
+            "sobre.valueImpactDesc": "Acelerar contrataciones, optimizar el tiempo del equipo y mejorar la experiencia de los nuevos colaboradores.",
+            "sobre.ctaTitle": "¿Listo para optimizar tu RRHH?",
+            "sobre.ctaSubtitle": "Descubre cómo DocFlow puede transformar el proceso de admisión de tu empresa.",
+            "sobre.ctaButton": "Conoce Nuestros Planes",
             "common.cancel": "Cancelar",
             "common.refresh": "Actualizar",
             "common.notInformed": "No informado",

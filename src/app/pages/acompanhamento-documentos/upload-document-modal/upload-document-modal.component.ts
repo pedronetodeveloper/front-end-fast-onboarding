@@ -33,7 +33,8 @@ export class UploadDocumentModalComponent implements OnInit {
       'Processando seu documento... Por favor, aguarde.',
       'Estamos validando a qualidade do arquivo.',
       'Verificando se o documento está legível.',
-      'Quase lá! Finalizando a validação...',
+      'Quase lá!.',
+      'Finalizando a validação...',
       'Obrigado pela sua paciência.'
     ];
     currentCarouselIndex: number = 0;
@@ -83,7 +84,7 @@ export class UploadDocumentModalComponent implements OnInit {
       this.elapsedSeconds++;
       // Troca mensagem a cada 3 segundos
       this.currentCarouselIndex = Math.floor(this.elapsedSeconds / 3) % this.carouselMessages.length;
-      if (this.elapsedSeconds === 15) {
+      if (this.elapsedSeconds === 18) {
         this.handleTimeout();
       }
     }, 1000);

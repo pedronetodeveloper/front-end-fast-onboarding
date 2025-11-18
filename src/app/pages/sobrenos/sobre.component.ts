@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CarouselModule } from 'primeng/carousel';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-sobre',
   standalone: true,
-  imports: [CommonModule, RouterModule, ButtonModule, CarouselModule],
+  imports: [CommonModule, RouterModule, ButtonModule, CarouselModule, TranslatePipe],
   templateUrl: './sobre.component.html',
   styleUrls: ['./sobre.component.scss']
 })

@@ -117,10 +117,6 @@
                   [ngClass]="'btn-primary'">
             Enviar Documentos
           </button>
-          <div *ngIf="isUploadBlocked()" class="upload-limit-message" style="display: flex; align-items: center; gap: 10px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 12px 20px; margin-top: 12px; color: #c62828; font-weight: 600; font-size: 1.1rem;">
-            <i class="pi pi-ban" style="font-size: 1.3rem;"></i>
-            Só é permitido o envio de até 5 documentos aprovados.
-          </div>
 
           <!-- Aviso sobre os 5 documentos -->
           <div class="upload-info-message" 
@@ -148,7 +144,7 @@
               <div class="card-title mb-1 text-center fw-bold"><strong>Tipo:</strong> {{ doc.tipo_documento }}</div>
               <div class="card-title mb-1 text-center fw-bold"><strong>Documento:</strong> {{ doc.nome_documento }}
               </div>
-              <div class="mb-2 w-100 d-flex justify-content-center">
+              <div class="mb-2 w-100 d-flex flex-column align-items-center justify-content-center">
                 <span *ngIf="doc.status" class="status-badge px-2 py-1 rounded-pill fw-semibold" [ngClass]="{
                   'status-valido': doc.status === 'APROVADO',
                   'status-invalido': doc.status === 'REPROVADO',
@@ -158,6 +154,11 @@
                   <strong>Status:</strong> {{ doc.status | uppercase }}
                 </span>
                 <span *ngIf="!doc.status" class="text-danger"><strong>Status:</strong> N/A</span>
+                <!-- Aviso de tentativas excedidas -->
+                <div *ngIf="doc.tentativas >= 3" class="tentativas-excedidas-alert mt-2 px-2 py-1 rounded text-center" style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba; font-size: 0.95rem; font-weight: 500;">
+                  <i class="fas fa-exclamation-triangle me-1"></i>
+                  Limite de tentativas de envio excedido ({{ doc.tentativas }} tentativas)
+                </div>
               </div>
             </div>
           </div>
@@ -213,42 +214,37 @@
     <!-- Help Panel -->
     <div class="help-widget-panel" 
          [class.show]="showHelpWidget"
-         [@slideInOut]>
-      <div class="help-widget-header">
-        <div class="help-avatar">
+         [@slideInOut]
+         style="background: #fff; border-radius: 14px; box-shadow: 0 4px 18px rgba(162,89,217,0.08); padding: 0 0 18px 0; max-width: 420px; min-width: 320px; border: 1px solid #e0d7f3; font-size: 0.97rem;">
+      <div class="help-widget-header" style="display: flex; align-items: center; gap: 12px; padding: 18px 20px 8px 20px; border-bottom: 1px solid #f0eafd;">
+        <div class="help-avatar" style="background: #a259d9; color: #fff; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
           <i class="fas fa-robot"></i>
         </div>
-        <div class="help-title">
-          <h4>Assistente DocFlow</h4>
-          <p>Como posso ajudar?</p>
+        <div class="help-title" style="flex: 1;">
+          <h4 style="margin: 0; font-size: 1.08rem; color: #fff; font-weight: 700; letter-spacing: 0.5px;">Assistente DocFlow</h4>
         </div>
       </div>
-      
-      <div class="help-widget-content">
+      <div class="help-widget-content" style="padding: 14px 20px 0 20px;">
         <div class="help-message">
-          <div class="message-bubble">
-            <p><strong>Olá!</strong> 👋</p>
-            <p>Precisa de ajuda com seus documentos?</p>
-            <p>Entre em contato conosco:</p>
-            
-            <div class="email-container">
-              <div class="email-display">
-                <i class="fas fa-envelope"></i>
-                <span>{{ supportEmail }}</span>
-              </div>
+          <div class="message-bubble" style="background: #f8f6fc; border-radius: 10px; box-shadow: 0 1px 4px rgba(162,89,217,0.04); padding: 14px 14px 10px 14px; margin-bottom: 8px;">
+            <p style="margin: 0 0 4px 0; font-size: 1rem;"><strong>Olá!</strong> 👋 Precisa de ajuda com seus documentos?</p>
+            <div style="margin-bottom: 8px; color: #6c3eb6; font-size: 0.97rem;">Entre em contato:</div>
+            <div class="email-container" style="display: flex; align-items: center; gap: 6px; background: #fff; border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; border: 1px solid #e0d7f3; font-size: 0.97rem;">
+              <i class="fas fa-envelope" style="color: #a259d9;"></i>
+              <span style="color: #a259d9; font-weight: 600;">{{ supportEmail }}</span>
               <button class="copy-email-btn" 
                       (click)="copyEmailToClipboard()"
-                      title="Copiar email">
+                      title="Copiar email"
+                      style="background: none; border: none; color: #a259d9; cursor: pointer; font-size: 1rem; padding: 2px 4px; border-radius: 4px;">
                 <i class="fas fa-copy"></i>
               </button>
             </div>
-            
-            <div class="help-tips">
-              <p><strong>Dicas rápidas:</strong></p>
-              <ul>
-                <li>Verifique se seus documentos estão em formato PDF ou imagem</li>
-                <li>Máximo de 5 documentos por processo</li>
-                <li>Acompanhe o status em tempo real</li>
+            <div class="help-tips" style="margin-top: 8px;">
+              <ul style="padding-left: 16px; margin: 0; color: #444; font-size: 0.96rem; list-style: disc inside;">
+                <li style="margin-bottom: 3px;">Se atingir <strong>3 tentativas</strong> em 1 documento, o RH entrará em contato.</li>
+                <li style="margin-bottom: 3px;">Envie arquivos PDF ou imagem (JPG/PNG).</li>
+                <li style="margin-bottom: 3px;">Máximo de <strong>5 documentos</strong> por processo.</li>
+                <li>Acompanhe o status em tempo real.</li>
               </ul>
             </div>
           </div>

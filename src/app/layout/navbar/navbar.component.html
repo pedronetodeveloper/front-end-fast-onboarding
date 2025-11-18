@@ -79,9 +79,9 @@
         <ng-container *ngIf="!isLoggedIn">
             <!-- Sobre Nós / Home Button -->
             <p-button 
-              [label]="isSobreNosPage ? 'Home' : 'Sobre Nós'" 
-              styleClass="p-button-secondary p-button-raised mr-3" 
-              [routerLink]="isSobreNosPage ? '/home' : '/sobre-nos'">
+                [label]="isSobreNosPage ? ('nav.home' | translate) : ('nav.sobrenos' | translate)" 
+                styleClass="p-button-secondary p-button-raised mr-3" 
+                [routerLink]="isSobreNosPage ? '/home' : '/sobre-nos'">
             </p-button>
 
             <!-- Language Selector -->

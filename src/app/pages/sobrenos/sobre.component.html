@@ -2,16 +2,14 @@
   <!-- Header Section -->
   <div class="hero-section">
     <div class="intro-content">
-      <h1 class="hero-title">Impulsionando a Transformação Digital no RH</h1>
-      <p class="hero-subtitle">Somos a DocFlow, a solução que impulsiona a transformação digital no setor de Recursos
-        Humanos.<br> Nosso propósito é simples e claro: otimizar o processo de admissão, eliminando a burocracia e
-        liberando o potencial do seu time.</p>
+      <h1 class="hero-title">{{ 'sobre.heroTitle' | translate }}</h1>
+      <p class="hero-subtitle">{{ 'sobre.heroSubtitle' | translate }}</p>
     </div>
   </div>
 
   <!-- Social Proof Section -->
   <div class="social-proof-section">
-    <h2>Empresas que confiam na DocFlow</h2>
+    <h2>{{ 'sobre.socialProofTitle' | translate }}</h2>
     <div class="carousel-container">
       <p-carousel [value]="empresas" [numVisible]="4" [numScroll]="1" [circular]="true"
         [responsiveOptions]="responsiveOptions" autoplayInterval="3000" [showIndicators]="false"
@@ -30,8 +28,8 @@
   <!-- Testimonials Section -->
   <div class="testimonials-section">
     <div class="testimonials-header">
-      <h2>O que nossos clientes dizem</h2>
-      <p>Veja como a DocFlow transformou a experiência de admissão dessas empresas</p>
+      <h2>{{ 'sobre.testimonialsTitle' | translate }}</h2>
+      <p>{{ 'sobre.testimonialsSubtitle' | translate }}</p>
     </div>
     
     <div class="testimonials-carousel">
@@ -73,23 +71,23 @@
     <div class="values-grid">
       <div class="value-card">
         <div class="value-icon"><i class="pi pi-thumbtack"></i></div>
-        <h3>Nossa Missão</h3>
-        <p>Otimizar o processo de admissão, eliminando a burocracia e liberando o potencial do seu time.</p>
+        <h3>{{ 'sobre.valueMissionTitle' | translate }}</h3>
+        <p>{{ 'sobre.valueMissionDesc' | translate }}</p>
       </div>
       <div class="value-card">
         <div class="value-icon"><i class="pi pi-eye"></i></div>
-        <h3>Nossa Tecnologia</h3>
-        <p>Automação da leitura de documentos com OCR para garantir precisão e agilidade.</p>
+        <h3>{{ 'sobre.valueTechTitle' | translate }}</h3>
+        <p>{{ 'sobre.valueTechDesc' | translate }}</p>
       </div>
       <div class="value-card">
         <div class="value-icon"><i class="pi pi-star"></i></div>
-        <h3>Nossa Visão de Excelência</h3>
-        <p>Transformar processos complexos em uma experiência ágil, segura e livre de erros.</p>
+        <h3>{{ 'sobre.valueVisionTitle' | translate }}</h3>
+        <p>{{ 'sobre.valueVisionDesc' | translate }}</p>
       </div>
       <div class="value-card">
         <div class="value-icon"><i class="pi pi-users"></i></div>
-        <h3>Nosso Impacto</h3>
-        <p>Agilizar contratações, otimizar o tempo do time e elevar a experiência dos novos colaboradores.</p>
+        <h3>{{ 'sobre.valueImpactTitle' | translate }}</h3>
+        <p>{{ 'sobre.valueImpactDesc' | translate }}</p>
       </div>
     </div>
   </div>
@@ -97,9 +95,9 @@
   <!-- Call to Action Section -->
   <div class="cta-section">
     <div class="cta-content">
-      <h2>Pronto para otimizar seu RH?</h2>
-      <p>Descubra como a DocFlow pode transformar o processo de admissão da sua empresa.</p>
-      <button pButton type="button" label="Conheça Nossos Planos" class="p-button-primary p-button-lg cta-button"
+      <h2>{{ 'sobre.ctaTitle' | translate }}</h2>
+      <p>{{ 'sobre.ctaSubtitle' | translate }}</p>
+      <button pButton type="button" [label]="'sobre.ctaButton' | translate" class="p-button-primary p-button-lg cta-button"
         (click)="navigateToHome()"></button>
     </div>
   </div>
