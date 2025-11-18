@@ -435,7 +435,7 @@ export class CandidatosComponent implements OnInit {
         this.messageService.add({ 
           severity: 'success', 
           summary: 'Sucesso', 
-          detail: `Download de "${doc.nome_documento}" iniciado.` 
+          detail: `Download de "${doc.nome_documento}" feito com sucesso.` 
         });
         
         doc.downloading = false;

@@ -79,6 +79,7 @@ export class TranslationService {
             "observability.rg": "RG",
             "observability.timeSaved": "Ganho em Horas de Trabalho",
             "observability.cpf": "CPF",
+            "observability.tituloEleitor": "Título de Eleitor",
             "observability.comprovanteResidencia": "Comprovante de Residência",
             "observability.comprovanteEndereco": "Comprovante de Endereço",
             "observability.carteiraTrabalho": "Carteira de Trabalho",

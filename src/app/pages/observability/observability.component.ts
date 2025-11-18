@@ -117,11 +117,11 @@ export class ObservabilityComponent implements OnInit {
     this.dashService.buscarDocumentosPorTipo(empresa).subscribe(data => {
         const newDocsProcessados: any[] = [];
         const docMap: any = {
-            rg: { label: 'observability.rg', icon: 'pi pi-id-card', color1: '#4ade80', color2: '#22c55e' },
-            cpf: { label: 'observability.cpf', icon: 'pi pi-user', color1: '#60a5fa', color2: '#3b82f6' },
-            carteiraDeTrabalho: { label: 'observability.carteiraTrabalho', icon: 'pi pi-briefcase', color1: '#fbbf24', color2: '#f59e0b'},
-            comprovanteDeEndereco: { label: 'observability.comprovanteEndereco', icon: 'pi pi-map-marker', color1: '#a78bfa', color2: '#8b5cf6'},
-            tituloEleitor: { label: 'observability.tituloEleitor', icon: 'pi pi-vote', color1: '#a78bfa', color2: '#8b5cf6'}
+            'rg': { label: 'observability.rg', icon: 'pi pi-id-card', color1: '#4ade80', color2: '#22c55e' },
+            'cpf': { label: 'observability.cpf', icon: 'pi pi-user', color1: '#60a5fa', color2: '#3b82f6' },
+            'carteira de trabalho': { label: 'observability.carteiraTrabalho', icon: 'pi pi-briefcase', color1: '#fbbf24', color2: '#f59e0b'},
+            'comprovante de residencia': { label: 'observability.comprovanteEndereco', icon: 'pi pi-map-marker', color1: '#a78bfa', color2: '#8b5cf6'},
+            'titulo de eleitor': { label: 'observability.tituloEleitor', icon: 'pi pi-vote', color1: '#a78bfa', color2: '#8b5cf6'}
         };
         for (const docType in data) {
             if (data.hasOwnProperty(docType)) {
@@ -216,6 +216,7 @@ export class ObservabilityComponent implements OnInit {
           case 'observability.rg': return 'RG';
           case 'observability.cpf': return 'CPF';
           case 'observability.carteiraTrabalho': return 'Carteira de Trabalho';
+          case 'observability.tituloEleitor': return 'Título de Eleitor';
           case 'observability.comprovanteEndereco': return 'Comprovante de Endereço';
           default: return doc.label;
         }
