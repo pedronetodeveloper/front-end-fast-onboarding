@@ -110,13 +110,17 @@
       <div class="card document-main-card bg-white border-0"
         style="border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 12px rgba(0,0,0,0.05); width: 100%;">
         <div class="button-message-container mb-3">
+
           <button class="btn btn-lg" 
                   (click)="onAttachDocuments()" 
-                  *ngIf="!isCurrentUserHR"
-                  [disabled]="isUploadBlocked()"
-                  [ngClass]="isUploadBlocked() ? 'btn-secondary' : 'btn-primary'">
-            {{ isUploadBlocked() ? 'Limite Atingido' : 'Enviar Documentos' }}
+                  *ngIf="!isCurrentUserHR && !isUploadBlocked()"
+                  [ngClass]="'btn-primary'">
+            Enviar Documentos
           </button>
+          <div *ngIf="isUploadBlocked()" class="upload-limit-message" style="display: flex; align-items: center; gap: 10px; background: #fffbe6; border: 1px solid #ffe58f; border-radius: 8px; padding: 12px 20px; margin-top: 12px; color: #c62828; font-weight: 600; font-size: 1.1rem;">
+            <i class="pi pi-ban" style="font-size: 1.3rem;"></i>
+            Só é permitido o envio de até 5 documentos aprovados.
+          </div>
 
           <!-- Aviso sobre os 5 documentos -->
           <div class="upload-info-message" 

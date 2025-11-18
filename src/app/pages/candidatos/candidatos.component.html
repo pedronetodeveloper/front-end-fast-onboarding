@@ -154,13 +154,14 @@
         </div>
         <div class="field" style="flex:1;">
           <label for="cpf">CPF *</label>
-          <input 
+          <p-inputMask
             id="cpf"
-            type="text" 
-            pInputText 
+            mask="999.999.999-99"
             formControlName="cpf"
             class="w-full"
-            placeholder="Somente números" />
+            placeholder="000.000.000-00"
+            [disabled]="isEditing">
+          </p-inputMask>
           <div *ngIf="candidatoFormGroup.get('cpf')?.invalid && candidatoFormGroup.get('cpf')?.touched" class="text-danger">
             <span *ngIf="candidatoFormGroup.get('cpf')?.errors?.['required']">CPF é obrigatório</span>
             <span *ngIf="candidatoFormGroup.get('cpf')?.errors?.['cpfInvalido']">CPF inválido</span>
@@ -209,13 +210,13 @@
         </div>
         <div class="field" style="flex:1;">
           <label for="telefone">Telefone</label>
-          <input 
+          <p-inputMask
             id="telefone"
-            type="text" 
-            pInputText 
+            mask="(99)99999-9999"
             formControlName="telefone"
             class="w-full"
-            placeholder="Somente números" />
+            placeholder="(11)00000-0000">
+          </p-inputMask>
           <div *ngIf="candidatoFormGroup.get('telefone')?.invalid && candidatoFormGroup.get('telefone')?.touched" class="text-danger">
             <span *ngIf="candidatoFormGroup.get('telefone')?.errors?.['telefoneInvalido']">Telefone inválido</span>
           </div>

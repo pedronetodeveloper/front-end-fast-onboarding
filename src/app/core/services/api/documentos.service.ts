@@ -16,7 +16,7 @@ export interface Documento {
 })
 export class DocumentosService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://14bq2mqpx1.execute-api.us-east-1.amazonaws.com/candidatos';
+  private apiUrl = 'https://hs0ruf4fmh.execute-api.us-east-1.amazonaws.com/candidatos';
   /**
    * Listar todos os documentos
    */
@@ -67,7 +67,7 @@ export class DocumentosService {
     console.log(documento.document_type);
     console.log(documento.email);
     // Endpoint correto para envio de documento
-    const uploadUrl = 'https://4b7puwi0te.execute-api.us-east-1.amazonaws.com/upload-doc-plataforma';
+    const uploadUrl = 'https://ivr3ppfhak.execute-api.us-east-1.amazonaws.com/upload-doc-plataforma';
     return this.http.post<any>(uploadUrl, documento);
   }
 
@@ -79,7 +79,7 @@ export class DocumentosService {
     filename: string;
     expires_in: number;
   }> {
-    const downloadUrl = 'https://4b7puwi0te.execute-api.us-east-1.amazonaws.com/download-doc-plataforma';
+    const downloadUrl = 'https://ivr3ppfhak.execute-api.us-east-1.amazonaws.com/download-doc-plataforma';
     const params = new HttpParams().set('filename', filename);
     
     return this.http.get<{

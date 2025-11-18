@@ -63,6 +63,8 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     setTimeout(() => {
       this.listarDocumentosApi();
     }, 500);
+    // Registra referência global para o modal acessar
+    (window as any).acompanhamentoDocumentosComponentRef = this;
   }
 
   listarDocumentosApi(): void {
@@ -94,12 +96,9 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   }
 
   isUploadBlocked(): boolean {
-    // Bloqueia o upload se houver 5 ou mais documentos com status APROVADO ou analisando
-    const approvedOrAnalyzing = this.documentos.filter(doc => 
-      doc.status === 'APROVADO' || doc.status === 'analisando'
-    ).length;
-    
-    return approvedOrAnalyzing >= 5;
+    // Bloqueia o upload se houver 5 ou mais documentos com status APROVADO
+    const approved = this.documentos.filter(doc => doc.status === 'APROVADO').length;
+    return approved >= 5;
   }
 
   onAttachDocuments(): void {
@@ -111,6 +110,8 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
 
   onDocumentUploaded(event: { file: File, documentType: string }): void {
     const { file, documentType } = event;
+    // Busca referência do modal
+    const modalRef = (window as any).uploadDocumentModalRef;
 
     // Validação de tipo de arquivo suportado
     const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
@@ -121,6 +122,10 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
         detail: 'Envie apenas PDF, PNG ou JPEG.',
         life: 5000
       });
+      // Fecha o loading do modal se possível
+      if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+        modalRef.finishLoadingAndClose();
+      }
       return;
     }
 
@@ -133,6 +138,9 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
         detail: 'O arquivo deve ter no máximo 10MB.',
         life: 5000
       });
+      if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+        modalRef.finishLoadingAndClose();
+      }
       return;
     }
 
@@ -159,6 +167,9 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
             detail: 'O arquivo não pôde ser convertido corretamente. Tente outro arquivo.',
             life: 5000
           });
+          if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+            modalRef.finishLoadingAndClose();
+          }
           return;
         }
         const documentoPayload = {
@@ -176,10 +187,6 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
               detail: `O documento ${file.name} foi enviado com sucesso!`,
               life: 3500
             });
-            // Recarrega os dados com um pequeno delay para mostrar o loading
-            setTimeout(() => {
-              this.listarDocumentosApi();
-            }, 2000);
           },
           error: (err) => {
             this.uploadMessage = `Falha ao enviar ${file.name}.`;
@@ -189,11 +196,22 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
             setTimeout(() => {
               this.uploadProgress = 0;
               this.uploadMessage = '';
-            }, 3000);
+              if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+                modalRef.finishLoadingAndClose();
+              }
+            }, 300);
           }
         });
       };
       reader.readAsDataURL(file);
+    }
+  }
+
+  // Adiciona referência global ao modal para controle do loading
+  ngAfterViewInit(): void {
+    const modal = document.querySelector('app-upload-document-modal');
+    if (modal && (modal as any).componentInstance) {
+      (window as any).uploadDocumentModalRef = (modal as any).componentInstance;
     }
   }
 

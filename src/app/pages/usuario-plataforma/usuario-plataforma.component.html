@@ -29,7 +29,10 @@
         <div class="search-container">
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
-                <input type="text" pInputText placeholder="Search" />
+                <input type="text" pInputText placeholder="Search"
+                  [(ngModel)]="searchTerm"
+                  (input)="onSearch()"
+                />
             </p-iconfield>
         </div>
       </ng-template>
@@ -225,21 +228,22 @@
       </div>
       <div class="field">
         <label for="role">{{ 'usuario-plataform.role' | translate }}</label>
-        <p-dropdown
-          id="role"
-          formControlName="role"
-          [options]="[
-            { label: 'Administrador', value: 'admin' },
-            { label: 'Responsável', value: 'user' },
-            { label: 'Candidato', value: 'candidate' },
-            { label: 'RH', value: 'rh' }
-          ]"
-          optionLabel="label"
-          optionValue="value"
-          appendTo="body"
-          class="w-full"
-          [placeholder]="'usuario-plataform.rolePlaceholder' | translate">
-        </p-dropdown>
+          <p-dropdown
+            id="role"
+            formControlName="role"
+            [options]="[
+              { label: 'Administrador', value: 'admin' },
+              { label: 'Responsável', value: 'user' },
+              { label: 'Candidato', value: 'candidate' },
+              { label: 'RH', value: 'rh' }
+            ]"
+            optionLabel="label"
+            optionValue="value"
+            appendTo="body"
+            class="w-full"
+            [disabled]="isEditing"
+            [placeholder]="'usuario-plataform.rolePlaceholder' | translate">
+          </p-dropdown>
         <div *ngIf="usuarioFormGroup.get('role')?.invalid && usuarioFormGroup.get('role')?.touched" class="text-danger">
           {{ 'common.required' | translate }}
         </div>

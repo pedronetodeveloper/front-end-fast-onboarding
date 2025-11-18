@@ -16,7 +16,7 @@ export interface Empresa {
 })
 export class EmpresaService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://tvqck2z8ml.execute-api.us-east-1.amazonaws.com/empresas';
+  private apiUrl = 'https://w7jmw7jc69.execute-api.us-east-1.amazonaws.com/empresas';
 
   /**
    * Listar todas as empresas
@@ -42,7 +42,7 @@ export class EmpresaService {
   /**
    * Atualizar empresa existente
    */
-  atualizarEmpresa(id: string, empresa: Empresa): Observable<Empresa> {
+  atualizarEmpresa(empresa: Empresa): Observable<Empresa> {
     return this.http.put<Empresa>(`${this.apiUrl}`, empresa);
   }
 

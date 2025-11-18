@@ -28,7 +28,10 @@
         <div class="search-container">
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
-                <input type="text" pInputText placeholder="{{ 'common.search' | translate }}" />
+                <input type="text" pInputText placeholder="{{ 'common.search' | translate }}"
+                  [(ngModel)]="searchTerm"
+                  (input)="filtrarEmpresas()"
+                />
             </p-iconfield>
         </div>
       </ng-template>
@@ -49,7 +52,7 @@
             {{ 'empresa.name' | translate }}
             <p-sortIcon field="nome"></p-sortIcon>
           </th>
-          <th pSortableColumn="plano" style="width: 18%">
+          <th pSortableColumn="plano" style="width: 10%">
             {{ 'empresa.plan' | translate }}
             <p-sortIcon field="plano"></p-sortIcon>
           </th>
@@ -59,7 +62,7 @@
           <th pSortableColumn="telefone_responsavel" style="width: 18%">
             {{ 'empresa.telefone_responsavel' | translate }}
           </th>
-          <th pSortableColumn="cnpj" style="width: 18%">
+          <th pSortableColumn="cnpj" style="width: 25%">
             {{ 'empresa.cnpj' | translate }}
           </th>
           <th style="width: 6%">{{ 'common.actions' | translate }}</th>
@@ -183,13 +186,13 @@
       </div>
       <div class="field">
         <label for="telefone">{{ 'empresa.phone' | translate }} *</label>
-        <input 
+        <p-inputMask
           id="telefone"
-          type="text" 
-          pInputText 
+          mask="(99)99999-9999"
           formControlName="telefone_responsavel"
           class="w-full"
-          [placeholder]="'empresa.phonePlaceholder' | translate" />
+          [placeholder]="'empresa.phonePlaceholder' | translate">
+        </p-inputMask>
         <div *ngIf="empresaFormGroup.get('telefone_responsavel')?.invalid && empresaFormGroup.get('telefone_responsavel')?.touched" class="text-danger">
           <span *ngIf="empresaFormGroup.get('telefone_responsavel')?.errors?.['required']">{{ 'common.required' | translate }}</span>
           <span *ngIf="empresaFormGroup.get('telefone_responsavel')?.errors?.['telefoneInvalido']">Telefone inválido</span>

@@ -26,6 +26,17 @@ export class UploadDocumentModalComponent implements OnInit {
   selectedFile: File | null = null;
   selectedDocumentType: DocumentType | null = null;
   documentTypes: DocumentType[] = [];
+    isLoading: boolean = false;
+    elapsedSeconds: number = 0;
+    private timer: any;
+    carouselMessages: string[] = [
+      'Processando seu documento... Por favor, aguarde.',
+      'Estamos validando a qualidade do arquivo.',
+      'Verificando se o documento está legível.',
+      'Quase lá! Finalizando a validação...',
+      'Obrigado pela sua paciência.'
+    ];
+    currentCarouselIndex: number = 0;
 
   ngOnInit(): void {
     this.documentTypes = [
@@ -44,14 +55,53 @@ export class UploadDocumentModalComponent implements OnInit {
 
   onUpload(): void {
     if (this.selectedFile && this.selectedDocumentType) {
+      this.isLoading = true;
+      this.elapsedSeconds = 0;
+      this.currentCarouselIndex = 0;
+      this.startTimer();
+      // Emite o evento para o componente pai, que irá processar o upload e fechar o modal após o retorno
       this.documentUploaded.emit({
         file: this.selectedFile,
         documentType: this.selectedDocumentType.code
       });
-      this.hideDialog();
+      // O modal só será fechado pelo pai após o upload
     } else {
-      // Optionally show a message to the user if fields are not filled
       alert('Por favor, selecione um arquivo e o tipo de documento.');
+    }
+  }
+
+  // Método para ser chamado pelo pai quando o upload terminar
+  finishLoadingAndClose(): void {
+    this.isLoading = false;
+    this.stopTimer();
+    this.hideDialog();
+  }
+
+  startTimer(): void {
+    this.stopTimer();
+    this.timer = setInterval(() => {
+      this.elapsedSeconds++;
+      // Troca mensagem a cada 3 segundos
+      this.currentCarouselIndex = Math.floor(this.elapsedSeconds / 3) % this.carouselMessages.length;
+      if (this.elapsedSeconds === 15) {
+        this.handleTimeout();
+      }
+    }, 1000);
+  }
+
+  // Chama o refresh externo e fecha o modal ao atingir 9 segundos
+  handleTimeout(): void {
+    // Busca componente pai (AcompanhamentoDocumentosComponent) e chama listarDocumentosApi
+    if ((window as any).acompanhamentoDocumentosComponentRef && typeof (window as any).acompanhamentoDocumentosComponentRef.listarDocumentosApi === 'function') {
+      (window as any).acompanhamentoDocumentosComponentRef.listarDocumentosApi();
+    }
+    this.finishLoadingAndClose();
+  }
+
+  stopTimer(): void {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
     }
   }
 
@@ -59,11 +109,15 @@ export class UploadDocumentModalComponent implements OnInit {
     this.visible = false;
     this.visibleChange.emit(this.visible);
     this.resetForm();
+    this.isLoading = false;
+    this.stopTimer();
+    this.elapsedSeconds = 0;
+    this.currentCarouselIndex = 0;
   }
 
   resetForm(): void {
     this.selectedFile = null;
     this.selectedDocumentType = null;
-    // Reset file input if possible (might require @ViewChild on the input itself)
+    // Reset file input se necessário
   }
 }

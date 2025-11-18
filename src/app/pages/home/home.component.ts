@@ -88,7 +88,7 @@ export class HomeComponent implements OnInit {
       documentosMes: 'até 100',
       preco: 'R$ 249,00',
       excedenteDoc: 'R$ 1,75',
-      popular: false,
+      popular: true,
       features: [
         'plans.features.basicProcessing',
         'plans.features.emailSupport',
@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
       documentosMes: 'até 400',
       preco: 'R$ 599,00',
       excedenteDoc: 'R$ 1,00',
-      popular: true,
+      popular: false,
       features: [
         'plans.features.advancedProcessing',
         'plans.features.prioritySupport',

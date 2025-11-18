@@ -178,11 +178,11 @@ export class ObservabilityComponent implements OnInit {
       },
       {
         label: 'observability.tempoMedioProcessamento',
-        value: 1.20, 
+        value: 12, 
         icon: 'pi pi-stopwatch',
         color1: '#ef4444',
         color2: '#dc2626',
-        unit: 'minutos'
+        unit: 'segundos'
       },
       {
         label: 'observability.documentosProcessados',

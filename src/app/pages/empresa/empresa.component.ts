@@ -16,6 +16,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { EmpresaService, Empresa } from '../../core/services/api/empresa.service';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { emailValidator } from '../../shared/validators/email.validator';
 import { telefoneValidator } from '../../shared/validators/telefone.validator';
 import { cpfCnpjValidator } from '../../shared/validators/cnpj.validator';
@@ -29,20 +30,21 @@ import { cpfCnpjValidator } from '../../shared/validators/cnpj.validator';
   imports: [
     CommonModule,
     FormsModule,
-  CardModule,
-  ToolbarModule,
-  ButtonModule,
-  TableModule,
-  TagModule,
-  DialogModule,
-  DropdownModule,
-  InputTextModule,
-  ToastModule,
-  ConfirmDialogModule,
-  IconFieldModule,
-  InputIconModule,
-  TranslatePipe,
-  ReactiveFormsModule
+    CardModule,
+    ToolbarModule,
+    ButtonModule,
+    TableModule,
+    TagModule,
+    DialogModule,
+    DropdownModule,
+    InputTextModule,
+    InputMaskModule,
+    ToastModule,
+    ConfirmDialogModule,
+    IconFieldModule,
+    InputIconModule,
+    TranslatePipe,
+    ReactiveFormsModule
   ],
   providers: [ConfirmationService]
 })
@@ -58,6 +60,21 @@ export class EmpresaComponent {
   displayDialog = false;
   displayDialogInfo = false;
   isEditing = false;
+  searchTerm: string = '';
+    filtrarEmpresas() {
+      const term = this.searchTerm.trim().toLowerCase();
+      if (!term) {
+        this.filteredEmpresas = [...this.empresas];
+        return;
+      }
+      this.filteredEmpresas = this.empresas.filter(emp =>
+        emp.nome.toLowerCase().includes(term) ||
+        emp.cnpj.toLowerCase().includes(term) ||
+        (emp.planos && emp.planos.toLowerCase().includes(term)) ||
+        (emp.email_responsavel && emp.email_responsavel.toLowerCase().includes(term)) ||
+        (emp.telefone_responsavel && emp.telefone_responsavel.toLowerCase().includes(term))
+      );
+    }
   empresaForm: Empresa = { nome: '', cnpj: '', planos: '', email_responsavel: '', telefone_responsavel: '' };
   planoOptions = [
     { label: 'Start', value: 'Start' },
@@ -76,6 +93,7 @@ export class EmpresaComponent {
 
   initializeValidators() {
     this.empresaFormGroup = this.fb.group({
+      id: [null],
       nome: ['', Validators.required],
       cnpj: ['', [Validators.required, cpfCnpjValidator]],
       planos: ['', Validators.required],
@@ -108,6 +126,7 @@ export class EmpresaComponent {
   editarEmpresa(empresa: Empresa) {
     this.isEditing = true;
     this.empresaFormGroup.patchValue({
+      id: empresa.id,
       nome: empresa.nome,
       cnpj: empresa.cnpj,
       planos: empresa.planos,
@@ -123,8 +142,10 @@ export class EmpresaComponent {
       return;
     }
     const empresaData = this.empresaFormGroup.value;
+    console.log(empresaData);
     if (this.isEditing && empresaData.id) {
-      this.empresaService.atualizarEmpresa(String(empresaData.id), empresaData).subscribe({
+      console.log(empresaData.id,"Edit");
+      this.empresaService.atualizarEmpresa(empresaData).subscribe({
         next: (empresa) => {
           this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Empresa editada com sucesso!' });
           this.carregarEmpresas();

@@ -9,6 +9,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
@@ -67,6 +68,7 @@ export interface CandidatoApi {
     ButtonModule,
     DialogModule,
     InputTextModule,
+    InputMaskModule,
     DropdownModule,
     ConfirmDialogModule,
     ToastModule,
@@ -162,6 +164,7 @@ export class CandidatosComponent implements OnInit {
   novoCandidato(): void {
     this.candidatoFormGroup.reset();
     this.isEditing = false;
+    this.candidatoFormGroup.get('cpf')?.enable();
     this.abrirDialogCandidato();
   }
 
@@ -182,6 +185,7 @@ export class CandidatosComponent implements OnInit {
     });
     this.selectedCandidato = candidato;
     this.isEditing = true;
+    this.candidatoFormGroup.get('cpf')?.disable();
     this.abrirDialogCandidato();
   }
 

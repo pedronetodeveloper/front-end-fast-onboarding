@@ -43,7 +43,7 @@ export class AuthService {
    * candidato: candidato@teste.com / candidato123@
    */
   login(email: string, senha: string): Observable<AuthUser> {
-    const url = 'https://gae7zljdek.execute-api.us-east-1.amazonaws.com/login';
+    const url = 'https://51fp28ou0a.execute-api.us-east-1.amazonaws.com/login';
     const body = { email, password: senha };
     return new Observable<AuthUser>(observer => {
       this.http.post<any>(url, body).subscribe({
@@ -73,7 +73,7 @@ export class AuthService {
 
   enviarContato(contatoData: Contato): Observable<any> { 
     // URL do seu endpoint da API Gateway para contato
-    const url = 'https://b8ctqfkdo0.execute-api.us-east-1.amazonaws.com/contato';
+    const url = 'https://qu8zbmm31e.execute-api.us-east-1.amazonaws.com/contato';
     
     // [AJUSTE AQUI] Mapear para as chaves esperadas pela Lambda (Python)
     const body = { 
