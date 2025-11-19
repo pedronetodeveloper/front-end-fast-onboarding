@@ -1,3 +1,4 @@
+  
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
@@ -22,7 +23,8 @@ export class UploadDocumentModalComponent implements OnInit {
   @Input() visible: boolean = false;
   @Output() visibleChange = new EventEmitter<boolean>();
   @Output() documentUploaded = new EventEmitter<{ file: File, documentType: string }>();
-
+  @Input() isUploadBlockedFn?: (fileName?: string) => boolean;
+  
   selectedFile: File | null = null;
   selectedDocumentType: DocumentType | null = null;
   documentTypes: DocumentType[] = [];
@@ -45,8 +47,7 @@ export class UploadDocumentModalComponent implements OnInit {
       { name: 'CPF', code: 'CPF' },
       { name: 'Comprovante de Residência', code: 'Comprovante de Residencia' },
       { name: 'Titulo de Eleitor', code: 'Titulo de eleitor' },
-      { name: 'Carteira de Trabalho', code: 'Carteira de trabalho' },
-      { name: 'Outros', code: 'OUTROS' }
+      { name: 'Carteira de Trabalho', code: 'Carteira de trabalho' }
     ];
   }
 

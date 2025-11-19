@@ -95,24 +95,84 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     return this.documentos.filter(doc => doc.status === status).length;
   }
 
-  isUploadBlocked(): boolean {
-    // Bloqueia o upload se houver 5 ou mais documentos com status APROVADO
+
+  /**
+   * Bloqueia o upload se:
+   * - houver 5 documentos (aprovados ou bloqueados por tentativas)
+   * - ou se já houver 5 documentos na lista e o arquivo selecionado não tiver nome igual a nenhum da lista
+   * @param fileName (opcional) nome do arquivo a ser enviado
+   */
+  isUploadBlocked(fileName?: string): boolean {
+    // Documentos aprovados
     const approved = this.documentos.filter(doc => doc.status === 'APROVADO').length;
-    return approved >= 5;
+    // Documentos bloqueados por tentativas
+    const bloqueados = this.documentos.filter(doc => doc.tentativas === 3).length;
+    const total = this.documentos.length;
+
+    // Se já tem 5 documentos (aprovados ou bloqueados), bloqueia tudo
+    if ((approved + bloqueados) >= 5) {
+      return true;
+    }
+
+    // Se já tem 5 documentos na lista, só permite reenvio de nomes já existentes (case-insensitive, trim, extensão)
+    if (total >= 5 && fileName) {
+      const normalize = (s: string) => s?.trim().toLowerCase();
+      const doc = this.documentos.find(
+        doc => normalize(doc.nome_documento) === normalize(fileName)
+      );
+      if (!doc || doc.tentativas === 3) {
+        return true;
+      }
+    }
+    return false;
   }
 
   onAttachDocuments(): void {
-    // Só abre o modal se não estiver bloqueado
+    // Só abre o modal se não estiver bloqueado (sem arquivo selecionado ainda)
     if (!this.isUploadBlocked()) {
       this.displayUploadModal = true;
     }
   }
 
   onDocumentUploaded(event: { file: File, documentType: string }): void {
+    // Bloqueia envio de PDF com nome diferente se já houver 5 documentos
+    if (this.isUploadBlocked(event.file.name)) {
+      const modalRef = (window as any).uploadDocumentModalRef;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Limite de documentos atingido',
+        detail: 'Você já atingiu o limite de 5 documentos. Só é possível reenviar arquivos já existentes.',
+        life: 6000
+      });
+      if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+        modalRef.finishLoadingAndClose();
+      }
+      return;
+    }
+      /**
+       * Exemplo de uso para o botão de enviar:
+       * [disabled]="isUploadBlocked(selectedFileName)"
+       * Onde selectedFileName é o nome do arquivo selecionado no modal
+       */
     const { file, documentType } = event;
     // Busca referência do modal
     const modalRef = (window as any).uploadDocumentModalRef;
 
+    // Validação: bloqueia se já existe documento com mesmo nome (case-insensitive, trim) e tentativas == 3
+    const normalize = (s: string) => s?.trim().toLowerCase();
+    const documentoBloqueado = this.documentos.find(doc => normalize(doc.nome_documento) === normalize(file.name) && doc.tentativas === 3);
+    if (documentoBloqueado) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Limite de tentativas atingido',
+        detail: `O documento "${file.name}" já atingiu o limite de 3 tentativas e não pode ser reenviado.`,
+        life: 6000
+      });
+      if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+        modalRef.finishLoadingAndClose();
+      }
+      return;
+    }
     // Validação de tipo de arquivo suportado
     const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
     if (!allowedTypes.includes(file.type)) {

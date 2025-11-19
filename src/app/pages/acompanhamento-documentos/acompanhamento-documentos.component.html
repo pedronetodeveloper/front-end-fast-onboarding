@@ -197,7 +197,10 @@
   </ng-template>
 
   <!-- Upload Document Modal -->
-  <app-upload-document-modal [(visible)]="displayUploadModal" (documentUploaded)="onDocumentUploaded($event)">
+  <app-upload-document-modal 
+    [(visible)]="displayUploadModal" 
+    (documentUploaded)="onDocumentUploaded($event)"
+    [isUploadBlockedFn]="isUploadBlocked.bind(this)">
   </app-upload-document-modal>
 
   <!-- Help Widget -->

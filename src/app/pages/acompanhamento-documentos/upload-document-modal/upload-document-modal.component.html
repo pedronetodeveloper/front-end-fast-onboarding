@@ -61,7 +61,12 @@
   <ng-template pTemplate="footer">
     <ng-container *ngIf="!isLoading">
       <p-button label="{{ 'upload.cancel' | translate }}" icon="pi pi-times" styleClass="p-button-text" (click)="hideDialog()"></p-button>
-      <p-button label="{{ 'upload.upload' | translate }}" icon="pi pi-upload" (click)="onUpload()" [disabled]="!selectedFile || !selectedDocumentType"></p-button>
+      <p-button 
+        label="{{ 'upload.upload' | translate }}" 
+        icon="pi pi-upload" 
+        (click)="onUpload()" 
+        [disabled]="!selectedFile || !selectedDocumentType || (isUploadBlockedFn && isUploadBlockedFn(selectedFile.name))">
+      </p-button>
     </ng-container>
   </ng-template>
 </p-dialog>
