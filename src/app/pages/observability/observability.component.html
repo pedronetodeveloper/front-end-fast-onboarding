@@ -1,62 +1,43 @@
-<div class="observability-container" [@pageAnimation]>
-  <p-card>
-    <ng-template pTemplate="content">
-      <div>
-        <div class="main-kpi-header">
-          <h2>Dashboard de Observabilidade</h2>
-          <p>Acompanhe as métricas de performance e contratações em tempo real.</p>
-        </div>
-        
-        <!-- Grid de KPIs 3x2 -->
-        <div class="kpi-grid">
-          <ng-container *ngFor="let kpi of kpisContratacao">
-            <p-card class="kpi-card">
-              <div class="kpi-content">
-                <div class="kpi-icon-wrapper" [ngStyle]="{'background-color': kpi.color1 + '15'}">
-                  <i [class]="kpi.icon" class="kpi-icon" [ngStyle]="{'color': kpi.color1}"></i>
-                </div>
-                <div class="kpi-details">
-                  <span class="kpi-label">{{ kpi.label | translate }}</span>
-                  <div class="kpi-value-container">
-                    <span class="kpi-value">{{ kpi.value | number:'1.1-1' }}</span>
-                    <span class="kpi-unit">{{ kpi.unit }}</span>
-                  </div>
-                </div>
+<section class="observability-section" [@pageAnimation]>
+  <div class="kpi-header-small">
+    <h3>KPIs</h3>
+  </div>
+  <div class="kpi-grid kpi-grid-3x2">
+    <div class="kpi-row">
+      <ng-container *ngFor="let kpi of kpisContratacao | slice:0:3">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-icon-wrapper" [ngStyle]="{'background-color': kpi.color1 + '15'}">
+              <i [class]="kpi.icon" class="kpi-icon" [ngStyle]="{'color': kpi.color1}"></i>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">{{ kpi.label | translate }}</span>
+              <div class="kpi-value-container">
+                <span class="kpi-value">{{ kpi.value | number:'1.1-1' }}</span>
+                <span class="kpi-unit">{{ kpi.unit }}</span>
               </div>
-            </p-card>
-          </ng-container>
+            </div>
+          </div>
         </div>
-      </div>
-    </ng-template>
-  </p-card>
-
-  <br>
-  <!-- Gráfico -->
-  <p-card>
-    <ng-template pTemplate="header">
-      <div class="pt-3 pb-2 px-4">
-        <span class="text-lg font-semibold">{{ 'observability.docsPerDay' | translate }}</span>
-      </div>
-    </ng-template>
-
-
-    <div class="card">
-      <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
+      </ng-container>
     </div>
-  </p-card>
-
-  <!-- Dialogs e Toasts -->
-  <p-dialog [header]="('usuario.info' | translate)" [(visible)]="displayDialogInfo" [modal]="true"
-    [style]="{width: '450px'}" [draggable]="false" [resizable]="false">
-    <div class="dialog-content">
-      <div class="field">
-        <p-tag severity="secondary"
-          [value]="'observability.infoDialog' | translate">
-        </p-tag>
-      </div>
+    <div class="kpi-row">
+      <ng-container *ngFor="let kpi of kpisContratacao | slice:3:6">
+        <div class="kpi-card">
+          <div class="kpi-content">
+            <div class="kpi-icon-wrapper" [ngStyle]="{'background-color': kpi.color1 + '15'}">
+              <i [class]="kpi.icon" class="kpi-icon" [ngStyle]="{'color': kpi.color1}"></i>
+            </div>
+            <div class="kpi-details">
+              <span class="kpi-label">{{ kpi.label | translate }}</span>
+              <div class="kpi-value-container">
+                <span class="kpi-value">{{ kpi.value | number:'1.1-1' }}</span>
+                <span class="kpi-unit">{{ kpi.unit }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
     </div>
-  </p-dialog>
-
-  <p-toast></p-toast>
-  <p-confirmDialog></p-confirmDialog>
-</div>
+  </div>
+</section>

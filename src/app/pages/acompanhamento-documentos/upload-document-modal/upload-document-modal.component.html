@@ -21,7 +21,7 @@
     </div>
     <div class="p-field mb-3">
       <label for="fileInput" class="mb-2">{{ 'upload.selectFile' | translate }}</label>
-      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="p-inputtext w-full">
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="p-inputtext w-full" #fileInputRef>
       <div class="p-field-description p-text-light mt-2">
         <div class="p-field-description-content">
           <div style="background: #fffbe6; color: #c62828; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 16px; margin-bottom: 8px; font-weight: bold; font-size: 1rem; text-align: center;">

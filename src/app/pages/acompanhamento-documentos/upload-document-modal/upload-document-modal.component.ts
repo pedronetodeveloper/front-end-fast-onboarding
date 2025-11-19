@@ -26,6 +26,7 @@ export class UploadDocumentModalComponent implements OnInit {
   @Output() documentUploaded = new EventEmitter<{ file: File, documentType: string }>();
 
   selectedFile: File | null = null;
+  fileInputRef?: HTMLInputElement;
   selectedDocumentType: DocumentType | null = null;
   documentTypes: DocumentType[] = [];
   private _visible: boolean = false;
@@ -67,6 +68,7 @@ export class UploadDocumentModalComponent implements OnInit {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+    this.fileInputRef = event.target as HTMLInputElement;
   }
 
   onUpload(): void {
@@ -75,6 +77,11 @@ export class UploadDocumentModalComponent implements OnInit {
         file: this.selectedFile,
         documentType: this.selectedDocumentType.code
       });
+      // Reset file input after upload
+      if (this.fileInputRef) {
+        this.fileInputRef.value = '';
+      }
+      this.selectedFile = null;
     } else {
       alert('Por favor, selecione um arquivo e o tipo de documento.');
     }
@@ -85,5 +92,9 @@ export class UploadDocumentModalComponent implements OnInit {
     this.visibleChange.emit(this.visible);
     this.selectedFile = null;
     this.selectedDocumentType = null;
+    // Reset file input when closing dialog
+    if (this.fileInputRef) {
+      this.fileInputRef.value = '';
+    }
   }
 }

@@ -1,7 +1,115 @@
+// Linha de KPIs para grid 3x2
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .kpi-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-row {
+    grid-template-columns: 1fr;
+  }
+}
+// Grid 3x2 para KPIs
+.kpi-grid-3x2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 900px) {
+  .kpi-grid-3x2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-grid-3x2 {
+    grid-template-columns: 1fr;
+  }
+}
+// Estilos compactos para KPIs na nova versão clean
+.observability-section {
+  padding: 2rem 3rem;
+  max-width: 700px;
+  margin: 1rem auto 0 auto;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.kpi-header-small {
+  margin-bottom: 1.2rem;
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0;
+  }
+}
+
+.kpi-grid-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.kpi-mini-card {
+  display: flex;
+  align-items: center;
+  background: none;
+  border-radius: 0.7rem;
+  padding: 0.2rem 0.7rem 0.2rem 0.2rem;
+  min-height: 2.5rem;
+  box-shadow: none;
+  border: none;
+  transition: background 0.2s;
+}
+
+.kpi-icon-wrapper-mini {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.7rem;
+}
+
+.kpi-icon-mini {
+  font-size: 1.3rem;
+}
+
+.kpi-details-mini {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.kpi-label-mini {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #222;
+  margin-bottom: 0.1rem;
+}
+
+.kpi-value-mini {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #444;
+}
 // Layout principal do container
 .observability-container {
   padding: 2rem;
-  max-width: 1400px;
+  max-width: 1800px;
   margin: 0 auto;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   min-height: 100vh;
@@ -84,12 +192,14 @@
 .kpi-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border-radius: 2.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
   border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   position: relative;
+  width: 100%;
+  margin: 0;
 
   &::before {
     content: '';
@@ -97,13 +207,13 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
+    height: 8px;
     background: linear-gradient(90deg, #9c27b0, #7c3aed, #06b6d4);
   }
 
   &:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
   }
 }
 
