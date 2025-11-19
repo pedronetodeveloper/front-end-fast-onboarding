@@ -3,9 +3,7 @@ import { MessageService } from 'primeng/api';
 import { CommonModule, NgClass } from '@angular/common';
 import { AuthService, AuthUser } from '../../core/services/auth.service';
 import { LocalStorageService } from '../../core/services/local-storage.service';
-import { Usuario } from '../../shared/interface/usuario.interface';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-import { HttpEventType } from '@angular/common/http';
 import { DocumentService } from '../../core/services/document.service';
 import { DocumentosService } from '../../core/services/api/documentos.service';
 import { UploadDocumentModalComponent } from './upload-document-modal/upload-document-modal.component'; // Import the new modal component
@@ -38,6 +36,17 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ]
 })
 export class AcompanhamentoDocumentosComponent implements OnInit {
+  uploadModalLoading: boolean = false;
+  loadingElapsedSeconds: number = 0;
+  loadingCurrentCarouselIndex: number = 0;
+  loadingCarouselMessages: string[] = [
+    'Validando documento... Aguarde.',
+    'Analisando qualidade da imagem...',
+    'Verificando restrições de envio...',
+    'Quase lá! Finalizando validação.'
+  ];
+  private loadingTimer: any = null;
+  private loadingCarouselTimer: any = null;
   user: AuthUser | null = null;
   documentos: any[] = [];
   uploadProgress: number = 0;
@@ -135,6 +144,8 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   }
 
   onDocumentUploaded(event: { file: File, documentType: string }): void {
+    // Fecha o modal de upload imediatamente
+    this.displayUploadModal = false;
     // Bloqueia envio de PDF com nome diferente se já houver 5 documentos
     if (this.isUploadBlocked(event.file.name)) {
       const modalRef = (window as any).uploadDocumentModalRef;
@@ -147,19 +158,35 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
         modalRef.finishLoadingAndClose();
       }
+      this.stopLoadingModal();
       return;
     }
-      /**
-       * Exemplo de uso para o botão de enviar:
-       * [disabled]="isUploadBlocked(selectedFileName)"
-       * Onde selectedFileName é o nome do arquivo selecionado no modal
-       */
+
+    // Validação: não permitir documento com tipo já existente mas nome diferente
+    const normalize = (s: string) => s?.trim().toLowerCase();
+    const docMesmoTipoNomeDiferente = this.documentos.find(doc =>
+      normalize(doc.tipo_documento) === normalize(event.documentType) &&
+      normalize(doc.nome_documento) !== normalize(event.file.name)
+    );
+    if (docMesmoTipoNomeDiferente) {
+      const modalRef = (window as any).uploadDocumentModalRef;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Tipo de documento já enviado',
+        detail: `Já existe um documento do tipo "${event.documentType}" com outro nome. Para reenviar, utilize o mesmo nome do arquivo anterior.`,
+        life: 6000
+      });
+      if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
+        modalRef.finishLoadingAndClose();
+      }
+      this.stopLoadingModal();
+      return;
+    }
     const { file, documentType } = event;
     // Busca referência do modal
     const modalRef = (window as any).uploadDocumentModalRef;
 
     // Validação: bloqueia se já existe documento com mesmo nome (case-insensitive, trim) e tentativas == 3
-    const normalize = (s: string) => s?.trim().toLowerCase();
     const documentoBloqueado = this.documentos.find(doc => normalize(doc.nome_documento) === normalize(file.name) && doc.tentativas === 3);
     if (documentoBloqueado) {
       this.messageService.add({
@@ -171,8 +198,11 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
         modalRef.finishLoadingAndClose();
       }
+      this.stopLoadingModal();
       return;
     }
+    // Só inicia o loading se passou por todas as validações
+    this.startLoadingModal();
     // Validação de tipo de arquivo suportado
     const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
     if (!allowedTypes.includes(file.type)) {
@@ -186,6 +216,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
         modalRef.finishLoadingAndClose();
       }
+      this.stopLoadingModal();
       return;
     }
 
@@ -201,6 +232,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
         modalRef.finishLoadingAndClose();
       }
+      this.stopLoadingModal();
       return;
     }
 
@@ -230,6 +262,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
           if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
             modalRef.finishLoadingAndClose();
           }
+          this.stopLoadingModal();
           return;
         }
         const documentoPayload = {
@@ -253,18 +286,43 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
             console.error('Erro no envio:', err);
           },
           complete: () => {
-            setTimeout(() => {
-              this.uploadProgress = 0;
-              this.uploadMessage = '';
-              if (modalRef && typeof modalRef.finishLoadingAndClose === 'function') {
-                modalRef.finishLoadingAndClose();
-              }
-            }, 300);
+            // Não fecha o loading aqui! O loading será fechado apenas após 15s pelo timer do modal.
+            this.uploadProgress = 0;
+            this.uploadMessage = '';
+            // O loading será fechado pelo timer
           }
         });
       };
       reader.readAsDataURL(file);
     }
+  }
+
+  startLoadingModal(): void {
+    this.uploadModalLoading = true;
+    this.loadingElapsedSeconds = 0;
+    this.loadingCurrentCarouselIndex = 0;
+    if (this.loadingTimer) clearInterval(this.loadingTimer);
+    if (this.loadingCarouselTimer) clearInterval(this.loadingCarouselTimer);
+    this.loadingTimer = setInterval(() => {
+      this.loadingElapsedSeconds++;
+      if (this.loadingElapsedSeconds >= 15) {
+        this.stopLoadingModal();
+        this.listarDocumentosApi();
+      }
+    }, 1000);
+    this.loadingCarouselTimer = setInterval(() => {
+      this.loadingCurrentCarouselIndex = (this.loadingCurrentCarouselIndex + 1) % this.loadingCarouselMessages.length;
+    }, 4000);
+  }
+
+  stopLoadingModal(): void {
+    this.uploadModalLoading = false;
+    this.loadingElapsedSeconds = 0;
+    this.loadingCurrentCarouselIndex = 0;
+    if (this.loadingTimer) clearInterval(this.loadingTimer);
+    if (this.loadingCarouselTimer) clearInterval(this.loadingCarouselTimer);
+    this.loadingTimer = null;
+    this.loadingCarouselTimer = null;
   }
 
   // Adiciona referência global ao modal para controle do loading

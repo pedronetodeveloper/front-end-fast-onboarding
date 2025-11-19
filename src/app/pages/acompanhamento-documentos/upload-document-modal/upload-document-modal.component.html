@@ -1,72 +1,61 @@
 
-<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [closable]="!isLoading" [showHeader]="!isLoading">
-  <ng-template pTemplate="header" *ngIf="!isLoading">
+
+<p-dialog [(visible)]="visible" (onHide)="hideDialog()" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [closable]="true" [showHeader]="true">
+  <ng-template pTemplate="header">
     <h3>{{ 'upload.title' | translate }}</h3>
   </ng-template>
-
-
-  <ng-container *ngIf="!isLoading; else loadingModal">
-    <div class="p-fluid">
-      <div class="p-field mb-3">
-        <label for="documentType" class="mb-2">{{ 'upload.documentType' | translate }}</label>
-        <p-dropdown 
-          id="documentType" 
-          [options]="documentTypes" 
-          [(ngModel)]="selectedDocumentType" 
-          optionLabel="name" 
-          placeholder="{{ 'upload.selectType' | translate }}" 
-          [filter]="true"
-          [showClear]="true"
-          appendTo="body" 
-          class="w-full">
-        </p-dropdown>
-      </div>
-
-      <div class="p-field mb-3">
-        <label for="fileInput" class="mb-2">{{ 'upload.selectFile' | translate }}</label>
-        <input type="file" id="fileInput" (change)="onFileSelected($event)" class="p-inputtext w-full">
-        <div class="p-field-description p-text-light mt-2">
-          <div class="p-field-description-content">
-            <div style="background: #fffbe6; color: #c62828; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 16px; margin-bottom: 8px; font-weight: bold; font-size: 1rem; text-align: center;">
-              <i class="pi pi-exclamation-triangle" style="margin-right: 6px;"></i>
-              Para reenviar um documento, envie o arquivo com o <u>mesmo nome</u> do documento anterior.<br>
-              <span style="display: block; margin-top: 6px; color: #a67c00; font-size: 0.98rem; font-weight: 500;">
-                <i class="pi pi-ban" style="margin-right: 4px;"></i>
-                O número máximo de tentativas de envio é <strong>3</strong> por documento.
-              </span>
-            </div>
-            <div>Extensões de arquivo aceitas: .pdf, .jpg ou .png</div>
-            <div>Deixe as imagens o mais claras possíveis, o documento pode ser reprovado por falta de ser legível</div>
-            <div>Em caso de dúvida, enviar e-mail para <a href="mailto:rh&#64;docflow.com.br">rh&#64;docflow.com.br</a></div>
+  <div class="p-fluid">
+    <div class="p-field mb-3">
+      <label for="documentType" class="mb-2">{{ 'upload.documentType' | translate }}</label>
+      <p-dropdown 
+        id="documentType" 
+        [options]="documentTypes" 
+        [(ngModel)]="selectedDocumentType" 
+        optionLabel="name" 
+        placeholder="{{ 'upload.selectType' | translate }}" 
+        [filter]="true"
+        [showClear]="true"
+        appendTo="body" 
+        class="w-full">
+      </p-dropdown>
+    </div>
+    <div class="p-field mb-3">
+      <label for="fileInput" class="mb-2">{{ 'upload.selectFile' | translate }}</label>
+      <input type="file" id="fileInput" (change)="onFileSelected($event)" class="p-inputtext w-full">
+      <div class="p-field-description p-text-light mt-2">
+        <div class="p-field-description-content">
+          <div style="background: #fffbe6; color: #c62828; border: 1px solid #ffe58f; border-radius: 8px; padding: 10px 16px; margin-bottom: 8px; font-weight: bold; font-size: 1rem; text-align: center;">
+            <i class="pi pi-exclamation-triangle" style="margin-right: 6px;"></i>
+            Para reenviar um documento, envie o arquivo com o <u>mesmo nome</u> do documento anterior.<br>
+            <span style="display: block; margin-top: 6px; color: #a67c00; font-size: 0.98rem; font-weight: 500;">
+              <i class="pi pi-ban" style="margin-right: 4px;"></i>
+              O número máximo de tentativas de envio é <strong>3</strong> por documento.
+            </span>
           </div>
+          <div>Extensões de arquivo aceitas: .pdf, .jpg ou .png</div>
+          <div>Deixe as imagens o mais claras possíveis, o documento pode ser reprovado por falta de ser legível</div>
+          <div>Em caso de dúvida, enviar e-mail para <a href="mailto:rh&#64;docflow.com.br">rh&#64;docflow.com.br</a></div>
         </div>
       </div>
     </div>
-  </ng-container>
-
-  <ng-template #loadingModal>
-      <div class="loading-modal"
-           style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 90px; max-width: 240px; width: 100%; margin: 0 auto;">
-      <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem; color: #a259d9; margin-bottom: 18px;"></i>
-      <div style="font-size: 1rem; font-weight: 500; color: #a259d9; text-align: center; min-height: 38px; display: flex; align-items: center; justify-content: center;">
-        {{ carouselMessages[currentCarouselIndex] }}
-      </div>
-      <div style="margin-top: 18px; font-size: 1.1rem; color: #a259d9; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-        <i class="pi pi-clock" style="font-size: 1.3rem;"></i>
-        <span>{{ (elapsedSeconds / 60) | number:'2.0-0' }}:{{ (elapsedSeconds % 60) | number:'2.0-0' }}</span>
-      </div>
-    </div>
-  </ng-template>
-
+  </div>
   <ng-template pTemplate="footer">
-    <ng-container *ngIf="!isLoading">
-      <p-button label="{{ 'upload.cancel' | translate }}" icon="pi pi-times" styleClass="p-button-text" (click)="hideDialog()"></p-button>
+    <p-button label="{{ 'upload.cancel' | translate }}" icon="pi pi-times" styleClass="p-button-text" (click)="hideDialog()"></p-button>
+    <p-button 
+      *ngIf="isTentativasLimitReached()"
+      label="{{ 'upload.upload' | translate }}" 
+      icon="pi pi-upload" 
+      [disabled]="true"
+      pTooltip="Limite de 3 tentativas atingido para este documento."
+      tooltipPosition="top">
+    </p-button>
+    <span *ngIf="!isTentativasLimitReached()">
       <p-button 
         label="{{ 'upload.upload' | translate }}" 
         icon="pi pi-upload" 
         (click)="onUpload()" 
         [disabled]="!selectedFile || !selectedDocumentType || (isUploadBlockedFn && isUploadBlockedFn(selectedFile.name))">
       </p-button>
-    </ng-container>
+    </span>
   </ng-template>
 </p-dialog>

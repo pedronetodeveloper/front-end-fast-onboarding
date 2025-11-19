@@ -1,3 +1,72 @@
+// Loading Modal Custom Styles
+.loading-modal-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(162, 89, 217, 0.10), 0 1.5px 8px rgba(0,0,0,0.04);
+  padding: 1.5rem 1.5rem 1.2rem 1.5rem;
+  min-width: 220px;
+  max-width: 320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  animation: fadeInScale 0.3s;
+}
+
+.loading-modal-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  i {
+    font-size: 2.2rem;
+    color: #a259d9;
+    background: #f6f0fa;
+    border-radius: 50%;
+    padding: 0.5rem;
+    box-shadow: 0 2px 8px rgba(162,89,217,0.08);
+  }
+}
+
+.loading-modal-message {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #7c3aed;
+  text-align: center;
+  min-height: 32px;
+  margin-bottom: 0.2rem;
+}
+
+.loading-modal-timer {
+  margin-top: 0.2rem;
+  font-size: 1.08rem;
+  color: #a259d9;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: #f6f0fa;
+  border-radius: 8px;
+  padding: 0.3rem 0.8rem;
+  box-shadow: 0 1px 4px rgba(162,89,217,0.04);
+  i {
+    font-size: 1.2rem;
+    margin-right: 2px;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* Styles for the Upload Document Modal */
 
 :host ::ng-deep .p-dialog {

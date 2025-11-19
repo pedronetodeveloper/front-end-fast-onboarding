@@ -197,56 +197,60 @@
   </ng-template>
 
   <!-- Upload Document Modal -->
-  <app-upload-document-modal 
-    [(visible)]="displayUploadModal" 
+  <app-upload-document-modal
+    [(visible)]="displayUploadModal"
+    (visibleChange)="displayUploadModal = $event"
     (documentUploaded)="onDocumentUploaded($event)"
-    [isUploadBlockedFn]="isUploadBlocked.bind(this)">
-  </app-upload-document-modal>
+    [isUploadBlockedFn]="isUploadBlocked.bind(this)"
+    [documentos]="documentos"
+  ></app-upload-document-modal>
 
-  <!-- Help Widget -->
+  <!-- Loading Modal Cronômetro -->
+  <p-dialog [(visible)]="uploadModalLoading" [modal]="true" [closable]="false" [draggable]="false" [resizable]="false" [style]="{ width: '340px' }" [baseZIndex]="1200" [showHeader]="false" [contentStyle]="{ background: 'transparent', boxShadow: 'none', padding: '0' }">
+    <div class="loading-modal-card" style="padding: 48px 24px; display: flex; flex-direction: column; align-items: center; min-width: 240px; box-shadow: 0 4px 32px rgba(162,89,217,0.10); background: #fff; border-radius: 24px;">
+      <div class="loading-modal-spinner">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2.5rem; color: #a259d9;"></i>
+      </div>
+      <div class="loading-modal-message" style="margin: 24px 0 12px 0; color: #a259d9; font-size: 1.15rem; font-weight: 600; text-align: center; min-height: 48px;">
+        {{ loadingCarouselMessages[loadingCurrentCarouselIndex] }}
+      </div>
+      <div class="loading-modal-timer" style="margin-top: 8px; font-size: 1.1rem; color: #a259d9; font-weight: 700;">
+        <i class="pi pi-clock"></i>
+        <span style="margin-left: 6px;">{{ (loadingElapsedSeconds / 60) | number:'2.0-0' }}:{{ (loadingElapsedSeconds % 60) | number:'2.0-0' }}</span>
+      </div>
+    </div>
+  </p-dialog>
   <div class="help-widget-container">
-    <!-- Help Button -->
-    <button class="help-widget-button" 
-            (click)="toggleHelpWidget()" 
-            [class.active]="showHelpWidget"
-            title="Precisa de ajuda?">
+    <button class="help-widget-button" (click)="toggleHelpWidget()" [class.active]="showHelpWidget" title="Precisa de ajuda?">
       <i class="fas fa-question-circle" *ngIf="!showHelpWidget"></i>
       <i class="fas fa-times" *ngIf="showHelpWidget"></i>
     </button>
-
-    <!-- Help Panel -->
-    <div class="help-widget-panel" 
-         [class.show]="showHelpWidget"
-         [@slideInOut]
-         style="background: #fff; border-radius: 14px; box-shadow: 0 4px 18px rgba(162,89,217,0.08); padding: 0 0 18px 0; max-width: 420px; min-width: 320px; border: 1px solid #e0d7f3; font-size: 0.97rem;">
-      <div class="help-widget-header" style="display: flex; align-items: center; gap: 12px; padding: 18px 20px 8px 20px; border-bottom: 1px solid #f0eafd;">
-        <div class="help-avatar" style="background: #a259d9; color: #fff; border-radius: 50%; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem;">
+    <div class="help-widget-panel" [class.show]="showHelpWidget" [@slideInOut]>
+      <div class="help-widget-header">
+        <div class="help-avatar">
           <i class="fas fa-robot"></i>
         </div>
-        <div class="help-title" style="flex: 1;">
-          <h4 style="margin: 0; font-size: 1.08rem; color: #fff; font-weight: 700; letter-spacing: 0.5px;">Assistente DocFlow</h4>
+        <div class="help-title">
+          <h4>Assistente DocFlow</h4>
         </div>
       </div>
-      <div class="help-widget-content" style="padding: 14px 20px 0 20px;">
+      <div class="help-widget-content">
         <div class="help-message">
-          <div class="message-bubble" style="background: #f8f6fc; border-radius: 10px; box-shadow: 0 1px 4px rgba(162,89,217,0.04); padding: 14px 14px 10px 14px; margin-bottom: 8px;">
-            <p style="margin: 0 0 4px 0; font-size: 1rem;"><strong>Olá!</strong> 👋 Precisa de ajuda com seus documentos?</p>
+          <div class="message-bubble">
+            <p><strong>Olá!</strong> 👋 Precisa de ajuda com seus documentos?</p>
             <div style="margin-bottom: 8px; color: #6c3eb6; font-size: 0.97rem;">Entre em contato:</div>
-            <div class="email-container" style="display: flex; align-items: center; gap: 6px; background: #fff; border-radius: 6px; padding: 6px 10px; margin-bottom: 8px; border: 1px solid #e0d7f3; font-size: 0.97rem;">
-              <i class="fas fa-envelope" style="color: #a259d9;"></i>
+            <div class="email-container">
+              <i class="fas fa-envelope"></i>
               <span style="color: #a259d9; font-weight: 600;">{{ supportEmail }}</span>
-              <button class="copy-email-btn" 
-                      (click)="copyEmailToClipboard()"
-                      title="Copiar email"
-                      style="background: none; border: none; color: #a259d9; cursor: pointer; font-size: 1rem; padding: 2px 4px; border-radius: 4px;">
+              <button class="copy-email-btn" (click)="copyEmailToClipboard()" title="Copiar email">
                 <i class="fas fa-copy"></i>
               </button>
             </div>
-            <div class="help-tips" style="margin-top: 8px;">
-              <ul style="padding-left: 16px; margin: 0; color: #444; font-size: 0.96rem; list-style: disc inside;">
-                <li style="margin-bottom: 3px;">Se atingir <strong>3 tentativas</strong> em 1 documento, o RH entrará em contato.</li>
-                <li style="margin-bottom: 3px;">Envie arquivos PDF ou imagem (JPG/PNG).</li>
-                <li style="margin-bottom: 3px;">Máximo de <strong>5 documentos</strong> por processo.</li>
+            <div class="help-tips">
+              <ul>
+                <li>Se atingir <strong>3 tentativas</strong> em 1 documento, o RH entrará em contato.</li>
+                <li>Envie arquivos PDF ou imagem (JPG/PNG).</li>
+                <li>Máximo de <strong>5 documentos</strong> por processo.</li>
                 <li>Acompanhe o status em tempo real.</li>
               </ul>
             </div>
@@ -255,7 +259,6 @@
       </div>
     </div>
   </div>
-
-</div>
+  </div>
 
 <p-toast></p-toast>
