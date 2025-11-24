@@ -118,7 +118,7 @@ export class ObservabilityComponent implements OnInit {
       },
       {
         label: 'observability.horasEconomizadas',
-        value: this.numeroContratacoes * 4,
+        value: this.numeroContratacoes * 10,
         icon: 'pi pi-clock',
         color1: '#8b5cf6',
         color2: '#7c3aed',

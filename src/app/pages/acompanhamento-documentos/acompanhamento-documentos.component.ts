@@ -198,6 +198,9 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       return;
     }
     // Só inicia o loading se passou por todas as validações
+    // Captura tentativas atuais do documento antes do envio
+    const docExistente = this.documentos.find(doc => doc.nome_documento === file.name);
+    this.lastTentativas = docExistente ? docExistente.tentativas : 0;
     this.startLoadingModal(file.name);
     // Validação de tipo de arquivo suportado
     const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
@@ -298,6 +301,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   private statusPollingTimeout: any = null;
   private lastUploadedFileName: string | null = null;
   private lastUploadedStatus: string | null = null;
+  private lastTentativas: number | null = null;
 
   startLoadingModal(fileName?: string): void {
     this.uploadModalLoading = true;
@@ -325,8 +329,10 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
         this.documentosService.consultarStatusDocumento(fileName).subscribe({
           next: (response) => {
             const status = response.status;
+            const tentativas = response.tentativas;
             this.lastUploadedStatus = status;
-            if (status === 'APROVADO' || status === 'REPROVADO') {
+            // Só fecha o modal se tentativas for maior que o valor anterior
+            if ((tentativas !== undefined && tentativas > (this.lastTentativas ?? 0)) && (status === 'APROVADO' || status === 'REPROVADO')) {
               statusResolved = true;
               this.stopLoadingModal();
               this.listarDocumentosApi();
@@ -335,7 +341,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
                   severity: 'error',
                   summary: 'Documento reprovado',
                   detail: `O documento "${fileName}" foi reprovado após análise.`,
-                  life: 10000
+                  life: 6000
                 });
               }
             }
@@ -357,7 +363,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
             life: 7000
           });
         }
-      }, 30000);
+      }, 18000);
     }
   }
 
@@ -375,6 +381,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     this.statusPollingTimeout = null;
     this.lastUploadedFileName = null;
     this.lastUploadedStatus = null;
+    this.lastTentativas = null;
   }
 
   // Adiciona referência global ao modal para controle do loading
