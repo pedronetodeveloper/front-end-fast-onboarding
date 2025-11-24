@@ -119,6 +119,11 @@ export class DocumentosService {
 
 
 
-
-
+  /**
+   * Consultar status do documento
+   */
+  consultarStatusDocumento(nomeDocumento: string): Observable<any> {
+    const statusUrl = `https://e1r8g4j2q8.execute-api.us-east-1.amazonaws.com/status/${nomeDocumento}`;
+    return this.http.get<any>(statusUrl);
+  }
 }

@@ -2,9 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { CommonModule, NgClass } from '@angular/common';
 import { AuthService, AuthUser } from '../../core/services/auth.service';
-import { LocalStorageService } from '../../core/services/local-storage.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-import { DocumentService } from '../../core/services/document.service';
 import { DocumentosService } from '../../core/services/api/documentos.service';
 import { UploadDocumentModalComponent } from './upload-document-modal/upload-document-modal.component'; // Import the new modal component
 import { ToastModule } from 'primeng/toast';
@@ -57,8 +55,6 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
   supportEmail: string = 'help-plataform@docflow.com.br'; // Support email
 
   private authService = inject(AuthService);
-  private localStorageService = inject(LocalStorageService);
-  private documentService = inject(DocumentService);
   private documentosService = inject(DocumentosService);
   private messageService = inject(MessageService);
 
@@ -202,7 +198,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
       return;
     }
     // Só inicia o loading se passou por todas as validações
-    this.startLoadingModal();
+    this.startLoadingModal(file.name);
     // Validação de tipo de arquivo suportado
     const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg'];
     if (!allowedTypes.includes(file.type)) {
@@ -297,22 +293,72 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     }
   }
 
-  startLoadingModal(): void {
+  // Novo controle de loading integrado ao endpoint de status
+  private statusPollingTimer: any = null;
+  private statusPollingTimeout: any = null;
+  private lastUploadedFileName: string | null = null;
+  private lastUploadedStatus: string | null = null;
+
+  startLoadingModal(fileName?: string): void {
     this.uploadModalLoading = true;
     this.loadingElapsedSeconds = 0;
     this.loadingCurrentCarouselIndex = 0;
+    this.lastUploadedFileName = fileName || null;
+    this.lastUploadedStatus = null;
     if (this.loadingTimer) clearInterval(this.loadingTimer);
     if (this.loadingCarouselTimer) clearInterval(this.loadingCarouselTimer);
+    if (this.statusPollingTimer) clearInterval(this.statusPollingTimer);
+    if (this.statusPollingTimeout) clearTimeout(this.statusPollingTimeout);
+
+    // Timer visual do loading
     this.loadingTimer = setInterval(() => {
       this.loadingElapsedSeconds++;
-      if (this.loadingElapsedSeconds >= 15) {
-        this.stopLoadingModal();
-        this.listarDocumentosApi();
-      }
     }, 1000);
     this.loadingCarouselTimer = setInterval(() => {
       this.loadingCurrentCarouselIndex = (this.loadingCurrentCarouselIndex + 1) % this.loadingCarouselMessages.length;
     }, 4000);
+
+    // Inicia polling do status se houver nome do arquivo
+    if (fileName) {
+      let statusResolved = false;
+      this.statusPollingTimer = setInterval(() => {
+        this.documentosService.consultarStatusDocumento(fileName).subscribe({
+          next: (response) => {
+            const status = response.status;
+            this.lastUploadedStatus = status;
+            if (status === 'APROVADO' || status === 'REPROVADO') {
+              statusResolved = true;
+              this.stopLoadingModal();
+              this.listarDocumentosApi();
+              if (status === 'REPROVADO') {
+                this.messageService.add({
+                  severity: 'error',
+                  summary: 'Documento reprovado',
+                  detail: `O documento "${fileName}" foi reprovado após análise.`,
+                  life: 10000
+                });
+              }
+            }
+          },
+          error: (err) => {
+            // Se não encontrar, ignora e continua polling
+          }
+        });
+      }, 3000); // Consulta a cada 3 segundos
+
+      // Timeout de 18 segundos para encerrar polling se não houver resposta
+      this.statusPollingTimeout = setTimeout(() => {
+        if (!statusResolved) {
+          this.stopLoadingModal();
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Envio não concluído',
+            detail: `O envio do arquivo "${fileName}" não foi concluído. Tente reenviar o documento.`,
+            life: 7000
+          });
+        }
+      }, 30000);
+    }
   }
 
   stopLoadingModal(): void {
@@ -321,8 +367,14 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
     this.loadingCurrentCarouselIndex = 0;
     if (this.loadingTimer) clearInterval(this.loadingTimer);
     if (this.loadingCarouselTimer) clearInterval(this.loadingCarouselTimer);
+    if (this.statusPollingTimer) clearInterval(this.statusPollingTimer);
+    if (this.statusPollingTimeout) clearTimeout(this.statusPollingTimeout);
     this.loadingTimer = null;
     this.loadingCarouselTimer = null;
+    this.statusPollingTimer = null;
+    this.statusPollingTimeout = null;
+    this.lastUploadedFileName = null;
+    this.lastUploadedStatus = null;
   }
 
   // Adiciona referência global ao modal para controle do loading
