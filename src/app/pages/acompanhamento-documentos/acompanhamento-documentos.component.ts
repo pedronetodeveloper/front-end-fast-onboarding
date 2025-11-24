@@ -343,6 +343,13 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
                   detail: `O documento "${fileName}" foi reprovado após análise.`,
                   life: 6000
                 });
+              } else if (status === 'APROVADO') {
+                this.messageService.add({
+                  severity: 'success',
+                  summary: 'Documento aprovado',
+                  detail: `O documento "${fileName}" foi aprovado com sucesso!`,
+                  life: 6000
+                });
               }
             }
           },
