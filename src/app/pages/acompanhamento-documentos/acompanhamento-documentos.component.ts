@@ -359,7 +359,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
         });
       }, 3000); // Consulta a cada 3 segundos
 
-      // Timeout de 18 segundos para encerrar polling se não houver resposta
+      // Timeout de 35 segundos para encerrar polling se não houver resposta
       this.statusPollingTimeout = setTimeout(() => {
         if (!statusResolved) {
           this.stopLoadingModal();
@@ -370,7 +370,7 @@ export class AcompanhamentoDocumentosComponent implements OnInit {
             life: 7000
           });
         }
-      }, 18000);
+      }, 35000);
     }
   }
 
