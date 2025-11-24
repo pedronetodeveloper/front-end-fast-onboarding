@@ -21,7 +21,7 @@ export interface SendPass{
 })
 export class UsuarioService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://kvf1h1xdki.execute-api.us-east-1.amazonaws.com/usuarios';
+  private apiUrl = 'https://8ym8ckydy6.execute-api.us-east-1.amazonaws.com/usuarios';
 
   /**
    * Listar todos os usuários

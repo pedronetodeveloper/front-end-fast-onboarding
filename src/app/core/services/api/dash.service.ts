@@ -19,7 +19,7 @@ export interface TaxaAprovacao {
 })
 export class DashService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://nh07ez61m7.execute-api.us-east-1.amazonaws.com/observability';
+  private apiUrl = 'https://hvevmnr8fa.execute-api.us-east-1.amazonaws.com/observability';
 
   /**
    * buscarContratacoes
